@@ -1,0 +1,14 @@
+{
+ "creation": "2024-09-24 09:06:45.788608",
+ "css": "<style>\nbody {\n   font-family: 'Arial', sans-serif;\n   font-size: 12px;\n}\nh1 {\n   font-size: 18px;\n   font-weight: bold;\n}\ntable {\n   width: 100%;\n   border-collapse: collapse;\n}\nth, td {\n   padding: 8px;\n   border: 1px solid #ccc;\n}\n</style>\n",
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Print Style",
+ "idx": 0,
+ "modified": "2024-09-24 09:06:45.788608",
+ "modified_by": "Administrator",
+ "name": "ManageFarms Pro Print",
+ "owner": "Administrator",
+ "print_style_name": "ManageFarms Pro Print",
+ "standard": 1
+}
