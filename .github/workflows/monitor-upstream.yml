@@ -1,0 +1,55 @@
+name: Monitor Upstream Changes
+
+# This workflow will run on a defined schedule (daily at 2 AM UTC) or manually.
+on:
+  schedule:
+    - cron: "0 2 * * *"  # Run at 2 AM UTC every day.
+  workflow_dispatch: # Allows the workflow to be manually triggered.
+
+jobs:
+  check_for_upstream_changes:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false  # Use our own credentials
+          fetch-depth: 0  # Fetch all history for all branches
+
+      # Step 2: Configure Git user
+      - name: Set up Git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      # Step 3: Add the upstream remote repository
+      # Note: Replace <original-repo> with the correct repo name
+      - name: Add upstream remote
+        run: |
+          if [ "${{ github.repository }}" == "khalandarsihan/frappe" ]; then
+            git remote add upstream https://github.com/frappe/frappe.git
+          elif [ "${{ github.repository }}" == "khalandarsihan/erpnext" ]; then
+            git remote add upstream https://github.com/frappe/erpnext.git
+          elif [ "${{ github.repository }}" == "khalandarsihan/payments" ]; then
+            git remote add upstream https://github.com/frappe/payments.git
+          fi
+
+      # Step 4: Fetch changes from the upstream repository
+      - name: Fetch changes from upstream
+        run: git fetch upstream
+
+      # Step 5: Compare the changes between origin and upstream branches
+      - name: Check for differences
+        run: |
+          git diff origin/version-15..upstream/version-15 > changes.diff
+          if [ -s changes.diff ]; then
+            echo "New updates are available in the upstream repository!" > update_notification.txt
+          else
+            echo "No new updates detected." > update_notification.txt
+          fi
+
+      # Step 6: Output the result
+      - name: Show results
+        run: cat update_notification.txt
