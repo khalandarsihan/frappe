@@ -29,10 +29,11 @@
   }
  ],
  "links": [],
- "modified": "2022-08-03 12:20:49.508223",
+ "modified": "2024-10-08 13:14:36.539078",
  "modified_by": "Administrator",
  "module": "Website",
  "name": "Website Sidebar",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
