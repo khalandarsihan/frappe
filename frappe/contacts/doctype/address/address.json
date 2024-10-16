@@ -25,7 +25,6 @@
   "is_shipping_address",
   "disabled",
   "linked_with",
-  "is_your_company_address",
   "links"
  ],
  "fields": [
@@ -150,18 +149,12 @@
    "fieldtype": "Table",
    "label": "Links",
    "options": "Dynamic Link"
-  },
-  {
-   "default": "0",
-   "fieldname": "is_your_company_address",
-   "fieldtype": "Check",
-   "label": "Is Your Company Address"
   }
  ],
  "icon": "fa fa-map-marker",
  "idx": 5,
  "links": [],
- "modified": "2024-10-16 17:29:17.320456",
+ "modified": "2024-10-16 17:39:05.061457",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Address",
