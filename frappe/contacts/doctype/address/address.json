@@ -21,7 +21,6 @@
   "email_id",
   "phone",
   "fax",
-  "tax_category",
   "is_primary_address",
   "is_shipping_address",
   "disabled",
@@ -153,13 +152,6 @@
    "options": "Dynamic Link"
   },
   {
-   "fieldname": "tax_category",
-   "fieldtype": "Link",
-   "hidden": 1,
-   "label": "Tax Category",
-   "options": "Tax Category"
-  },
-  {
    "default": "0",
    "fieldname": "is_your_company_address",
    "fieldtype": "Check",
@@ -169,7 +161,7 @@
  "icon": "fa fa-map-marker",
  "idx": 5,
  "links": [],
- "modified": "2024-10-15 15:03:37.854625",
+ "modified": "2024-10-16 17:29:17.320456",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Address",
