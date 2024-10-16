@@ -46,6 +46,7 @@
    "depends_on": "eval:!doc.is_folder",
    "fieldname": "is_private",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Is Private"
   },
   {
@@ -190,7 +191,7 @@
  "icon": "fa fa-file",
  "idx": 1,
  "links": [],
- "modified": "2024-05-09 11:46:42.917146",
+ "modified": "2024-10-15 16:54:46.594179",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "File",

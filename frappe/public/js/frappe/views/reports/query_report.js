@@ -1975,14 +1975,26 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			this.$tree_footer.find("[data-action=expand_all_rows]").hide();
 		}
 
-		const message = __(
-			"For comparison, use >5, <10 or =324. For ranges, use 5:10 (for values between 5 & 10)."
-		);
+		// Commented out the default message line that displayed the comparison text:
+		// const message = __(
+		// 	"For comparison, use >5, <10 or =324. For ranges, use 5:10 (for values between 5 & 10)."
+		// );
+		// const execution_time_msg = __("Execution Time: {0} sec", [this.execution_time || 0.1]);
+
+		// this.$report_footer.append(`<div class="col-md-12">
+		// 	<span">${message}</span><span class="pull-right">${execution_time_msg}</span>
+		// </div>`);
+		// Reason: The comparison text is not relevant to the current report and was cluttering the report footer.
+		// We want to display only the execution time to provide a cleaner and more focused user interface.
+
+		// Generate the execution time message with a default value of 0.1 seconds if `this.execution_time` is not available.
 		const execution_time_msg = __("Execution Time: {0} sec", [this.execution_time || 0.1]);
 
+		// Append the execution time message to the report footer in a `div` with a class of `col-md-12`.
+		// The message is displayed on the right side of the footer using the `pull-right` class.
 		this.$report_footer.append(`<div class="col-md-12">
-			<span">${message}</span><span class="pull-right">${execution_time_msg}</span>
-		</div>`);
+    	<span class="pull-right">${execution_time_msg}</span>
+</div>`);
 	}
 
 	expand_all_rows() {

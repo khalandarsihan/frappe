@@ -21,10 +21,12 @@
   "email_id",
   "phone",
   "fax",
+  "tax_category",
   "is_primary_address",
   "is_shipping_address",
   "disabled",
   "linked_with",
+  "is_your_company_address",
   "links"
  ],
  "fields": [
@@ -34,6 +36,7 @@
    "options": "fa fa-map-marker"
   },
   {
+   "description": "Individual's or Comapany's name",
    "fieldname": "address_title",
    "fieldtype": "Data",
    "label": "Address Title"
@@ -51,8 +54,7 @@
    "fieldname": "address_line1",
    "fieldtype": "Data",
    "label": "Address Line 1",
-   "length": 240,
-   "reqd": 1
+   "length": 240
   },
   {
    "fieldname": "address_line2",
@@ -66,12 +68,12 @@
    "in_global_search": 1,
    "in_list_view": 1,
    "label": "City/Town",
-   "reqd": 1,
    "search_index": 1
   },
   {
    "fieldname": "county",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "County"
   },
   {
@@ -86,7 +88,6 @@
    "in_standard_filter": 1,
    "label": "Country",
    "options": "Country",
-   "reqd": 1,
    "search_index": 1
   },
   {
@@ -107,25 +108,29 @@
    "options": "Email"
   },
   {
+   "default": "+91-",
    "fieldname": "phone",
-   "fieldtype": "Data",
+   "fieldtype": "Phone",
    "label": "Phone"
   },
   {
    "fieldname": "fax",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Fax"
   },
   {
    "default": "0",
    "fieldname": "is_primary_address",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Preferred Billing Address"
   },
   {
    "default": "0",
    "fieldname": "is_shipping_address",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Preferred Shipping Address"
   },
   {
@@ -137,6 +142,7 @@
   {
    "fieldname": "linked_with",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Reference",
    "options": "fa fa-pushpin"
   },
@@ -145,12 +151,25 @@
    "fieldtype": "Table",
    "label": "Links",
    "options": "Dynamic Link"
+  },
+  {
+   "fieldname": "tax_category",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Tax Category",
+   "options": "Tax Category"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_your_company_address",
+   "fieldtype": "Check",
+   "label": "Is Your Company Address"
   }
  ],
  "icon": "fa fa-map-marker",
  "idx": 5,
  "links": [],
- "modified": "2023-11-20 17:28:41.698356",
+ "modified": "2024-10-15 15:03:37.854625",
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Address",
@@ -220,7 +239,9 @@
   }
  ],
  "search_fields": "country, state",
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "address_title"
 }
