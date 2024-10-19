@@ -1988,13 +1988,13 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		// We want to display only the execution time to provide a cleaner and more focused user interface.
 
 		// Generate the execution time message with a default value of 0.1 seconds if `this.execution_time` is not available.
-		const execution_time_msg = __("Execution Time: {0} sec", [this.execution_time || 0.1]);
+		// const execution_time_msg = __("Execution Time: {0} sec", [this.execution_time || 0.1]);
 
 		// Append the execution time message to the report footer in a `div` with a class of `col-md-12`.
 		// The message is displayed on the right side of the footer using the `pull-right` class.
-		this.$report_footer.append(`<div class="col-md-12">
-    	<span class="pull-right">${execution_time_msg}</span>
-</div>`);
+		// 		this.$report_footer.append(`<div class="col-md-12">
+		//     	<span class="pull-right">${execution_time_msg}</span>
+		// </div>`);
 	}
 
 	expand_all_rows() {

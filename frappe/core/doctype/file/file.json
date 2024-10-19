@@ -80,7 +80,6 @@
   {
    "fieldname": "file_size",
    "fieldtype": "Int",
-   "in_list_view": 1,
    "label": "File Size",
    "length": 20,
    "options": "File Size",
@@ -191,7 +190,7 @@
  "icon": "fa fa-file",
  "idx": 1,
  "links": [],
- "modified": "2024-10-15 16:54:46.594179",
+ "modified": "2024-10-18 21:26:47.077652",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "File",
