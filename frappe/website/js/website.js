@@ -207,7 +207,7 @@ $.extend(frappe, {
 					icon +
 					' text-muted"></i><br>' +
 					text +
-					"</div>"
+					"</div>",
 			)
 			.appendTo(document.body);
 	},
@@ -233,13 +233,13 @@ $.extend(frappe, {
 			$(".user-image").attr("src", frappe.get_cookie("user_image"));
 
 			$(".user-image-wrapper").html(
-				frappe.avatar(null, "avatar-medium", null, null, null, true)
+				frappe.avatar(null, "avatar-medium", null, null, null, true),
 			);
 			$(".user-image-sidebar").html(
-				frappe.avatar(null, "avatar-medium", null, null, null, true)
+				frappe.avatar(null, "avatar-medium", null, null, null, true),
 			);
 			$(".user-image-myaccount").html(
-				frappe.avatar(null, "avatar-large", null, null, null, true)
+				frappe.avatar(null, "avatar-large", null, null, null, true),
 			);
 		}
 	},
@@ -247,13 +247,15 @@ $.extend(frappe, {
 	freeze: function (msg) {
 		// blur
 		if (!$("#freeze").length) {
-			var freeze = $('<div id="freeze" class="modal-backdrop fade"></div>').appendTo("body");
+			var freeze = $(
+				'<div id="freeze" class="modal-backdrop fade"></div>',
+			).appendTo("body");
 
 			freeze.html(
 				repl(
 					'<div class="freeze-message-container"><div class="freeze-message">%(msg)s</div></div>',
-					{ msg: msg || "" }
-				)
+					{ msg: msg || "" },
+				),
 			);
 
 			setTimeout(function () {
@@ -322,7 +324,8 @@ $.extend(frappe, {
 	},
 	do_search: function (val) {
 		var path =
-			(frappe.awesome_bar_path && frappe.awesome_bar_path[location.pathname]) ||
+			(frappe.awesome_bar_path &&
+				frappe.awesome_bar_path[location.pathname]) ||
 			window.search_path ||
 			location.pathname;
 
@@ -346,7 +349,10 @@ $.extend(frappe, {
 		return $(".navbar .search, .sidebar .search");
 	},
 	is_user_logged_in: function () {
-		return frappe.get_cookie("user_id") !== "Guest" && frappe.session.user !== "Guest";
+		return (
+			frappe.get_cookie("user_id") !== "Guest" &&
+			frappe.session.user !== "Guest"
+		);
 	},
 	add_switch_to_desk: function () {
 		$(".switch-to-desk").removeClass("hidden");
@@ -382,19 +388,23 @@ $.extend(frappe, {
 					let language_list = res.message;
 					let language = frappe.get_cookie("preferred_language");
 					let language_codes = [];
-					let language_switcher = $("#language-switcher .form-control");
+					let language_switcher = $(
+						"#language-switcher .form-control",
+					);
 					language_list.forEach((language_doc) => {
 						language_codes.push(language_doc.language_code);
 						language_switcher.append(
 							$("<option></option>")
 								.attr("value", language_doc.language_code)
-								.text(language_doc.language_name)
+								.text(language_doc.language_name),
 						);
 					});
 					$("#language-switcher").removeClass("hide");
 					language =
 						language ||
-						(language_codes.includes(navigator.language) ? navigator.language : "en");
+						(language_codes.includes(navigator.language)
+							? navigator.language
+							: "en");
 					language_switcher.val(language);
 					document.documentElement.lang = language;
 					language_switcher.change(() => {
@@ -495,7 +505,7 @@ frappe.setup_search = function (target, search_scope) {
 					$dropdown_menu.addClass("show");
 					dropdownItems = $dropdown_menu.find(".dropdown-item");
 				});
-		}, 500)
+		}, 500),
 	);
 
 	$input.on("focus", () => {
@@ -563,7 +573,7 @@ window.valid_email = function (id) {
 	// copied regex from frappe/utils.js validate_type
 	// eslint-disable-next-line
 	return /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/.test(
-		id.toLowerCase()
+		id.toLowerCase(),
 	);
 };
 
@@ -594,7 +604,7 @@ window.ask_to_login = function ask_to_login() {
 		if (localStorage) {
 			localStorage.setItem(
 				"last_visited",
-				window.location.href.replace(window.location.origin, "")
+				window.location.href.replace(window.location.origin, ""),
 			);
 		}
 		window.location.href = "login";
@@ -643,10 +653,13 @@ $(document).on("page-change", function () {
 	$(".dropdown-toggle").dropdown();
 
 	//multilevel dropdown fix
-	$(".dropdown-menu .dropdown-submenu .dropdown-toggle").on("click", function (e) {
-		e.stopPropagation();
-		$(this).parent().parent().parent().addClass("open");
-	});
+	$(".dropdown-menu .dropdown-submenu .dropdown-toggle").on(
+		"click",
+		function (e) {
+			e.stopPropagation();
+			$(this).parent().parent().parent().addClass("open");
+		},
+	);
 
 	$.extend(frappe, frappe.get_cookies());
 	frappe.session = { user: frappe.user_id };
@@ -659,7 +672,9 @@ $(document).on("page-change", function () {
 	frappe.make_navbar_active();
 	// scroll to hash
 	if (window.location.hash) {
-		var element = document.getElementById(window.location.hash.substring(1));
+		var element = document.getElementById(
+			window.location.hash.substring(1),
+		);
 		element && element.scrollIntoView(true);
 	}
 });

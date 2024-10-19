@@ -106,8 +106,8 @@ class Database:
 
 	def connect(self):
 		"""Connects to a database as set in `site_config.json`."""
-		self._conn: "MariadbConnection" | "PostgresConnection" = self.get_connection()
-		self._cursor: "MariadbCursor" | "PostgresCursor" = self._conn.cursor()
+		self._conn: MariadbConnection | PostgresConnection = self.get_connection()
+		self._cursor: MariadbCursor | PostgresCursor = self._conn.cursor()
 
 		try:
 			if execution_timeout := get_query_execution_timeout():

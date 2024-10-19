@@ -74,7 +74,9 @@ export class ReminderManager {
 		const period = this.dialog.get_value("remind_me_in");
 		if (!period || period == "custom") return;
 
-		const now_time = frappe.datetime.str_to_obj(frappe.datetime.now_datetime());
+		const now_time = frappe.datetime.str_to_obj(
+			frappe.datetime.now_datetime(),
+		);
 		let [magnitude, unit] = period.split("_");
 
 		let time_to_set = moment(now_time)
@@ -85,15 +87,20 @@ export class ReminderManager {
 
 	create_reminder() {
 		frappe
-			.xcall("frappe.automation.doctype.reminder.reminder.create_new_reminder", {
-				remind_at: this.dialog.get_value("remind_at"),
-				description: this.dialog.get_value("description"),
-				reminder_doctype: this.frm?.doc.doctype,
-				reminder_docname: this.frm?.doc.name,
-			})
+			.xcall(
+				"frappe.automation.doctype.reminder.reminder.create_new_reminder",
+				{
+					remind_at: this.dialog.get_value("remind_at"),
+					description: this.dialog.get_value("description"),
+					reminder_doctype: this.frm?.doc.doctype,
+					reminder_docname: this.frm?.doc.name,
+				},
+			)
 			.then((reminder) => {
 				frappe.show_alert(
-					__("Reminder set at {0}", [frappe.datetime.str_to_user(reminder.remind_at)])
+					__("Reminder set at {0}", [
+						frappe.datetime.str_to_user(reminder.remind_at),
+					]),
 				);
 			});
 	}

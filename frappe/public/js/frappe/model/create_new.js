@@ -6,7 +6,12 @@ frappe.provide("frappe.model");
 $.extend(frappe.model, {
 	new_names: {},
 
-	get_new_doc: function (doctype, parent_doc, parentfield, with_mandatory_children) {
+	get_new_doc: function (
+		doctype,
+		parent_doc,
+		parentfield,
+		with_mandatory_children,
+	) {
 		frappe.provide("locals." + doctype);
 		var doc = {
 			docstatus: 0,
@@ -62,7 +67,9 @@ $.extend(frappe.model, {
 				var df = frappe.meta.has_field(doctype, fieldname);
 				if (
 					df &&
-					["Link", "Data", "Select", "Dynamic Link"].includes(df.fieldtype) &&
+					["Link", "Data", "Select", "Dynamic Link"].includes(
+						df.fieldtype,
+					) &&
 					!df.no_copy
 				) {
 					doc[fieldname] = value;
@@ -75,12 +82,19 @@ $.extend(frappe.model, {
 	},
 
 	make_new_doc_and_get_name: function (doctype, with_mandatory_children) {
-		return frappe.model.get_new_doc(doctype, null, null, with_mandatory_children).name;
+		return frappe.model.get_new_doc(
+			doctype,
+			null,
+			null,
+			with_mandatory_children,
+		).name;
 	},
 
 	get_new_name: function (doctype) {
 		// random hash is added to idenity mislinked files when doc is not saved and file is uploaded.
-		return frappe.router.slug(`new-${doctype}-${frappe.utils.get_random(10)}`);
+		return frappe.router.slug(
+			`new-${doctype}-${frappe.utils.get_random(10)}`,
+		);
 	},
 
 	set_default_values: function (doc, parent_doc) {
@@ -90,7 +104,7 @@ $.extend(frappe.model, {
 
 		// Table types should be initialized
 		let fieldtypes_without_default = frappe.model.no_value_type.filter(
-			(fieldtype) => !frappe.model.table_fields.includes(fieldtype)
+			(fieldtype) => !frappe.model.table_fields.includes(fieldtype),
 		);
 		docfields.forEach((f) => {
 			if (
@@ -104,7 +118,8 @@ $.extend(frappe.model, {
 			let v = frappe.model.get_default_value(f, doc, parent_doc);
 			if (v) {
 				if (["Int", "Check"].includes(f.fieldtype)) v = cint(v);
-				else if (["Currency", "Float"].includes(f.fieldtype)) v = flt(v);
+				else if (["Currency", "Float"].includes(f.fieldtype))
+					v = flt(v);
 
 				doc[f.fieldname] = v;
 				updated.push(f.fieldname);
@@ -139,10 +154,11 @@ $.extend(frappe.model, {
 		let default_doc = null;
 		let value = null;
 		if (user_permissions) {
-			({ allowed_records, default_doc } = frappe.perm.filter_allowed_docs_for_doctype(
-				user_permissions[df.options],
-				doc.doctype
-			));
+			({ allowed_records, default_doc } =
+				frappe.perm.filter_allowed_docs_for_doctype(
+					user_permissions[df.options],
+					doc.doctype,
+				));
 		}
 		var meta = frappe.get_meta(doc.doctype);
 		var has_user_permissions =
@@ -160,7 +176,9 @@ $.extend(frappe.model, {
 				// 2 - look in user defaults
 
 				if (!df.ignore_user_permissions) {
-					var user_defaults = frappe.defaults.get_user_defaults(df.options);
+					var user_defaults = frappe.defaults.get_user_defaults(
+						df.options,
+					);
 					if (user_defaults && user_defaults.length === 1) {
 						// Use User Permission value when only when it has a single value
 						user_default = user_defaults[0];
@@ -168,19 +186,23 @@ $.extend(frappe.model, {
 				}
 
 				if (!user_default) {
-					user_default = frappe.defaults.get_user_default(df.fieldname);
+					user_default = frappe.defaults.get_user_default(
+						df.fieldname,
+					);
 				}
 				if (
 					!user_default &&
 					df.remember_last_selected_value &&
 					frappe.boot.user.last_selected_values
 				) {
-					user_default = frappe.boot.user.last_selected_values[df.options];
+					user_default =
+						frappe.boot.user.last_selected_values[df.options];
 				}
 
 				var is_allowed_user_default =
 					user_default &&
-					(!has_user_permissions || allowed_records.includes(user_default));
+					(!has_user_permissions ||
+						allowed_records.includes(user_default));
 
 				// is this user default also allowed as per user permissions?
 				if (is_allowed_user_default) {
@@ -192,7 +214,10 @@ $.extend(frappe.model, {
 		// 3 - look in default of docfield
 		if (!value || df["default"]) {
 			const default_val = String(df["default"]);
-			if (default_val == "__user" || default_val.toLowerCase() == "user") {
+			if (
+				default_val == "__user" ||
+				default_val.toLowerCase() == "user"
+			) {
 				value = frappe.session.user;
 			} else if (default_val == "user_fullname") {
 				value = frappe.session.user_fullname;
@@ -206,7 +231,11 @@ $.extend(frappe.model, {
 					value = frappe.datetime.system_datetime();
 				}
 			} else if (default_val[0] === ":") {
-				var boot_doc = frappe.model.get_default_from_boot_docs(df, doc, parent_doc);
+				var boot_doc = frappe.model.get_default_from_boot_docs(
+					df,
+					doc,
+					parent_doc,
+				);
 				var is_allowed_boot_doc =
 					!has_user_permissions || allowed_records.includes(boot_doc);
 
@@ -219,8 +248,13 @@ $.extend(frappe.model, {
 			} else {
 				// is this default value is also allowed as per user permissions?
 				var is_allowed_default =
-					!has_user_permissions || allowed_records.includes(df.default);
-				if (df.fieldtype !== "Link" || df.options === "User" || is_allowed_default) {
+					!has_user_permissions ||
+					allowed_records.includes(df.default);
+				if (
+					df.fieldtype !== "Link" ||
+					df.options === "User" ||
+					is_allowed_default
+				) {
 					value = df["default"];
 				}
 			}
@@ -241,11 +275,16 @@ $.extend(frappe.model, {
 	get_default_from_boot_docs: function (df, doc, parent_doc) {
 		// set default from partial docs passed during boot like ":User"
 		if (frappe.get_list(df["default"]).length > 0) {
-			var ref_fieldname = df["default"].slice(1).toLowerCase().replace(" ", "_");
+			var ref_fieldname = df["default"]
+				.slice(1)
+				.toLowerCase()
+				.replace(" ", "_");
 			var ref_value = parent_doc
 				? parent_doc[ref_fieldname]
 				: frappe.defaults.get_user_default(ref_fieldname);
-			var ref_doc = ref_value ? frappe.get_doc(df["default"], ref_value) : null;
+			var ref_doc = ref_value
+				? frappe.get_doc(df["default"], ref_value)
+				: null;
 
 			if (ref_doc && ref_doc[df.fieldname]) {
 				return ref_doc[df.fieldname];
@@ -257,7 +296,10 @@ $.extend(frappe.model, {
 		// if given doc, fieldname only
 		if (arguments.length === 2) {
 			parentfield = doctype;
-			doctype = frappe.meta.get_field(parent_doc.doctype, parentfield).options;
+			doctype = frappe.meta.get_field(
+				parent_doc.doctype,
+				parentfield,
+			).options;
 		}
 
 		// create row doc
@@ -283,8 +325,17 @@ $.extend(frappe.model, {
 	},
 
 	copy_doc: function (doc, from_amend, parent_doc, parentfield) {
-		var no_copy_list = ["name", "amended_from", "amendment_date", "cancel_reason"];
-		var newdoc = frappe.model.get_new_doc(doc.doctype, parent_doc, parentfield);
+		var no_copy_list = [
+			"name",
+			"amended_from",
+			"amendment_date",
+			"cancel_reason",
+		];
+		var newdoc = frappe.model.get_new_doc(
+			doc.doctype,
+			parent_doc,
+			parentfield,
+		);
 
 		for (var key in doc) {
 			// dont copy name and blank fields
@@ -300,7 +351,12 @@ $.extend(frappe.model, {
 				if (frappe.model.table_fields.includes(df.fieldtype)) {
 					for (var i = 0, j = value.length; i < j; i++) {
 						var d = value[i];
-						frappe.model.copy_doc(d, from_amend, newdoc, df.fieldname);
+						frappe.model.copy_doc(
+							d,
+							from_amend,
+							newdoc,
+							df.fieldname,
+						);
 					}
 				} else {
 					newdoc[key] = doc[key];
@@ -329,7 +385,9 @@ $.extend(frappe.model, {
 	open_mapped_doc: function (opts) {
 		if (opts.frm && opts.frm.doc.__unsaved) {
 			frappe.throw(
-				__("You have unsaved changes in this form. Please save before you continue.")
+				__(
+					"You have unsaved changes in this form. Please save before you continue.",
+				),
 			);
 		} else if (!opts.source_name && opts.frm) {
 			opts.source_name = opts.frm.doc.name;
@@ -354,7 +412,7 @@ $.extend(frappe.model, {
 					if (opts.run_link_triggers) {
 						frappe.get_doc(
 							r.message.doctype,
-							r.message.name
+							r.message.name,
 						).__run_link_triggers = true;
 					}
 					frappe.set_route("Form", r.message.doctype, r.message.name);
@@ -378,7 +436,9 @@ frappe.new_doc = function (doctype, opts, init_callback) {
 		}
 		frappe.model.with_doctype(doctype, function () {
 			if (frappe.create_routes[doctype]) {
-				frappe.set_route(frappe.create_routes[doctype]).then(() => resolve());
+				frappe
+					.set_route(frappe.create_routes[doctype])
+					.then(() => resolve());
 			} else {
 				frappe.ui.form
 					.make_quick_entry(doctype, null, init_callback)

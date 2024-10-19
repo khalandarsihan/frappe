@@ -1,7 +1,9 @@
 import localforage from "localforage";
 import PhonePicker from "../../phone_picker/phone_picker";
 
-frappe.ui.form.ControlPhone = class ControlPhone extends frappe.ui.form.ControlData {
+frappe.ui.form.ControlPhone = class ControlPhone extends (
+	frappe.ui.form.ControlData
+) {
 	async make_input() {
 		await this.setup_country_codes();
 		super.make_input();
@@ -15,7 +17,9 @@ frappe.ui.form.ControlPhone = class ControlPhone extends frappe.ui.form.ControlD
 		if (data) {
 			this.country_codes = data;
 		} else {
-			const data = await frappe.xcall("frappe.geo.country_info.get_country_timezone_info");
+			const data = await frappe.xcall(
+				"frappe.geo.country_info.get_country_timezone_info",
+			);
 			this.country_codes = data?.country_info;
 			localforage.setItem(key, this.country_codes);
 		}
@@ -49,12 +53,16 @@ frappe.ui.form.ControlPhone = class ControlPhone extends frappe.ui.form.ControlD
 				this.selected_icon.prepend(this.get_country_flag(country));
 			}
 			if (!this.$isd.length) {
-				this.selected_icon.append($(`<span class= "country"> ${country_isd}</span>`));
+				this.selected_icon.append(
+					$(`<span class= "country"> ${country_isd}</span>`),
+				);
 			} else {
 				this.$isd.text(country_isd);
 			}
 			if (this.$input.val()) {
-				this.set_value(this.get_country(country) + "-" + this.$input.val());
+				this.set_value(
+					this.get_country(country) + "-" + this.$input.val(),
+				);
 			}
 			this.update_padding();
 			// hide popover and focus input
@@ -115,7 +123,7 @@ frappe.ui.form.ControlPhone = class ControlPhone extends frappe.ui.form.ControlD
 		let input_value = this.get_input_value();
 		if (!this.selected_icon.length) {
 			this.selected_icon = $(
-				`<div class="selected-phone">${frappe.utils.icon("down", "sm")}</div>`
+				`<div class="selected-phone">${frappe.utils.icon("down", "sm")}</div>`,
 			);
 			this.selected_icon.insertAfter(this.$input);
 			this.selected_icon.append($(`<span class= "country"></span>`));
@@ -174,7 +182,9 @@ frappe.ui.form.ControlPhone = class ControlPhone extends frappe.ui.form.ControlD
 	}
 
 	set_flag(country_code) {
-		this.selected_icon.find("img").attr("src", `https://flagcdn.com/${country_code}.svg`);
+		this.selected_icon
+			.find("img")
+			.attr("src", `https://flagcdn.com/${country_code}.svg`);
 		this.$icon = this.selected_icon.find("img");
 		this.$icon.hasClass("hide") && this.$icon.toggleClass("hide");
 	}

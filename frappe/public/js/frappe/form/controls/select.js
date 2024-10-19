@@ -1,10 +1,13 @@
-frappe.ui.form.ControlSelect = class ControlSelect extends frappe.ui.form.ControlData {
+frappe.ui.form.ControlSelect = class ControlSelect extends (
+	frappe.ui.form.ControlData
+) {
 	static html_element = "select";
 	static trigger_change_on_input_event = false;
 	make_input() {
 		super.make_input();
 
-		const is_xs_input = this.df.input_class && this.df.input_class.includes("input-xs");
+		const is_xs_input =
+			this.df.input_class && this.df.input_class.includes("input-xs");
 		this.set_icon(is_xs_input);
 		this.df.placeholder && this.set_placeholder(is_xs_input);
 
@@ -36,7 +39,8 @@ frappe.ui.form.ControlSelect = class ControlSelect extends frappe.ui.form.Contro
 			this.$wrapper.find(".control-input").append(placeholder_html);
 		}
 		this.toggle_placeholder();
-		this.$input && this.$input.on("select-change", () => this.toggle_placeholder());
+		this.$input &&
+			this.$input.on("select-change", () => this.toggle_placeholder());
 	}
 	set_formatted_input(value) {
 		// refresh options first - (new ones??)
@@ -79,7 +83,7 @@ frappe.ui.form.ControlSelect = class ControlSelect extends frappe.ui.form.Contro
 				this.$input,
 				options || [],
 				this.df.sort_options,
-				this.df.context || this.df.parent || this.doctype
+				this.df.context || this.df.parent || this.doctype,
 			);
 
 			if (value === undefined && selected) {
@@ -114,9 +118,13 @@ frappe.ui.form.add_options = function (input, options_list, sort, doctype) {
 		return $select;
 	}
 
-	let options = options_list.map((raw_option) => parse_option(raw_option, doctype));
+	let options = options_list.map((raw_option) =>
+		parse_option(raw_option, doctype),
+	);
 	if (sort) {
-		options = options.sort((a, b) => cstr(a.label).localeCompare(cstr(b.label)));
+		options = options.sort((a, b) =>
+			cstr(a.label).localeCompare(cstr(b.label)),
+		);
 	}
 
 	options
@@ -125,7 +133,7 @@ frappe.ui.form.add_options = function (input, options_list, sort, doctype) {
 				.html(cstr(option.label))
 				.attr("value", option.value)
 				.prop("disabled", option.is_disabled)
-				.prop("selected", option.is_selected)
+				.prop("selected", option.is_selected),
 		)
 		.forEach(($option) => $option.appendTo($select.get(0)));
 
@@ -172,7 +180,9 @@ function parse_option(v, doctype) {
 			label = __(v, null, doctype);
 		} else {
 			value = is_value_null ? "" : v.value;
-			label = is_label_null ? __(value, null, doctype) : __(v.label, null, doctype);
+			label = is_label_null
+				? __(value, null, doctype)
+				: __(v.label, null, doctype);
 		}
 	}
 

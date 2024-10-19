@@ -12,7 +12,7 @@ frappe.ui.form.LinkedWith = class LinkedWith {
 		$(this.dialog.body).html(
 			`<div class="text-muted text-center" style="padding: 30px 0px">
 				${__("Loading")}...
-			</div>`
+			</div>`,
 		);
 
 		this.dialog.show();

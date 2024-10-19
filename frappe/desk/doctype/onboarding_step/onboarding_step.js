@@ -16,9 +16,9 @@ frappe.ui.form.on("Onboarding Step", {
 		frappe.boot.developer_mode &&
 			frm.set_intro(
 				__(
-					"To export this step as JSON, link it in a Onboarding document and save the document."
+					"To export this step as JSON, link it in a Onboarding document and save the document.",
 				),
-				true
+				true,
 			);
 		if (frm.doc.reference_document && frm.doc.action == "Update Settings") {
 			setup_fields(frm);
@@ -71,7 +71,9 @@ function setup_fields(frm) {
 			let fields = frappe
 				.get_meta(frm.doc.reference_document)
 				.fields.filter((df) => {
-					return ["Data", "Check", "Int", "Link", "Select"].includes(df.fieldtype);
+					return ["Data", "Check", "Int", "Link", "Select"].includes(
+						df.fieldtype,
+					);
 				})
 				.map((df) => {
 					return {

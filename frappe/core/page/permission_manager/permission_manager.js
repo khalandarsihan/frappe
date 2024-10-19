@@ -8,10 +8,12 @@ frappe.pages["permission-manager"].on_page_load = (wrapper) => {
 
 	frappe.breadcrumbs.add("Setup");
 
-	$("<div class='perm-engine' style='min-height: 200px; padding: 15px;'></div>").appendTo(
-		page.main
+	$(
+		"<div class='perm-engine' style='min-height: 200px; padding: 15px;'></div>",
+	).appendTo(page.main);
+	$(frappe.render_template("permission_manager_help", {})).appendTo(
+		page.main,
 	);
-	$(frappe.render_template("permission_manager_help", {})).appendTo(page.main);
 	wrapper.permission_engine = new frappe.PermissionEngine(wrapper);
 };
 
@@ -106,18 +108,21 @@ frappe.PermissionEngine = class PermissionEngine {
 
 	reset_std_permissions(data) {
 		let doctype = this.get_doctype();
-		let d = frappe.confirm(__("Reset Permissions for {0}?", [doctype]), () => {
-			return frappe
-				.call({
-					module: "frappe.core",
-					page: "permission_manager",
-					method: "reset",
-					args: { doctype },
-				})
-				.then(() => {
-					this.refresh();
-				});
-		});
+		let d = frappe.confirm(
+			__("Reset Permissions for {0}?", [doctype]),
+			() => {
+				return frappe
+					.call({
+						module: "frappe.core",
+						page: "permission_manager",
+						method: "reset",
+						args: { doctype },
+					})
+					.then(() => {
+						this.refresh();
+					});
+			},
+		);
 
 		// show standard permissions
 		let $d = $(d.wrapper)
@@ -169,7 +174,9 @@ frappe.PermissionEngine = class PermissionEngine {
 		let role = this.get_role();
 
 		if (!doctype && !role) {
-			return this.set_empty_message(__("Select Document Type or Role to start."));
+			return this.set_empty_message(
+				__("Select Document Type or Role to start."),
+			);
 		}
 
 		// get permissions
@@ -204,7 +211,7 @@ frappe.PermissionEngine = class PermissionEngine {
 				<thead><tr></tr></thead>\
 				<tbody></tbody>\
 			</table>\
-		</div>"
+		</div>",
 		).appendTo(this.body);
 
 		const table_columns = [
@@ -247,14 +254,22 @@ frappe.PermissionEngine = class PermissionEngine {
 			}
 
 			let perm_cell = this.add_cell(row, d, "permissions");
-			let perm_container = $("<div class='row'></div>").appendTo(perm_cell);
+			let perm_container = $("<div class='row'></div>").appendTo(
+				perm_cell,
+			);
 
 			this.rights.forEach((r) => {
-				if (!d.is_submittable && ["submit", "cancel", "amend"].includes(r)) return;
+				if (
+					!d.is_submittable &&
+					["submit", "cancel", "amend"].includes(r)
+				)
+					return;
 				this.add_check(perm_container, d, r);
 
 				if (d.if_owner && r == "report") {
-					perm_container.find("div[data-fieldname='report']").toggle(false);
+					perm_container
+						.find("div[data-fieldname='report']")
+						.toggle(false);
 				}
 			});
 
@@ -283,7 +298,7 @@ frappe.PermissionEngine = class PermissionEngine {
 					<label><input type='checkbox'>${__(label)}</input></label>
 					<p class='help-box small text-muted'>${__(description)}</p>
 				</div>
-			</div>`
+			</div>`,
 		)
 			.appendTo(cell)
 			.attr("data-fieldname", fieldname);
@@ -342,12 +357,15 @@ frappe.PermissionEngine = class PermissionEngine {
 					},
 					callback: function (r) {
 						r.message = $.map(r.message, function (p) {
-							return $.format('<a href="/app/user/{0}">{1}</a>', [p, p]);
+							return $.format('<a href="/app/user/{0}">{1}</a>', [
+								p,
+								p,
+							]);
 						});
 						frappe.msgprint(
 							__("Users with role {0}:", [__(role)]) +
 								"<br>" +
-								r.message.join("<br>")
+								r.message.join("<br>"),
 						);
 					},
 				});
@@ -358,8 +376,8 @@ frappe.PermissionEngine = class PermissionEngine {
 	add_delete_button(row, d) {
 		$(
 			`<button class='btn btn-danger btn-remove-perm btn-xs'>${frappe.utils.icon(
-				"delete"
-			)}</button>`
+				"delete",
+			)}</button>`,
 		)
 			.appendTo($(`<td class="pt-4">`).appendTo(row))
 			.attr("data-doctype", d.parent)
@@ -458,7 +476,7 @@ frappe.PermissionEngine = class PermissionEngine {
 							reqd: 1,
 							fieldname: "permlevel",
 							description: __(
-								"Level 0 is for document level permissions, higher levels for field level permissions."
+								"Level 0 is for document level permissions, higher levels for field level permissions.",
 							),
 						},
 					],
@@ -494,16 +512,19 @@ frappe.PermissionEngine = class PermissionEngine {
 				});
 				d.show();
 			},
-			"small-add"
+			"small-add",
 		);
 	}
 
 	make_reset_button() {
-		this.page.set_secondary_action(__("Restore Original Permissions"), () => {
-			this.get_standard_permissions((data) => {
-				this.reset_std_permissions(data);
-			});
-		});
+		this.page.set_secondary_action(
+			__("Restore Original Permissions"),
+			() => {
+				this.get_standard_permissions((data) => {
+					this.reset_std_permissions(data);
+				});
+			},
+		);
 	}
 
 	get_perm(role) {

@@ -23,10 +23,14 @@ frappe.views.FormFactory = class FormFactory extends frappe.views.Factory {
 
 	make_and_show(doctype, route) {
 		if (frappe.router.doctype_layout) {
-			frappe.model.with_doc("DocType Layout", frappe.router.doctype_layout, () => {
-				this.make_form(doctype);
-				this.show_doc(route);
-			});
+			frappe.model.with_doc(
+				"DocType Layout",
+				frappe.router.doctype_layout,
+				() => {
+					this.make_form(doctype);
+					this.show_doc(route);
+				},
+			);
 		} else {
 			this.make_form(doctype);
 			this.show_doc(route);
@@ -38,7 +42,7 @@ frappe.views.FormFactory = class FormFactory extends frappe.views.Factory {
 			doctype,
 			this.page,
 			true,
-			frappe.router.doctype_layout
+			frappe.router.doctype_layout,
 		);
 	}
 

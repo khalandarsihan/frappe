@@ -7,7 +7,7 @@ frappe.ui.form.on("Google Calendar", {
 			frm.dashboard.set_headline(
 				__("To use Google Calendar, enable {0}.", [
 					`<a href='/app/google-settings'>${__("Google Settings")}</a>`,
-				])
+				]),
 			);
 		}
 
@@ -16,7 +16,7 @@ frappe.ui.form.on("Google Calendar", {
 				frm.dashboard.show_progress(
 					"Syncing Google Calendar",
 					(data.progress / data.total) * 100,
-					__("Syncing {0} of {1}", [data.progress, data.total])
+					__("Syncing {0} of {1}", [data.progress, data.total]),
 				);
 				if (data.progress === data.total) {
 					frm.dashboard.hide_progress("Syncing Google Calendar");

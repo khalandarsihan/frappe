@@ -32,7 +32,10 @@ frappe.ui.form.Share = class Share {
 		}
 
 		this.shares.show();
-		let avatar_group = frappe.avatar_group(shared_users, 5, { align: "left", overlap: true });
+		let avatar_group = frappe.avatar_group(shared_users, 5, {
+			align: "left",
+			overlap: true,
+		});
 		avatar_group.on("click", () => {
 			this.frm.share_doc();
 		});
@@ -86,7 +89,7 @@ frappe.ui.form.Share = class Share {
 				frm: this.frm,
 				shared: this.shared,
 				everyone: everyone,
-			})
+			}),
 		).appendTo(d.body);
 
 		if (frappe.model.can_share(null, this.frm)) {
@@ -132,10 +135,24 @@ frappe.ui.form.Share = class Share {
 						doctype: me.frm.doctype,
 						name: me.frm.doc.name,
 						user: user,
-						read: $(d.body).find(".add-share-read").prop("checked") ? 1 : 0,
-						write: $(d.body).find(".add-share-write").prop("checked") ? 1 : 0,
-						submit: $(d.body).find(".add-share-submit").prop("checked") ? 1 : 0,
-						share: $(d.body).find(".add-share-share").prop("checked") ? 1 : 0,
+						read: $(d.body).find(".add-share-read").prop("checked")
+							? 1
+							: 0,
+						write: $(d.body)
+							.find(".add-share-write")
+							.prop("checked")
+							? 1
+							: 0,
+						submit: $(d.body)
+							.find(".add-share-submit")
+							.prop("checked")
+							? 1
+							: 0,
+						share: $(d.body)
+							.find(".add-share-share")
+							.prop("checked")
+							? 1
+							: 0,
 						notify: 1,
 					},
 					btn: this,
@@ -160,10 +177,17 @@ frappe.ui.form.Share = class Share {
 		$(d.body)
 			.find(".edit-share")
 			.on("click", function () {
-				var user = $(this).parents(".shared-user:first").attr("data-user") || "",
+				var user =
+						$(this)
+							.parents(".shared-user:first")
+							.attr("data-user") || "",
 					value = $(this).prop("checked") ? 1 : 0,
 					property = $(this).attr("name"),
-					everyone = cint($(this).parents(".shared-user:first").attr("data-everyone"));
+					everyone = cint(
+						$(this)
+							.parents(".shared-user:first")
+							.attr("data-everyone"),
+					);
 
 				frappe.call({
 					method: "frappe.share.set_permission",
@@ -179,7 +203,11 @@ frappe.ui.form.Share = class Share {
 						var found = null;
 						$.each(me.shared, function (i, s) {
 							// update shared object
-							if (s && (s.user === user || (everyone && s.everyone === 1))) {
+							if (
+								s &&
+								(s.user === user ||
+									(everyone && s.everyone === 1))
+							) {
 								if (!r.message) {
 									delete me.shared[i];
 								} else {

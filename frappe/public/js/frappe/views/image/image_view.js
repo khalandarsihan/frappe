@@ -67,7 +67,8 @@ frappe.views.ImageView = class ImageView extends frappe.views.ListView {
 
 	item_details_html(item) {
 		// TODO: Image view field in DocType
-		let info_fields = this.get_fields_in_list_view().map((el) => el.fieldname) || [];
+		let info_fields =
+			this.get_fields_in_list_view().map((el) => el.fieldname) || [];
 		const title_field = this.meta.title_field || "name";
 		info_fields = info_fields.filter((field) => field !== title_field);
 		let info_html = `<div><ul class="list-unstyled image-view-info">`;
@@ -75,7 +76,8 @@ frappe.views.ImageView = class ImageView extends frappe.views.ListView {
 		info_fields.forEach((field, index) => {
 			if (item[field] && !set) {
 				if (index == 0) info_html += `<li>${__(item[field])}</li>`;
-				else info_html += `<li class="text-muted">${__(item[field])}</li>`;
+				else
+					info_html += `<li class="text-muted">${__(item[field])}</li>`;
 				set = true;
 			}
 		});
@@ -151,7 +153,10 @@ frappe.views.ImageView = class ImageView extends frappe.views.ListView {
 				},
 			})
 			.then((r) => {
-				this.images_map = Object.assign(this.images_map || {}, r.message);
+				this.images_map = Object.assign(
+					this.images_map || {},
+					r.message,
+				);
 			});
 	}
 
@@ -231,7 +236,9 @@ frappe.views.GalleryView = class GalleryView {
 				}
 
 				if (!el) {
-					el = me.wrapper.find('.image-field[data-name="' + i._name + '"]').get(0);
+					el = me.wrapper
+						.find('.image-field[data-name="' + i._name + '"]')
+						.get(0);
 					width = el.getBoundingClientRect().width;
 					height = el.getBoundingClientRect().height;
 				}
@@ -250,7 +257,9 @@ frappe.views.GalleryView = class GalleryView {
 		});
 	}
 	show(docname) {
-		this.lib_ready.then(() => this.prepare_pswp_items()).then(() => this._show(docname));
+		this.lib_ready
+			.then(() => this.prepare_pswp_items())
+			.then(() => this._show(docname));
 	}
 	_show(docname) {
 		const me = this;
@@ -267,7 +276,9 @@ frappe.views.GalleryView = class GalleryView {
 					return;
 				}
 
-				var pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
+				var pageYScroll =
+						window.pageYOffset ||
+						document.documentElement.scrollTop,
 					rect = thumbnail.getBoundingClientRect();
 
 				return {
@@ -282,7 +293,12 @@ frappe.views.GalleryView = class GalleryView {
 		};
 
 		// init
-		this.pswp = new PhotoSwipe(this.pswp_root.get(0), PhotoSwipeUI_Default, items, options);
+		this.pswp = new PhotoSwipe(
+			this.pswp_root.get(0),
+			PhotoSwipeUI_Default,
+			items,
+			options,
+		);
 		this.browse_images();
 		this.pswp.init();
 	}
@@ -312,7 +328,9 @@ frappe.views.GalleryView = class GalleryView {
 		// Replace current image on click
 		$more_items.on("click", ".pswp__more-item", (e) => {
 			const img_el = e.target;
-			const index = this.pswp.items.findIndex((i) => i.name === this.pswp.currItem.name);
+			const index = this.pswp.items.findIndex(
+				(i) => i.name === this.pswp.currItem.name,
+			);
 
 			this.pswp.goTo(index);
 			this.pswp.items.splice(index, 1, {
@@ -358,7 +376,7 @@ frappe.views.GalleryView = class GalleryView {
 					asset_dir + "photoswipe.js",
 					asset_dir + "photoswipe-ui-default.js",
 				],
-				resolve
+				resolve,
 			);
 		});
 	}

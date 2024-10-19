@@ -31,7 +31,10 @@ const bundle_map = app_list.reduce((out, app) => {
 
 		for (let js_file of js_files) {
 			const filename = path.basename(js_file).split(".")[0];
-			out[path.join(app, "js", filename)] = path.resolve(public_js_path, js_file);
+			out[path.join(app, "js", filename)] = path.resolve(
+				public_js_path,
+				js_file,
+			);
 		}
 	}
 
@@ -40,7 +43,8 @@ const bundle_map = app_list.reduce((out, app) => {
 
 const get_public_path = (app) => public_paths[app];
 
-const get_build_json_path = (app) => path.resolve(get_public_path(app), "build.json");
+const get_build_json_path = (app) =>
+	path.resolve(get_public_path(app), "build.json");
 
 function get_build_json(app) {
 	try {
@@ -108,7 +112,10 @@ function log(...args) {
 function get_redis_subscriber(kind) {
 	// get redis subscriber that aborts after 10 connection attempts
 	let retry_strategy;
-	let { get_redis_subscriber: get_redis, get_conf } = require("../node_utils");
+	let {
+		get_redis_subscriber: get_redis,
+		get_conf,
+	} = require("../node_utils");
 
 	if (process.env.CI == 1 || get_conf().developer_mode == 0) {
 		retry_strategy = () => {};

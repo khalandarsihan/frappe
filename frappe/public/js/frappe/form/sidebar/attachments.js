@@ -34,9 +34,10 @@ frappe.ui.form.Attachments = class Attachments {
 			if (raise_exception) {
 				frappe.throw({
 					title: __("Attachment Limit Reached"),
-					message: __("Maximum attachment limit of {0} has been reached.", [
-						cstr(attachment_limit).bold(),
-					]),
+					message: __(
+						"Maximum attachment limit of {0} has been reached.",
+						[cstr(attachment_limit).bold()],
+					),
 				});
 			}
 			return true;
@@ -52,7 +53,9 @@ frappe.ui.form.Attachments = class Attachments {
 		this.parent.find(".attachment-row").remove();
 
 		var max_reached = this.max_reached();
-		this.add_attachment_wrapper.find(".add-attachment-btn").toggle(!max_reached);
+		this.add_attachment_wrapper
+			.find(".add-attachment-btn")
+			.toggle(!max_reached);
 
 		// add attachment objects
 		var attachments = this.get_attachments();
@@ -91,16 +94,24 @@ frappe.ui.form.Attachments = class Attachments {
 		if (!this.show_all_attachments && is_slicable) {
 			// render last n attachments as they are at the top
 			let start = attachments.length - this.attachments_page_length;
-			attachments_to_render = attachments.slice(start, attachments.length);
+			attachments_to_render = attachments.slice(
+				start,
+				attachments.length,
+			);
 		}
 
 		if (attachments_to_render.length) {
 			let exists = {};
-			let unique_attachments = attachments_to_render.filter((attachment) => {
-				return Object.prototype.hasOwnProperty.call(exists, attachment.file_name)
-					? false
-					: (exists[attachment.file_name] = true);
-			});
+			let unique_attachments = attachments_to_render.filter(
+				(attachment) => {
+					return Object.prototype.hasOwnProperty.call(
+						exists,
+						attachment.file_name,
+					)
+						? false
+						: (exists[attachment.file_name] = true);
+				},
+			);
 			unique_attachments.forEach((attachment) => {
 				me.add_attachment(attachment);
 			});
@@ -132,17 +143,26 @@ frappe.ui.form.Attachments = class Attachments {
 		let remove_action = null;
 		if (frappe.model.can_write(this.frm.doctype, this.frm.name)) {
 			remove_action = function (target_id) {
-				frappe.confirm(__("Are you sure you want to delete the attachment?"), function () {
-					let target_attachment = me
-						.get_attachments()
-						.find((attachment) => attachment.name === target_id);
-					let to_be_removed = me
-						.get_attachments()
-						.filter(
-							(attachment) => attachment.file_name === target_attachment.file_name
+				frappe.confirm(
+					__("Are you sure you want to delete the attachment?"),
+					function () {
+						let target_attachment = me
+							.get_attachments()
+							.find(
+								(attachment) => attachment.name === target_id,
+							);
+						let to_be_removed = me
+							.get_attachments()
+							.filter(
+								(attachment) =>
+									attachment.file_name ===
+									target_attachment.file_name,
+							);
+						to_be_removed.forEach((attachment) =>
+							me.remove_attachment(attachment.name),
 						);
-					to_be_removed.forEach((attachment) => me.remove_attachment(attachment.name));
-				});
+					},
+				);
 				return false;
 			};
 		}
@@ -152,7 +172,9 @@ frappe.ui.form.Attachments = class Attachments {
 			</a>`;
 
 		$(`<li class="attachment-row">`)
-			.append(frappe.get_data_pill(file_label, fileid, remove_action, icon))
+			.append(
+				frappe.get_data_pill(file_label, fileid, remove_action, icon),
+			)
 			.insertAfter(this.add_attachment_wrapper);
 	}
 
@@ -179,7 +201,10 @@ frappe.ui.form.Attachments = class Attachments {
 		return fid;
 	}
 	remove_attachment_by_filename(filename, callback) {
-		this.remove_attachment(this.get_file_id_from_file_url(filename), callback);
+		this.remove_attachment(
+			this.get_file_id_from_file_url(filename),
+			callback,
+		);
 	}
 	remove_attachment(fileid, callback) {
 		if (!fileid) {
@@ -198,7 +223,8 @@ frappe.ui.form.Attachments = class Attachments {
 			},
 			callback: function (r, rt) {
 				if (r.exc) {
-					if (!r._server_messages) frappe.msgprint(__("There were errors"));
+					if (!r._server_messages)
+						frappe.msgprint(__("There were errors"));
 					return;
 				}
 				me.remove_fileid(fileid);
@@ -216,7 +242,8 @@ frappe.ui.form.Attachments = class Attachments {
 		const restrictions = {};
 		if (this.frm.meta.max_attachments) {
 			restrictions.max_number_of_files =
-				this.frm.meta.max_attachments - this.frm.attachments.get_attachments().length;
+				this.frm.meta.max_attachments -
+				this.frm.attachments.get_attachments().length;
 		}
 
 		new frappe.ui.FileUploader({

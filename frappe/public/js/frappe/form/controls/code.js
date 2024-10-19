@@ -1,4 +1,6 @@
-frappe.ui.form.ControlCode = class ControlCode extends frappe.ui.form.ControlText {
+frappe.ui.form.ControlCode = class ControlCode extends (
+	frappe.ui.form.ControlText
+) {
 	make_input() {
 		if (this.editor) return;
 		this.load_lib().then(() => this.make_ace_editor());
@@ -15,7 +17,10 @@ frappe.ui.form.ControlCode = class ControlCode extends frappe.ui.form.ControlTex
 		}
 
 		const codeField = this.df.fieldtype === "Code";
-		if ((codeField && this.df.read_only === 1) || (codeField && this.frm.doc.docstatus > 0)) {
+		if (
+			(codeField && this.df.read_only === 1) ||
+			(codeField && this.frm.doc.docstatus > 0)
+		) {
 			this.button = $(
 				`<button
 					class="btn icon-btn"
@@ -26,11 +31,15 @@ frappe.ui.form.ControlCode = class ControlCode extends frappe.ui.form.ControlTex
 					<svg class="es-icon es-line  icon-sm" style="" aria-hidden="true">
 						<use class="" href="#es-line-copy-light"></use>
 					</svg>
-				</button>`
+				</button>`,
 			);
 			this.button.on("click", () => {
 				frappe.utils.copy_to_clipboard(
-					frappe.model.get_value(this.doctype, this.docname, this.df.fieldname)
+					frappe.model.get_value(
+						this.doctype,
+						this.docname,
+						this.df.fieldname,
+					),
 				);
 			});
 			this.button.appendTo(this.$wrapper);
@@ -39,9 +48,9 @@ frappe.ui.form.ControlCode = class ControlCode extends frappe.ui.form.ControlTex
 
 	make_ace_editor() {
 		if (this.editor) return;
-		this.ace_editor_target = $('<div class="ace-editor-target"></div>').appendTo(
-			this.input_area
-		);
+		this.ace_editor_target = $(
+			'<div class="ace-editor-target"></div>',
+		).appendTo(this.input_area);
 
 		// styling
 		this.ace_editor_target.addClass("border rounded");
@@ -56,12 +65,14 @@ frappe.ui.form.ControlCode = class ControlCode extends frappe.ui.form.ControlTex
 		this.editor = ace.edit(this.ace_editor_target.get(0));
 
 		if (this.df.max_lines || this.df.min_lines || this.df.max_height) {
-			if (this.df.max_lines) this.editor.setOption("maxLines", this.df.max_lines);
-			if (this.df.min_lines) this.editor.setOption("minLines", this.df.min_lines);
+			if (this.df.max_lines)
+				this.editor.setOption("maxLines", this.df.max_lines);
+			if (this.df.min_lines)
+				this.editor.setOption("minLines", this.df.min_lines);
 		} else {
 			this.expanded = false;
 			this.$expand_button = $(
-				`<button class="btn btn-xs btn-default">${this.get_button_label()}</button>`
+				`<button class="btn btn-xs btn-default">${this.get_button_label()}</button>`,
 			)
 				.click(() => {
 					this.expanded = !this.expanded;
@@ -147,7 +158,7 @@ frappe.ui.form.ControlCode = class ControlCode extends frappe.ui.form.ControlTex
 							meta: a.meta,
 							caption: a.caption,
 						};
-					})
+					}),
 				);
 			}
 		};
@@ -171,7 +182,8 @@ frappe.ui.form.ControlCode = class ControlCode extends frappe.ui.form.ControlTex
 	}
 
 	toggle_label() {
-		this.$expand_button && this.$expand_button.text(this.get_button_label());
+		this.$expand_button &&
+			this.$expand_button.text(this.get_button_label());
 	}
 
 	get_button_label() {
@@ -203,7 +215,7 @@ frappe.ui.form.ControlCode = class ControlCode extends frappe.ui.form.ControlTex
 			console.warn(
 				`Invalid language option provided for field "${
 					this.df.label
-				}". Valid options are ${valid_languages.join(", ")}.`
+				}". Valid options are ${valid_languages.join(", ")}.`,
 			);
 		}
 
@@ -238,9 +250,11 @@ frappe.ui.form.ControlCode = class ControlCode extends frappe.ui.form.ControlTex
 		if (this.library_loaded) return this.library_loaded;
 
 		if (frappe.boot.developer_mode) {
-			this.root_lib_path = "/assets/frappe/node_modules/ace-builds/src-noconflict/";
+			this.root_lib_path =
+				"/assets/frappe/node_modules/ace-builds/src-noconflict/";
 		} else {
-			this.root_lib_path = "/assets/frappe/node_modules/ace-builds/src-min-noconflict/";
+			this.root_lib_path =
+				"/assets/frappe/node_modules/ace-builds/src-min-noconflict/";
 		}
 
 		this.library_loaded = new Promise((resolve) => {

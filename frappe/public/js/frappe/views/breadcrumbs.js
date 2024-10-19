@@ -108,14 +108,16 @@ frappe.breadcrumbs = {
 		if (
 			breadcrumbs.module_info &&
 			(breadcrumbs.module_info.blocked ||
-				!frappe.visible_modules.includes(breadcrumbs.module_info.module))
+				!frappe.visible_modules.includes(
+					breadcrumbs.module_info.module,
+				))
 		) {
 			return;
 		}
 
 		this.append_breadcrumb_element(
 			`/app/${frappe.router.slug(breadcrumbs.workspace)}`,
-			__(breadcrumbs.workspace)
+			__(breadcrumbs.workspace),
 		);
 	},
 
@@ -139,7 +141,9 @@ frappe.breadcrumbs = {
 
 			if (
 				breadcrumbs.module &&
-				frappe.boot.module_wise_workspaces[breadcrumbs.module]?.includes(last_workspace)
+				frappe.boot.module_wise_workspaces[
+					breadcrumbs.module
+				]?.includes(last_workspace)
 			) {
 				breadcrumbs.workspace = last_workspace;
 				return;
@@ -158,7 +162,8 @@ frappe.breadcrumbs = {
 				breadcrumbs.module_info &&
 				frappe.boot.module_wise_workspaces[breadcrumbs.module]
 			) {
-				breadcrumbs.workspace = frappe.boot.module_wise_workspaces[breadcrumbs.module][0];
+				breadcrumbs.workspace =
+					frappe.boot.module_wise_workspaces[breadcrumbs.module][0];
 			}
 		}
 	},
@@ -173,9 +178,12 @@ frappe.breadcrumbs = {
 			// no user listview for non-system managers and single doctypes
 		} else {
 			let route;
-			const doctype_route = frappe.router.slug(frappe.router.doctype_layout || doctype);
+			const doctype_route = frappe.router.slug(
+				frappe.router.doctype_layout || doctype,
+			);
 			if (doctype_meta?.is_tree) {
-				let view = frappe.model.user_settings[doctype].last_view || "Tree";
+				let view =
+					frappe.model.user_settings[doctype].last_view || "Tree";
 				route = `${doctype_route}/view/${view}`;
 			} else {
 				route = doctype_route;
@@ -188,7 +196,11 @@ frappe.breadcrumbs = {
 		const doctype = breadcrumbs.doctype;
 		let docname = frappe.get_route().slice(2).join("/");
 		let docname_title;
-		if (docname.startsWith("new-" + doctype.toLowerCase().replace(/ /g, "-"))) {
+		if (
+			docname.startsWith(
+				"new-" + doctype.toLowerCase().replace(/ /g, "-"),
+			)
+		) {
 			docname_title = __("New {0}", [__(doctype)]);
 		} else {
 			docname_title = __(docname);
@@ -211,14 +223,19 @@ frappe.breadcrumbs = {
 		const doctype = breadcrumbs.doctype;
 		const docname = frappe.get_route()[1];
 		let dashboard_route = `/app/${frappe.router.slug(doctype)}/${docname}`;
-		$(`<li><a href="${dashboard_route}">${__(docname)}</a></li>`).appendTo(this.$breadcrumbs);
+		$(`<li><a href="${dashboard_route}">${__(docname)}</a></li>`).appendTo(
+			this.$breadcrumbs,
+		);
 	},
 
 	setup_modules() {
 		if (!frappe.visible_modules) {
-			frappe.visible_modules = $.map(frappe.boot.allowed_workspaces, (m) => {
-				return m.module;
-			});
+			frappe.visible_modules = $.map(
+				frappe.boot.allowed_workspaces,
+				(m) => {
+					return m.module;
+				},
+			);
 		}
 	},
 

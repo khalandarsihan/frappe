@@ -3,7 +3,11 @@ $(".dropdown-menu a.dropdown-toggle").on("click", function (e) {
 	e.preventDefault();
 	e.stopImmediatePropagation();
 	if (!$(this).next().hasClass("show")) {
-		$(this).parents(".dropdown-menu").first().find(".show").removeClass("show");
+		$(this)
+			.parents(".dropdown-menu")
+			.first()
+			.find(".show")
+			.removeClass("show");
 	}
 	var $subMenu = $(this).next(".dropdown-menu");
 	$subMenu.toggleClass("show");
@@ -37,7 +41,7 @@ frappe.get_modal = function (title, content) {
 					</div>
 				</div>
 			</div>
-		</div>`
+		</div>`,
 	);
 };
 

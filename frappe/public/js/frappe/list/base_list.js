@@ -38,7 +38,8 @@ frappe.views.BaseList = class BaseList {
 
 	setup_defaults() {
 		this.page_name = frappe.get_route_str();
-		this.page_title = this.page_title || frappe.router.doctype_layout || __(this.doctype);
+		this.page_title =
+			this.page_title || frappe.router.doctype_layout || __(this.doctype);
 		this.meta = frappe.get_meta(this.doctype);
 		this.settings = frappe.listview_settings[this.doctype] || {};
 		this.user_settings = frappe.get_user_settings(this.doctype);
@@ -83,7 +84,10 @@ frappe.views.BaseList = class BaseList {
 	}
 
 	async set_fields() {
-		let fields = [].concat(frappe.model.std_fields_list, this.meta.title_field);
+		let fields = [].concat(
+			frappe.model.std_fields_list,
+			this.meta.title_field,
+		);
 
 		fields.forEach((f) => this._add_field(f));
 	}
@@ -94,7 +98,9 @@ frappe.views.BaseList = class BaseList {
 				(frappe.model.is_value_type(df.fieldtype) &&
 					df.in_list_view &&
 					frappe.perm.has_perm(this.doctype, df.permlevel, "read")) ||
-				(df.fieldtype === "Currency" && df.options && !df.options.includes(":")) ||
+				(df.fieldtype === "Currency" &&
+					df.options &&
+					!df.options.includes(":")) ||
 				df.fieldname === "status"
 			);
 		});
@@ -132,7 +138,9 @@ frappe.views.BaseList = class BaseList {
 			frappe.meta.has_field(doctype, fieldname) ||
 			fieldname === "_seen";
 
-		let is_virtual = this.meta.fields.find((df) => df.fieldname == fieldname)?.is_virtual;
+		let is_virtual = this.meta.fields.find(
+			(df) => df.fieldname == fieldname,
+		)?.is_virtual;
 
 		if (!is_valid_field || is_virtual) {
 			return;
@@ -144,7 +152,9 @@ frappe.views.BaseList = class BaseList {
 	set_stats() {
 		this.stats = ["_user_tags"];
 		// add workflow field (as priority)
-		this.workflow_state_fieldname = frappe.workflow.get_state_fieldname(this.doctype);
+		this.workflow_state_fieldname = frappe.workflow.get_state_fieldname(
+			this.doctype,
+		);
 		if (this.workflow_state_fieldname) {
 			if (!frappe.workflow.workflows[this.doctype]["override_status"]) {
 				this._add_field(this.workflow_state_fieldname);
@@ -182,11 +192,20 @@ frappe.views.BaseList = class BaseList {
 	}
 
 	set_title() {
-		this.page.set_title(this.page_title, null, true, "", this.meta?.description);
+		this.page.set_title(
+			this.page_title,
+			null,
+			true,
+			"",
+			this.meta?.description,
+		);
 	}
 
 	setup_view_menu() {
-		if (frappe.boot.desk_settings.view_switcher && !this.meta.force_re_route_to_default_view) {
+		if (
+			frappe.boot.desk_settings.view_switcher &&
+			!this.meta.force_re_route_to_default_view
+		) {
 			const icon_map = {
 				Image: "image-view",
 				List: "list",
@@ -213,7 +232,7 @@ frappe.views.BaseList = class BaseList {
 
 			this.views_menu = this.page.add_custom_button_group(
 				label_map[this.view_name] || label_map["List"],
-				icon_map[this.view_name] || "list"
+				icon_map[this.view_name] || "list",
 			);
 			this.views_list = new frappe.views.ListViewSelect({
 				doctype: this.doctype,
@@ -232,7 +251,7 @@ frappe.views.BaseList = class BaseList {
 			const $secondary_action = this.page.set_secondary_action(
 				this.secondary_action.label,
 				this.secondary_action.action,
-				this.secondary_action.icon
+				this.secondary_action.icon,
 			);
 			if (!this.secondary_action.icon) {
 				$secondary_action.addClass("hidden-xs");
@@ -246,7 +265,7 @@ frappe.views.BaseList = class BaseList {
 					this.refresh();
 				},
 				"",
-				__("Reload List")
+				__("Reload List"),
 			);
 		}
 	}
@@ -263,7 +282,7 @@ frappe.views.BaseList = class BaseList {
 					item.label,
 					item.action,
 					item.standard,
-					item.shortcut
+					item.shortcut,
 				);
 				if (item.class) {
 					$item && $item.addClass(item.class);
@@ -276,7 +295,8 @@ frappe.views.BaseList = class BaseList {
 	}
 
 	setup_side_bar() {
-		if (this.hide_sidebar || !frappe.boot.desk_settings.list_sidebar) return;
+		if (this.hide_sidebar || !frappe.boot.desk_settings.list_sidebar)
+			return;
 		this.list_sidebar = new frappe.views.ListSidebar({
 			doctype: this.doctype,
 			stats: this.stats,
@@ -287,7 +307,8 @@ frappe.views.BaseList = class BaseList {
 	}
 
 	toggle_side_bar(show) {
-		let show_sidebar = show || JSON.parse(localStorage.show_sidebar || "true");
+		let show_sidebar =
+			show || JSON.parse(localStorage.show_sidebar || "true");
 		show_sidebar = !show_sidebar;
 		localStorage.show_sidebar = show_sidebar;
 		this.show_or_hide_sidebar();
@@ -310,12 +331,14 @@ frappe.views.BaseList = class BaseList {
 				this.setup_no_result_area,
 				this.setup_freeze_area,
 				this.setup_paging_area,
-			].map((fn) => fn.bind(this))
+			].map((fn) => fn.bind(this)),
 		);
 	}
 
 	setup_list_wrapper() {
-		this.$frappe_list = $('<div class="frappe-list">').appendTo(this.page.main);
+		this.$frappe_list = $('<div class="frappe-list">').appendTo(
+			this.page.main,
+		);
 	}
 
 	setup_filter_area() {
@@ -382,7 +405,7 @@ frappe.views.BaseList = class BaseList {
 								data-value="${value}">
 								${value}
 							</button>
-						`
+						`,
 							)
 							.join("")}
 					</div>
@@ -392,7 +415,7 @@ frappe.views.BaseList = class BaseList {
 						${__("Load More")}
 					</button>
 				</div>
-			</div>`
+			</div>`,
 		).hide();
 		this.$frappe_list.append(this.$paging_area);
 
@@ -423,13 +446,18 @@ frappe.views.BaseList = class BaseList {
 
 	get_fields() {
 		// convert [fieldname, Doctype] => tabDoctype.fieldname
-		return this.fields.map((f) => frappe.model.get_full_column_name(f[0], f[1]));
+		return this.fields.map((f) =>
+			frappe.model.get_full_column_name(f[0], f[1]),
+		);
 	}
 
 	get_group_by() {
 		let name_field = this.fields && this.fields.find((f) => f[0] == "name");
 		if (name_field) {
-			return frappe.model.get_full_column_name(name_field[0], name_field[1]);
+			return frappe.model.get_full_column_name(
+				name_field[0],
+				name_field[1],
+			);
 		}
 		return null;
 	}
@@ -439,7 +467,9 @@ frappe.views.BaseList = class BaseList {
 	}
 
 	get_filter_value(fieldname) {
-		const filter = this.get_filters_for_args().filter((f) => f[1] == fieldname)[0];
+		const filter = this.get_filters_for_args().filter(
+			(f) => f[1] == fieldname,
+		)[0];
 		if (!filter) return;
 		return (
 			{
@@ -452,7 +482,9 @@ frappe.views.BaseList = class BaseList {
 	get_filters_for_args() {
 		// filters might have a fifth param called hidden,
 		// we don't want to pass that server side
-		return this.filter_area ? this.filter_area.get().map((filter) => filter.slice(0, 4)) : [];
+		return this.filter_area
+			? this.filter_area.get().map((filter) => filter.slice(0, 4))
+			: [];
 	}
 
 	get_args() {
@@ -533,7 +565,9 @@ frappe.views.BaseList = class BaseList {
 		Object.assign(frappe.boot.user_info, data.user_info);
 		delete data.user_info;
 
-		data = !Array.isArray(data) ? frappe.utils.dict(data.keys, data.values) : data;
+		data = !Array.isArray(data)
+			? frappe.utils.dict(data.keys, data.values)
+			: data;
 
 		if (this.start === 0) {
 			this.data = data;
@@ -593,22 +627,24 @@ frappe.views.BaseList = class BaseList {
 class FilterArea {
 	constructor(list_view) {
 		this.list_view = list_view;
-		this.list_view.page.page_form.append(`<div class="standard-filter-section flex"></div>`);
+		this.list_view.page.page_form.append(
+			`<div class="standard-filter-section flex"></div>`,
+		);
 
 		const filter_area = this.list_view.hide_page_form
 			? this.list_view.page.custom_actions
 			: this.list_view.page.page_form;
 
-		this.list_view.$filter_section = $('<div class="filter-section flex">').appendTo(
-			filter_area
-		);
+		this.list_view.$filter_section = $(
+			'<div class="filter-section flex">',
+		).appendTo(filter_area);
 
 		this.$filter_list_wrapper = this.list_view.$filter_section;
 		this.trigger_refresh = true;
 
 		this.debounced_refresh_list_view = frappe.utils.debounce(
 			this.refresh_list_view.bind(this),
-			300
+			300,
 		);
 		this.setup();
 	}
@@ -635,7 +671,8 @@ class FilterArea {
 	}
 
 	add(filters, refresh = true) {
-		if (!filters || (Array.isArray(filters) && filters.length === 0)) return Promise.resolve();
+		if (!filters || (Array.isArray(filters) && filters.length === 0))
+			return Promise.resolve();
 
 		if (typeof filters[0] === "string") {
 			// passed in the format of doctype, field, condition, value
@@ -647,7 +684,8 @@ class FilterArea {
 
 		// standard filters = filters visible on list view
 		// non-standard filters = filters set by filter button
-		const { non_standard_filters, promise } = this.set_standard_filter(filters);
+		const { non_standard_filters, promise } =
+			this.set_standard_filter(filters);
 
 		return promise
 			.then(() => {
@@ -708,12 +746,15 @@ class FilterArea {
 			if (
 				fields_dict[fieldname] &&
 				(condition === "=" ||
-					(condition === "like" && fields_dict[fieldname]?.df?.fieldtype != "Link") ||
+					(condition === "like" &&
+						fields_dict[fieldname]?.df?.fieldtype != "Link") ||
 					(condition === "descendants of (inclusive)" &&
 						fields_dict[fieldname]?.df?.fieldtype == "Link"))
 			) {
 				// standard filter
-				out.promise = out.promise.then(() => fields_dict[fieldname].set_value(value));
+				out.promise = out.promise.then(() =>
+					fields_dict[fieldname].set_value(value),
+				);
 			} else {
 				// filter out non standard filters
 				out.non_standard_filters.push(filter);
@@ -765,7 +806,7 @@ class FilterArea {
 
 	make_standard_filters() {
 		this.standard_filters_wrapper = this.list_view.page.page_form.find(
-			".standard-filter-section"
+			".standard-filter-section",
 		);
 		let fields = [];
 
@@ -795,7 +836,8 @@ class FilterArea {
 				.filter(
 					(df) =>
 						df.fieldname === title_field ||
-						(df.in_standard_filter && frappe.model.is_value_type(df.fieldtype))
+						(df.in_standard_filter &&
+							frappe.model.is_value_type(df.fieldtype)),
 				)
 				.map((df) => {
 					let options = df.options;
@@ -842,7 +884,7 @@ class FilterArea {
 						ignore_link_validation: fieldtype === "Dynamic Link",
 						is_filter: 1,
 					};
-				})
+				}),
 		);
 
 		fields.map((df) => {
@@ -892,7 +934,8 @@ class FilterArea {
 		</div>`).appendTo(this.$filter_list_wrapper);
 
 		this.filter_button = this.$filter_list_wrapper.find(".filter-button");
-		this.filter_x_button = this.$filter_list_wrapper.find(".filter-x-button");
+		this.filter_x_button =
+			this.$filter_list_wrapper.find(".filter-x-button");
 		this.filter_list = new frappe.ui.FilterGroup({
 			base_list: this.list_view,
 			parent: this.$filter_list_wrapper,
@@ -927,4 +970,5 @@ frappe.views.view_modes = [
 	"Tree",
 	"Map",
 ];
-frappe.views.is_valid = (view_mode) => frappe.views.view_modes.includes(view_mode);
+frappe.views.is_valid = (view_mode) =>
+	frappe.views.view_modes.includes(view_mode);

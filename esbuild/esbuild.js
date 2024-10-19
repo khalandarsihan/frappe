@@ -63,15 +63,18 @@ const argv = yargs
 		description:
 			"Saves esbuild metafiles for built assets. Useful for analyzing bundle size. More info: https://esbuild.github.io/api/#metafile",
 	})
-	.example("node esbuild --apps frappe,erpnext", "Run build only for frappe and erpnext")
+	.example(
+		"node esbuild --apps frappe,erpnext",
+		"Run build only for frappe and erpnext",
+	)
 	.example(
 		"node esbuild --files frappe/website.bundle.js,frappe/desk.bundle.js",
-		"Run build only for specified bundles"
+		"Run build only for specified bundles",
 	)
 	.version(false).argv;
 
 const APPS = (!argv.apps ? app_list : argv.apps.split(",")).filter(
-	(app) => !(argv.skip_frappe && app == "frappe")
+	(app) => !(argv.skip_frappe && app == "frappe"),
 );
 const FILES_TO_BUILD = argv.files ? argv.files.split(",") : [];
 const WATCH_MODE = Boolean(argv.watch);
@@ -81,9 +84,11 @@ const RUN_BUILD_COMMAND = !WATCH_MODE && Boolean(argv["run-build-command"]);
 const TOTAL_BUILD_TIME = `${chalk.black.bgGreen(" DONE ")} Total Build Time`;
 const NODE_PATHS = [].concat(
 	// node_modules of apps directly importable
-	app_list.map((app) => path.resolve(apps_path, app, "node_modules")).filter(fs.existsSync),
+	app_list
+		.map((app) => path.resolve(apps_path, app, "node_modules"))
+		.filter(fs.existsSync),
 	// import js file of any app if you provide the full path
-	app_list.map((app) => path.resolve(apps_path, app)).filter(fs.existsSync)
+	app_list.map((app) => path.resolve(apps_path, app)).filter(fs.existsSync),
 );
 
 execute().catch((e) => {
@@ -145,7 +150,9 @@ function build_assets_for_apps(apps, files) {
 
 			let extension = path.extname(file);
 			let output_name = path.basename(file, extension);
-			if ([".css", ".scss", ".less", ".sass", ".styl"].includes(extension)) {
+			if (
+				[".css", ".scss", ".less", ".sass", ".styl"].includes(extension)
+			) {
 				output_name = path.join("css", output_name);
 			} else if ([".js", ".ts"].includes(extension)) {
 				output_name = path.join("js", output_name);
@@ -156,11 +163,16 @@ function build_assets_for_apps(apps, files) {
 				Object.keys(file_map).includes(output_name) ||
 				Object.keys(style_file_map).includes(output_name)
 			) {
-				log_warn(`Duplicate output file ${output_name} generated from ${file}`);
+				log_warn(
+					`Duplicate output file ${output_name} generated from ${file}`,
+				);
 			}
-			if ([".css", ".scss", ".less", ".sass", ".styl"].includes(extension)) {
+			if (
+				[".css", ".scss", ".less", ".sass", ".styl"].includes(extension)
+			) {
 				style_file_map[output_name] = file;
-				rtl_style_file_map[output_name.replace("/css/", "/css-rtl/")] = file;
+				rtl_style_file_map[output_name.replace("/css/", "/css-rtl/")] =
+					file;
 			} else {
 				file_map[output_name] = file;
 			}
@@ -189,11 +201,15 @@ function get_all_files_to_build(apps) {
 	for (let app of apps) {
 		let public_path = get_public_path(app);
 		include_patterns.push(
-			path.resolve(public_path, "**", "*.bundle.{js,ts,css,sass,scss,less,styl,jsx}")
+			path.resolve(
+				public_path,
+				"**",
+				"*.bundle.{js,ts,css,sass,scss,less,styl,jsx}",
+			),
 		);
 		ignore_patterns.push(
 			path.resolve(public_path, "node_modules"),
-			path.resolve(public_path, "dist")
+			path.resolve(public_path, "dist"),
 		);
 	}
 
@@ -214,7 +230,7 @@ function get_files_to_build(files) {
 		include_patterns.push(path.resolve(public_path, "**", bundle));
 		ignore_patterns.push(
 			path.resolve(public_path, "node_modules"),
-			path.resolve(public_path, "dist")
+			path.resolve(public_path, "dist"),
 		);
 	}
 
@@ -225,7 +241,12 @@ function get_files_to_build(files) {
 }
 
 function build_files({ files, outdir }) {
-	let build_plugins = [vue(), html_plugin, build_cleanup_plugin, vue_style_plugin];
+	let build_plugins = [
+		vue(),
+		html_plugin,
+		build_cleanup_plugin,
+		vue_style_plugin,
+	];
 	return esbuild.build(get_build_options(files, outdir, build_plugins));
 }
 
@@ -260,7 +281,9 @@ function get_build_options(files, outdir, plugins) {
 		minify: PRODUCTION,
 		nodePaths: NODE_PATHS,
 		define: {
-			"process.env.NODE_ENV": JSON.stringify(PRODUCTION ? "production" : "development"),
+			"process.env.NODE_ENV": JSON.stringify(
+				PRODUCTION ? "production" : "development",
+			),
 			__VUE_OPTIONS_API__: JSON.stringify(true),
 			__VUE_PROD_DEVTOOLS__: JSON.stringify(false),
 		},
@@ -279,13 +302,15 @@ function get_watch_config() {
 					log(chalk.dim(error.stack));
 					notify_redis({ error });
 				} else {
-					let { new_assets_json, prev_assets_json } = await write_assets_json(
-						result.metafile
-					);
+					let { new_assets_json, prev_assets_json } =
+						await write_assets_json(result.metafile);
 
 					let changed_files;
 					if (prev_assets_json) {
-						changed_files = get_rebuilt_assets(prev_assets_json, new_assets_json);
+						changed_files = get_rebuilt_assets(
+							prev_assets_json,
+							new_assets_json,
+						);
 
 						let timestamp = new Date().toLocaleTimeString();
 						let message = `${timestamp}: Compiled ${changed_files.length} files...`;
@@ -318,7 +343,7 @@ function log_built_assets(results) {
 		{
 			text: chalk.cyan.bold("Size"),
 			width: column_widths[1],
-		}
+		},
 	);
 	cliui.div("");
 
@@ -361,7 +386,7 @@ function log_built_assets(results) {
 				{
 					text: file.size,
 					width: column_widths[1],
-				}
+				},
 			);
 		}
 		cliui.div("");
@@ -390,7 +415,10 @@ async function write_assets_json(metafile) {
 		}
 	}
 
-	let assets_json_path = path.resolve(assets_path, `assets${rtl ? "-rtl" : ""}.json`);
+	let assets_json_path = path.resolve(
+		assets_path,
+		`assets${rtl ? "-rtl" : ""}.json`,
+	);
 	let assets_json;
 	try {
 		assets_json = await fs.promises.readFile(assets_json_path, "utf-8");
@@ -402,13 +430,19 @@ async function write_assets_json(metafile) {
 	let new_assets_json = Object.assign({}, assets_json, out);
 	curr_assets_json = new_assets_json;
 
-	await fs.promises.writeFile(assets_json_path, JSON.stringify(new_assets_json, null, 4));
+	await fs.promises.writeFile(
+		assets_json_path,
+		JSON.stringify(new_assets_json, null, 4),
+	);
 	await update_assets_json_in_cache();
 	if (argv["save-metafiles"]) {
 		// use current timestamp in readable formate as a suffix for filename
 		let current_timestamp = new Date().getTime();
 		const metafile_name = `meta-${current_timestamp}.json`;
-		await fs.promises.writeFile(`${metafile_name}`, JSON.stringify(metafile));
+		await fs.promises.writeFile(
+			`${metafile_name}`,
+			JSON.stringify(metafile),
+		);
 		log(`Saved metafile as ${metafile_name}`);
 	}
 	return {
@@ -488,7 +522,7 @@ async function notify_redis({ error, success, changed_files }) {
 		JSON.stringify({
 			event: "build_event",
 			message: payload,
-		})
+		}),
 	);
 }
 

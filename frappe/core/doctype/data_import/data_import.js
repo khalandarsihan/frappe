@@ -36,9 +36,17 @@ frappe.ui.form.on("Data Import", {
 						: __("Updating {0} of {1}, {2}", message_args);
 			}
 			if (data.skipping) {
-				message = __("Skipping {0} of {1}, {2}", [data.current, data.total, eta_message]);
+				message = __("Skipping {0} of {1}, {2}", [
+					data.current,
+					data.total,
+					eta_message,
+				]);
 			}
-			frm.dashboard.show_progress(__("Import Progress"), percent, message);
+			frm.dashboard.show_progress(
+				__("Import Progress"),
+				percent,
+				message,
+			);
 			frm.page.set_indicator(__("In Progress"), "orange");
 			frm.trigger("update_primary_action");
 
@@ -84,13 +92,14 @@ frappe.ui.form.on("Data Import", {
 
 		if (frm.doc.status === "Partial Success") {
 			frm.add_custom_button(__("Export Errored Rows"), () =>
-				frm.trigger("export_errored_rows")
+				frm.trigger("export_errored_rows"),
 			);
 		}
 
 		if (frm.doc.status.includes("Success")) {
-			frm.add_custom_button(__("Go to {0} List", [__(frm.doc.reference_doctype)]), () =>
-				frappe.set_route("List", frm.doc.reference_doctype)
+			frm.add_custom_button(
+				__("Go to {0} List", [__(frm.doc.reference_doctype)]),
+				() => frappe.set_route("List", frm.doc.reference_doctype),
 			);
 		}
 	},
@@ -107,8 +116,13 @@ frappe.ui.form.on("Data Import", {
 		frm.disable_save();
 		if (frm.doc.status !== "Success") {
 			if (!frm.is_new() && frm.has_import_file()) {
-				let label = frm.doc.status === "Pending" ? __("Start Import") : __("Retry");
-				frm.page.set_primary_action(label, () => frm.events.start_import(frm));
+				let label =
+					frm.doc.status === "Pending"
+						? __("Start Import")
+						: __("Retry");
+				frm.page.set_primary_action(label, () =>
+					frm.events.start_import(frm),
+				);
 			} else {
 				frm.page.set_primary_action(__("Save"), () => frm.save());
 			}
@@ -146,21 +160,31 @@ frappe.ui.form.on("Data Import", {
 				if (failed_records === 0) {
 					let message_args = [action, successful_records];
 					if (successful_records === 1) {
-						message = __("Successfully {0} 1 record.", message_args);
+						message = __(
+							"Successfully {0} 1 record.",
+							message_args,
+						);
 					} else {
-						message = __("Successfully {0} {1} records.", message_args);
+						message = __(
+							"Successfully {0} {1} records.",
+							message_args,
+						);
 					}
 				} else {
-					let message_args = [action, successful_records, total_records];
+					let message_args = [
+						action,
+						successful_records,
+						total_records,
+					];
 					if (successful_records === 1) {
 						message = __(
 							"Successfully {0} {1} record out of {2}. Click on Export Errored Rows, fix the errors and import again.",
-							message_args
+							message_args,
 						);
 					} else {
 						message = __(
 							"Successfully {0} {1} records out of {2}. Click on Export Errored Rows, fix the errors and import again.",
-							message_args
+							message_args,
 						);
 					}
 				}
@@ -215,7 +239,7 @@ frappe.ui.form.on("Data Import", {
 		frappe.require("data_import_tools.bundle.js", () => {
 			frm.data_exporter = new frappe.data_import.DataExporter(
 				frm.doc.reference_doctype,
-				frm.doc.import_type
+				frm.doc.import_type,
 			);
 		});
 	},
@@ -284,7 +308,10 @@ frappe.ui.form.on("Data Import", {
 	show_import_preview(frm, preview_data) {
 		let import_log = preview_data.import_log;
 
-		if (frm.import_preview && frm.import_preview.doctype === frm.doc.reference_doctype) {
+		if (
+			frm.import_preview &&
+			frm.import_preview.doctype === frm.doc.reference_doctype
+		) {
 			frm.import_preview.preview_data = preview_data;
 			frm.import_preview.import_log = import_log;
 			frm.import_preview.refresh();
@@ -300,11 +327,19 @@ frappe.ui.form.on("Data Import", {
 				frm,
 				events: {
 					remap_column(changed_map) {
-						let template_options = JSON.parse(frm.doc.template_options || "{}");
+						let template_options = JSON.parse(
+							frm.doc.template_options || "{}",
+						);
 						template_options.column_to_field_map =
 							template_options.column_to_field_map || {};
-						Object.assign(template_options.column_to_field_map, changed_map);
-						frm.set_value("template_options", JSON.stringify(template_options));
+						Object.assign(
+							template_options.column_to_field_map,
+							changed_map,
+						);
+						frm.set_value(
+							"template_options",
+							JSON.stringify(template_options),
+						);
 						frm.save().then(() => frm.trigger("import_file"));
 					},
 				},
@@ -317,7 +352,7 @@ frappe.ui.form.on("Data Import", {
 			"/api/method/frappe.core.doctype.data_import.data_import.download_errored_template",
 			{
 				data_import_name: frm.doc.name,
-			}
+			},
 		);
 	},
 
@@ -326,7 +361,7 @@ frappe.ui.form.on("Data Import", {
 			"/api/method/frappe.core.doctype.data_import.data_import.download_import_log",
 			{
 				data_import_name: frm.doc.name,
-			}
+			},
 		);
 	},
 
@@ -346,7 +381,8 @@ frappe.ui.form.on("Data Import", {
 		let other_warnings = [];
 		for (let warning of warnings) {
 			if (warning.row) {
-				warnings_by_row[warning.row] = warnings_by_row[warning.row] || [];
+				warnings_by_row[warning.row] =
+					warnings_by_row[warning.row] || [];
 				warnings_by_row[warning.row].push(warning);
 			} else {
 				other_warnings.push(warning);
@@ -382,9 +418,10 @@ frappe.ui.form.on("Data Import", {
 			.map((warning) => {
 				let header = "";
 				if (columns && warning.col) {
-					let column_number = `<span class="text-uppercase">${__("Column {0}", [
-						warning.col,
-					])}</span>`;
+					let column_number = `<span class="text-uppercase">${__(
+						"Column {0}",
+						[warning.col],
+					)}</span>`;
 					let column_header = columns[warning.col].header_title;
 					header = `${column_number} (${column_header})`;
 				}
@@ -429,7 +466,7 @@ frappe.ui.form.on("Data Import", {
 									`<span class="underline">${frappe.utils.get_form_link(
 										frm.doc.reference_doctype,
 										log.docname,
-										true
+										true,
 									)}<span>`,
 								]);
 							} else {
@@ -437,15 +474,19 @@ frappe.ui.form.on("Data Import", {
 									`<span class="underline">${frappe.utils.get_form_link(
 										frm.doc.reference_doctype,
 										log.docname,
-										true
+										true,
 									)}<span>`,
 								]);
 							}
 						} else {
 							let messages = JSON.parse(log.messages || "[]")
 								.map((m) => {
-									let title = m.title ? `<strong>${m.title}</strong>` : "";
-									let message = m.message ? `<div>${m.message}</div>` : "";
+									let title = m.title
+										? `<strong>${m.title}</strong>`
+										: "";
+									let message = m.message
+										? `<div>${m.message}</div>`
+										: "";
 									return title + message;
 								})
 								.join("");
@@ -521,7 +562,7 @@ frappe.ui.form.on("Data Import", {
 				} else {
 					frm.toggle_display("import_log_section", false);
 					frm.add_custom_button(__("Export Import Log"), () =>
-						frm.trigger("export_import_log")
+						frm.trigger("export_import_log"),
 					);
 				}
 			},

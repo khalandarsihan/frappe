@@ -7,7 +7,7 @@ frappe.avatar = function (
 	title,
 	image_url = null,
 	remove_color = false,
-	filterable = false
+	filterable = false,
 ) {
 	let user_info;
 	if (user) {
@@ -17,7 +17,10 @@ frappe.avatar = function (
 		// website
 		let full_name = title || frappe.get_cookie("full_name");
 		user_info = {
-			image: image_url === null ? frappe.get_cookie("user_image") : image_url,
+			image:
+				image_url === null
+					? frappe.get_cookie("user_image")
+					: image_url,
 			fullname: full_name,
 			abbr: frappe.get_abbr(full_name),
 			color: frappe.get_palette(full_name),
@@ -39,11 +42,17 @@ frappe.avatar = function (
 		title,
 		image_url || user_info.image,
 		remove_color,
-		data_attr
+		data_attr,
 	);
 };
 
-frappe.get_avatar = function (css_class, title, image_url = null, remove_color, data_attributes) {
+frappe.get_avatar = function (
+	css_class,
+	title,
+	image_url = null,
+	remove_color,
+	data_attributes,
+) {
 	if (!css_class) {
 		css_class = "avatar-small";
 	}
@@ -88,7 +97,14 @@ frappe.avatar_group = function (users, limit = 4, options = {}) {
 
 	let html = display_users
 		.map((user) =>
-			frappe.avatar(user, "avatar-small " + css_class, null, null, false, options.filterable)
+			frappe.avatar(
+				user,
+				"avatar-small " + css_class,
+				null,
+				null,
+				false,
+				options.filterable,
+			),
 		)
 		.join("");
 	if (extra_users.length === 1) {
@@ -98,7 +114,7 @@ frappe.avatar_group = function (users, limit = 4, options = {}) {
 			null,
 			null,
 			false,
-			options.filterable
+			options.filterable,
 		);
 	} else if (extra_users.length > 1) {
 		html = `
@@ -122,9 +138,10 @@ frappe.avatar_group = function (users, limit = 4, options = {}) {
 		`;
 	}
 
-	const $avatar_group = $(`<div class="avatar-group ${options.align || "right"} ${
-		options.overlap != false ? "overlap" : ""
-	}">
+	const $avatar_group =
+		$(`<div class="avatar-group ${options.align || "right"} ${
+			options.overlap != false ? "overlap" : ""
+		}">
 			${html}
 			${avatar_action_html}
 		</div>`);
@@ -252,7 +269,10 @@ frappe.get_cookies = function getCookies() {
 		c.split(/[,;]/).map(function (cookie) {
 			var parts = cookie.split(/=/, 2),
 				name = decodeURIComponent(parts[0].trimLeft()),
-				value = parts.length > 1 ? decodeURIComponent(parts[1].trimRight()) : null;
+				value =
+					parts.length > 1
+						? decodeURIComponent(parts[1].trimRight())
+						: null;
 			if (value && value.charAt(0) === '"') {
 				value = value.substr(1, value.length - 2);
 			}
@@ -260,10 +280,13 @@ frappe.get_cookies = function getCookies() {
 		});
 	} else {
 		c.match(
-			/(?:^|\s+)([!#$%&'*+\-.0-9A-Z^`a-z|~]+)=([!#$%&'*+\-.0-9A-Z^`a-z|~]*|"(?:[\x20-\x7E\x80\xFF]|\\[\x00-\x7F])*")(?=\s*[,;]|$)/g
+			/(?:^|\s+)([!#$%&'*+\-.0-9A-Z^`a-z|~]+)=([!#$%&'*+\-.0-9A-Z^`a-z|~]*|"(?:[\x20-\x7E\x80\xFF]|\\[\x00-\x7F])*")(?=\s*[,;]|$)/g,
 		).map(function ($0, $1) {
 			var name = $0,
-				value = $1.charAt(0) === '"' ? $1.substr(1, -1).replace(/\\(.)/g, "$1") : $1;
+				value =
+					$1.charAt(0) === '"'
+						? $1.substr(1, -1).replace(/\\(.)/g, "$1")
+						: $1;
 			cookies[name] = value;
 		});
 	}
@@ -318,9 +341,10 @@ frappe.utils.sanitise_redirect = (url) => {
 	const is_external = (() => {
 		return (url) => {
 			function domain(url) {
-				let base_domain = /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n?]+)/gim.exec(
-					url
-				);
+				let base_domain =
+					/^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n?]+)/gim.exec(
+						url,
+					);
 				return base_domain == null ? "" : base_domain[1];
 			}
 
@@ -332,7 +356,9 @@ frappe.utils.sanitise_redirect = (url) => {
 
 			// check for base domain only if the url is absolute
 			// return true for relative url (except protocol-relative urls)
-			return is_absolute(url) ? domain(location.href) !== domain(url) : false;
+			return is_absolute(url)
+				? domain(location.href) !== domain(url)
+				: false;
 		};
 	})();
 
@@ -367,7 +393,7 @@ frappe.utils.sanitise_redirect = (url) => {
 		const REGEX_ESC_UNIT = /\s*(&#x.{1,7})?/;
 		const REGEX_SCRIPT = new RegExp(
 			Array.from("javascript").join(REGEX_ESC_UNIT.source),
-			"gi"
+			"gi",
 		);
 
 		return url.replace(REGEX_SCRIPT, "");
@@ -377,7 +403,9 @@ frappe.utils.sanitise_redirect = (url) => {
 
 	return is_external(url)
 		? ""
-		: sanitise_javascript(frappe.utils.xss_sanitise(url, { strategies: ["js"] }));
+		: sanitise_javascript(
+				frappe.utils.xss_sanitise(url, { strategies: ["js"] }),
+			);
 };
 
 frappe.utils.strip_url = (url) => {
@@ -431,7 +459,9 @@ frappe.utils.new_auto_repeat_prompt = function (frm) {
 				callback: function (r) {
 					if (r.message) {
 						frappe.show_alert({
-							message: __("Auto Repeat created for this document"),
+							message: __(
+								"Auto Repeat created for this document",
+							),
 							indicator: "green",
 						});
 						frm.reload_doc();
@@ -440,12 +470,15 @@ frappe.utils.new_auto_repeat_prompt = function (frm) {
 			});
 		},
 		__("Auto Repeat"),
-		__("Save")
+		__("Save"),
 	);
 };
 
 frappe.utils.get_page_view_count = function (route) {
-	return frappe.call("frappe.website.doctype.web_page_view.web_page_view.get_page_view_count", {
-		path: route,
-	});
+	return frappe.call(
+		"frappe.website.doctype.web_page_view.web_page_view.get_page_view_count",
+		{
+			path: route,
+		},
+	);
 };

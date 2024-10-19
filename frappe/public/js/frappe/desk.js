@@ -18,7 +18,7 @@ $(document).ready(function () {
 			indicator: "red",
 			title: __("Browser not supported"),
 			message: __(
-				"Some of the features might not work in your browser. Please update your browser to the latest version."
+				"Some of the features might not work in your browser. Please update your browser to the latest version.",
 			),
 		});
 	}
@@ -50,7 +50,10 @@ frappe.Application = class Application {
 			shortcut: "shift+ctrl+g",
 			description: __("Switch Theme"),
 			action: () => {
-				if (frappe.theme_switcher && frappe.theme_switcher.dialog.is_visible) {
+				if (
+					frappe.theme_switcher &&
+					frappe.theme_switcher.dialog.is_visible
+				) {
 					frappe.theme_switcher.hide();
 				} else {
 					frappe.theme_switcher = new frappe.ui.ThemeSwitcher();
@@ -80,7 +83,8 @@ frappe.Application = class Application {
 			frappe.boot.user.onboarding_status != null
 		) {
 			let pending_tours = !frappe.boot.onboarding_tours.every(
-				(tour) => frappe.boot.user.onboarding_status[tour[0]]?.is_complete
+				(tour) =>
+					frappe.boot.user.onboarding_status[tour[0]]?.is_complete,
 			);
 			if (pending_tours && frappe.boot.onboarding_tours.length > 0) {
 				frappe.require("onboarding_tours.bundle.js", () => {
@@ -111,7 +115,7 @@ frappe.Application = class Application {
 
 		if (!frappe.boot.developer_mode) {
 			let console_security_message = __(
-				"Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand."
+				"Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand.",
 			);
 			console.log(`%c${console_security_message}`, "font-size: large");
 		}
@@ -126,7 +130,7 @@ frappe.Application = class Application {
 		frappe.realtime.on("version-update", function () {
 			var dialog = frappe.msgprint({
 				message: __(
-					"The application has been updated to a new version, please refresh this page"
+					"The application has been updated to a new version, please refresh this page",
 				),
 				indicator: "green",
 				title: __("Version Updated"),
@@ -202,14 +206,18 @@ frappe.Application = class Application {
 					label: __(
 						"Please enter the password for: <b>{0}</b>",
 						[email_id],
-						"Email Account"
+						"Email Account",
 					),
 					reqd: 1,
 				},
 				{
 					fieldname: "submit",
 					fieldtype: "Button",
-					label: __("Submit", null, "Submit password for Email Account"),
+					label: __(
+						"Submit",
+						null,
+						"Submit password for Email Account",
+					),
 				},
 			],
 		});
@@ -225,7 +233,9 @@ frappe.Application = class Application {
 					},
 				],
 			});
-			s.fields_dict.checking.$wrapper.html('<i class="fa fa-spinner fa-spin fa-4x"></i>');
+			s.fields_dict.checking.$wrapper.html(
+				'<i class="fa fa-spinner fa-spin fa-4x"></i>',
+			);
 			s.show();
 			frappe.call({
 				method: "frappe.email.doctype.email_account.email_account.set_email_password",
@@ -238,8 +248,11 @@ frappe.Application = class Application {
 					d.hide(); //hide waiting indication
 					if (!passed["message"]) {
 						frappe.show_alert(
-							{ message: __("Login Failed please try again"), indicator: "error" },
-							5
+							{
+								message: __("Login Failed please try again"),
+								indicator: "error",
+							},
+							5,
 						);
 						me.email_password_prompt(email_account, user, i);
 					} else {
@@ -288,7 +301,7 @@ frappe.Application = class Application {
 			"update_user_permissions",
 			frappe.utils.debounce(() => {
 				frappe.defaults.update_user_permissions();
-			}, 500)
+			}, 500),
 		);
 	}
 
@@ -321,7 +334,10 @@ frappe.Application = class Application {
 			frappe.boot.allowed_pages = [];
 			var page_info = JSON.parse(localStorage["page_info"]);
 			$.each(frappe.boot.page_info, function (name, p) {
-				if (!page_info[name] || page_info[name].modified != p.modified) {
+				if (
+					!page_info[name] ||
+					page_info[name].modified != p.modified
+				) {
 					delete localStorage["_page:" + name];
 				}
 				frappe.boot.allowed_pages.push(name);
@@ -343,9 +359,9 @@ frappe.Application = class Application {
 	make_page_container() {
 		if ($("#body").length) {
 			$(".splash").remove();
-			frappe.temp_container = $("<div id='temp-container' style='display: none;'>").appendTo(
-				"body"
-			);
+			frappe.temp_container = $(
+				"<div id='temp-container' style='display: none;'>",
+			).appendTo("body");
 			frappe.container = new frappe.views.Container();
 		}
 	}
@@ -373,20 +389,30 @@ frappe.Application = class Application {
 	}
 	redirect_to_login() {
 		window.location.href = `/login?redirect-to=${encodeURIComponent(
-			window.location.pathname + window.location.search
+			window.location.pathname + window.location.search,
 		)}`;
 	}
 	set_favicon() {
 		var link = $('link[type="image/x-icon"]').remove().attr("href");
-		$('<link rel="shortcut icon" href="' + link + '" type="image/x-icon">').appendTo("head");
-		$('<link rel="icon" href="' + link + '" type="image/x-icon">').appendTo("head");
+		$(
+			'<link rel="shortcut icon" href="' +
+				link +
+				'" type="image/x-icon">',
+		).appendTo("head");
+		$('<link rel="icon" href="' + link + '" type="image/x-icon">').appendTo(
+			"head",
+		);
 	}
 	trigger_primary_action() {
 		// to trigger change event on active input before triggering primary action
 		$(document.activeElement).blur();
 		// wait for possible JS validations triggered after blur (it might change primary button)
 		setTimeout(() => {
-			if (window.cur_dialog && cur_dialog.display && !cur_dialog.is_minimized) {
+			if (
+				window.cur_dialog &&
+				cur_dialog.display &&
+				!cur_dialog.is_minimized
+			) {
 				// trigger primary
 				cur_dialog.get_primary_btn().trigger("click");
 			} else if (cur_frm && cur_frm.page.btn_primary.is(":visible")) {
@@ -422,7 +448,9 @@ frappe.Application = class Application {
 
 		// Iterate over changelog
 		var change_log_dialog = frappe.msgprint({
-			message: frappe.render_template("change_log", { change_log: change_log }),
+			message: frappe.render_template("change_log", {
+				change_log: change_log,
+			}),
 			title: __("Updated To A New Version 🎉"),
 			wide: true,
 		});
@@ -453,7 +481,10 @@ frappe.Application = class Application {
 		if (frappe.boot.notes.length) {
 			frappe.boot.notes.forEach(function (note) {
 				if (!note.seen || note.notify_on_every_login) {
-					var d = frappe.msgprint({ message: note.content, title: note.title });
+					var d = frappe.msgprint({
+						message: note.content,
+						title: note.title,
+					});
 					d.keep_open = true;
 					d.custom_onhide = function () {
 						note.seen = true;
@@ -497,7 +528,9 @@ frappe.Application = class Application {
 					e.preventDefault();
 					const sleep = frappe.utils.sleep;
 
-					frappe.dom.freeze(__("Creating {0}", [doc.doctype]) + "...");
+					frappe.dom.freeze(
+						__("Creating {0}", [doc.doctype]) + "...",
+					);
 					// to avoid abrupt UX
 					// wait for activity feedback
 					sleep(500).then(() => {
@@ -507,7 +540,11 @@ frappe.Application = class Application {
 							delete doc.name;
 							newdoc.idx = null;
 							newdoc.__run_link_triggers = false;
-							frappe.set_route("Form", newdoc.doctype, newdoc.name);
+							frappe.set_route(
+								"Form",
+								newdoc.doctype,
+								newdoc.name,
+							);
 							frappe.dom.unfreeze();
 						});
 						res && res.fail?.(frappe.dom.unfreeze);
@@ -526,7 +563,7 @@ frappe.Application = class Application {
 			if (user && user != frappe.session.user) {
 				frappe.msgprint({
 					message: __(
-						"You've logged in as another user from another tab. Refresh this page to continue using system."
+						"You've logged in as another user from another tab. Refresh this page to continue using system.",
 					),
 					title: __("User Changed"),
 					primary_action: {

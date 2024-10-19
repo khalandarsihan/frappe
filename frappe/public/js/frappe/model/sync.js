@@ -48,7 +48,8 @@ Object.assign(frappe.model, {
 
 		// update docinfo to new dict keys
 		if (i === 0) {
-			frappe.model.docinfo[d.doctype][d.name] = frappe.model.docinfo[d.doctype][d.localname];
+			frappe.model.docinfo[d.doctype][d.name] =
+				frappe.model.docinfo[d.doctype][d.localname];
 			frappe.model.docinfo[d.doctype][d.localname] = undefined;
 		}
 	},
@@ -79,7 +80,9 @@ Object.assign(frappe.model, {
 			doc.name = frappe.model.get_new_name(doc.doctype);
 
 			if (!doc.parentfield)
-				frappe.provide("frappe.model.docinfo." + doc.doctype + "." + doc.name);
+				frappe.provide(
+					"frappe.model.docinfo." + doc.doctype + "." + doc.name,
+				);
 		}
 
 		locals[doc.doctype][doc.name] = doc;
@@ -95,7 +98,8 @@ Object.assign(frappe.model, {
 					for (var x = 0, y = value.length; x < y; x++) {
 						var d = value[x];
 
-						if (typeof d == "object" && !d.parent) d.parent = doc.name;
+						if (typeof d == "object" && !d.parent)
+							d.parent = doc.name;
 
 						frappe.model.add_to_locals(d);
 					}
@@ -159,7 +163,11 @@ Object.assign(frappe.model, {
 
 				// remove extra rows
 				if (local_doc[fieldname].length > doc[fieldname].length) {
-					for (let i = doc[fieldname].length; i < local_doc[fieldname].length; i++) {
+					for (
+						let i = doc[fieldname].length;
+						i < local_doc[fieldname].length;
+						i++
+					) {
 						// clear from local
 						let d = local_doc[fieldname][i];
 						if (locals[d.doctype] && locals[d.doctype][d.name]) {

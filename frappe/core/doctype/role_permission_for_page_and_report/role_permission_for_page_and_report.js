@@ -15,7 +15,10 @@ frappe.ui.form.on("Role Permission for Page and Report", {
 	setup_buttons: function (frm) {
 		frm.clear_custom_buttons();
 		frm.page.clear_actions();
-		if (frm.doc.set_role_for && frm.doc[frappe.model.scrub(frm.doc.set_role_for)]) {
+		if (
+			frm.doc.set_role_for &&
+			frm.doc[frappe.model.scrub(frm.doc.set_role_for)]
+		) {
 			frm.add_custom_button(__("Reset to defaults"), function () {
 				frm.trigger("reset_roles");
 			});
@@ -120,7 +123,10 @@ frappe.ui.form.on("Role Permission for Page and Report", {
 			frappe.throw(__("Mandatory field: set role for"));
 		}
 
-		if (frm.doc.set_role_for && !frm.doc[frm.doc.set_role_for.toLocaleLowerCase()]) {
+		if (
+			frm.doc.set_role_for &&
+			!frm.doc[frm.doc.set_role_for.toLocaleLowerCase()]
+		) {
 			frappe.throw(__("Mandatory field: {0}", [frm.doc.set_role_for]));
 		}
 	},

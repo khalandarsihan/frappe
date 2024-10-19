@@ -22,11 +22,9 @@ def send_email(success, service_name, doctype, email_field, error_status=None):
 			return
 
 		subject = "Backup Upload Successful"
-		message = """
+		message = f"""
 <h3>Backup Uploaded Successfully!</h3>
-<p>Hi there, this is just to inform you that your backup was successfully uploaded to your {} bucket. So relax!</p>""".format(
-			service_name
-		)
+<p>Hi there, this is just to inform you that your backup was successfully uploaded to your {service_name} bucket. So relax!</p>"""
 	else:
 		subject = "[Warning] Backup Upload Failed"
 		message = f"""

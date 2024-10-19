@@ -8,11 +8,14 @@ frappe.ui.form.on("System Health Report", {
 			frappe
 				.xcall(
 					"frappe.desk.doctype.system_health_report.system_health_report.get_job_status",
-					{ job_id: frm.doc.test_job_id }
+					{ job_id: frm.doc.test_job_id },
 				)
 				.then((status) => {
 					poll_attempts += 1;
-					if (["finished", "failed"].includes(status) || poll_attempts > 30) {
+					if (
+						["finished", "failed"].includes(status) ||
+						poll_attempts > 30
+					) {
 						clearInterval(interval);
 					}
 					status && frm.set_value("background_jobs_check", status);
@@ -25,7 +28,7 @@ frappe.ui.form.on("System Health Report", {
 			frm.set_value("socketio_ping_check", "Pass");
 			frm.set_value(
 				"socketio_transport_mode",
-				frappe.realtime.socket.io?.engine?.transport?.name
+				frappe.realtime.socket.io?.engine?.transport?.name,
 			);
 		});
 		frappe.realtime.emit("ping");
@@ -47,7 +50,9 @@ frappe.ui.form.on("System Health Report", {
 			total_errors: (val) => val > 50,
 			// 5% excluding very small numbers
 			unhandled_emails: (val) =>
-				val > 3 && frm.doc.handled_emails > 3 && val / frm.doc.handled_emails > 0.05,
+				val > 3 &&
+				frm.doc.handled_emails > 3 &&
+				val / frm.doc.handled_emails > 0.05,
 			failed_emails: (val) =>
 				val > 3 &&
 				frm.doc.total_outgoing_emails > 3 &&
@@ -83,12 +88,18 @@ frappe.ui.form.on("System Health Report", {
 
 						frm.fields_dict[table].grid.grid_rows.forEach((row) => {
 							let is_bad = condition(row.doc[fieldname]);
-							$(row.columns[fieldname]).toggleClass("health-check-failed", is_bad);
+							$(row.columns[fieldname]).toggleClass(
+								"health-check-failed",
+								is_bad,
+							);
 						});
 					} else {
 						let is_bad = condition(frm.doc[field]);
 						let df = frm.fields_dict[field];
-						$(df.disp_area).toggleClass("health-check-failed", is_bad);
+						$(df.disp_area).toggleClass(
+							"health-check-failed",
+							is_bad,
+						);
 					}
 				} catch (e) {
 					console.log("Failed to evaluated", e);

@@ -6,7 +6,13 @@ frappe.quick_edit = function (doctype, name) {
 	});
 };
 
-frappe.ui.form.make_quick_entry = (doctype, after_insert, init_callback, doc, force) => {
+frappe.ui.form.make_quick_entry = (
+	doctype,
+	after_insert,
+	init_callback,
+	doc,
+	force,
+) => {
 	var trimmed_doctype = doctype.replace(/ /g, "");
 	var controller_name = "QuickEntryForm";
 
@@ -19,7 +25,7 @@ frappe.ui.form.make_quick_entry = (doctype, after_insert, init_callback, doc, fo
 		after_insert,
 		init_callback,
 		doc,
-		force
+		force,
 	);
 	return frappe.quick_entry.setup();
 };
@@ -111,7 +117,10 @@ frappe.ui.form.QuickEntryForm = class QuickEntryForm {
 	}
 
 	validate_for_prompt_autoname() {
-		if (this.meta.autoname && this.meta.autoname.toLowerCase() === "prompt") {
+		if (
+			this.meta.autoname &&
+			this.meta.autoname.toLowerCase() === "prompt"
+		) {
 			this.mandatory = [
 				{
 					fieldname: "__newname",
@@ -188,15 +197,21 @@ frappe.ui.form.QuickEntryForm = class QuickEntryForm {
 						frappe.run_serially([
 							() => (me.dialog.working = true),
 							() => {
-								me.dialog.set_primary_action(__("Submit"), function () {
-									me.submit(r.message);
-								});
+								me.dialog.set_primary_action(
+									__("Submit"),
+									function () {
+										me.submit(r.message);
+									},
+								);
 							},
 						]);
 					} else {
 						me.dialog.hide();
 						// delete the old doc
-						frappe.model.clear_doc(me.dialog.doc.doctype, me.dialog.doc.name);
+						frappe.model.clear_doc(
+							me.dialog.doc.doctype,
+							me.dialog.doc.name,
+						);
 						me.dialog.doc = r.message;
 						if (frappe._from_link) {
 							frappe.ui.form.update_calling_link(me.dialog.doc);
@@ -233,7 +248,10 @@ frappe.ui.form.QuickEntryForm = class QuickEntryForm {
 			callback: function (r) {
 				me.dialog.hide();
 				// delete the old doc
-				frappe.model.clear_doc(me.dialog.doc.doctype, me.dialog.doc.name);
+				frappe.model.clear_doc(
+					me.dialog.doc.doctype,
+					me.dialog.doc.name,
+				);
 				me.dialog.doc = r.message;
 				if (frappe._from_link) {
 					frappe.ui.form.update_calling_link(me.dialog.doc);
@@ -254,7 +272,9 @@ frappe.ui.form.QuickEntryForm = class QuickEntryForm {
 		let route = frappe.get_route();
 		let doc = this.dialog.doc;
 		if (route && !(route[0] === "List" && route[1] === doc.doctype)) {
-			frappe.run_serially([() => frappe.set_route("Form", doc.doctype, doc.name)]);
+			frappe.run_serially([
+				() => frappe.set_route("Form", doc.doctype, doc.name),
+			]);
 		}
 	}
 
@@ -283,7 +303,9 @@ frappe.ui.form.QuickEntryForm = class QuickEntryForm {
 
 	render_edit_in_full_page_link() {
 		var me = this;
-		this.dialog.add_custom_action(__("Edit Full Form"), () => me.open_doc(true));
+		this.dialog.add_custom_action(__("Edit Full Form"), () =>
+			me.open_doc(true),
+		);
 	}
 
 	set_defaults() {

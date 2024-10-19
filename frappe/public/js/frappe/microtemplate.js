@@ -17,7 +17,10 @@ frappe.template.compile = function (str, name) {
 		str = str.replace(/{{/g, "{%=").replace(/}}/g, "%}");
 
 		// {% if not test %} --> {% if (!test) { %}
-		str = str.replace(/{%\s?if\s?\s?not\s?([^\(][^%{]+)\s?%}/g, "{% if (! $1) { %}");
+		str = str.replace(
+			/{%\s?if\s?\s?not\s?([^\(][^%{]+)\s?%}/g,
+			"{% if (! $1) { %}",
+		);
 
 		// {% if test %} --> {% if (test) { %}
 		str = str.replace(/{%\s?if\s?([^\(][^%{]+)\s?%}/g, "{% if ($1) { %}");
@@ -53,7 +56,10 @@ frappe.template.compile = function (str, name) {
 				"; %}"
 			);
 		}
-		str = str.replace(/{%\s?for\s([a-z._]+)\sin\s([a-z._]+)\s?%}/g, replacer);
+		str = str.replace(
+			/{%\s?for\s([a-z._]+)\sin\s([a-z._]+)\s?%}/g,
+			replacer,
+		);
 
 		// {% endfor %} --> {% } %}
 		str = str.replace(/{%\s?endif\s?%}/g, "{% }; %}");
@@ -90,7 +96,13 @@ frappe.template.compile = function (str, name) {
 			console.log("Error in Template:");
 			console.log(fn_str);
 			if (e.lineNumber) {
-				console.log("Error in Line " + e.lineNumber + ", Col " + e.columnNumber + ":");
+				console.log(
+					"Error in Line " +
+						e.lineNumber +
+						", Col " +
+						e.columnNumber +
+						":",
+				);
 				console.log(fn_str.split("\n")[e.lineNumber - 1]);
 			}
 		}
@@ -144,7 +156,10 @@ frappe.render_template = function (name, data) {
 
 	// render content
 	if (!opts.content) {
-		opts.content = frappe.render_template(opts.template || "print_grid", opts);
+		opts.content = frappe.render_template(
+			opts.template || "print_grid",
+			opts,
+		);
 	}
 
 	// render HTML wrapper page
@@ -152,7 +167,8 @@ frappe.render_template = function (name, data) {
 	opts.print_css = frappe.boot.print_css;
 
 	(opts.lang = opts.lang || frappe.boot.lang),
-		(opts.layout_direction = opts.layout_direction || frappe.utils.is_rtl() ? "rtl" : "ltr");
+		(opts.layout_direction =
+			opts.layout_direction || frappe.utils.is_rtl() ? "rtl" : "ltr");
 
 	var html = frappe.render_template("print_template", opts);
 
@@ -169,7 +185,9 @@ frappe.render_template = function (name, data) {
 		opts.base_url = frappe.urllib.get_base_url();
 		opts.landscape = false;
 		opts.print_css = frappe.boot.print_css;
-		opts.print_format_css_path = frappe.assets.bundled_asset("print_format.bundle.css");
+		opts.print_format_css_path = frappe.assets.bundled_asset(
+			"print_format.bundle.css",
+		);
 		var tree = frappe.render_template("print_tree", opts);
 		var w = window.open();
 
@@ -200,7 +218,9 @@ frappe.render_pdf = function (html, opts = {}) {
 
 	xhr.onload = function (success) {
 		if (this.status === 200) {
-			var blob = new Blob([success.currentTarget.response], { type: "application/pdf" });
+			var blob = new Blob([success.currentTarget.response], {
+				type: "application/pdf",
+			});
 			var objectUrl = URL.createObjectURL(blob);
 
 			// Create a hidden a tag to force set report name

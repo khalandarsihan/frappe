@@ -19,7 +19,12 @@ frappe.ui.FieldSelect = class FieldSelect {
 			autoFirst: true,
 			list: me.options,
 			item(item) {
-				return $(repl('<li class="filter-field-select"><p>%(label)s</p></li>', item))
+				return $(
+					repl(
+						'<li class="filter-field-select"><p>%(label)s</p></li>',
+						item,
+					),
+				)
 					.data("item.autocomplete", item)
 					.get(0);
 			},
@@ -40,7 +45,8 @@ frappe.ui.FieldSelect = class FieldSelect {
 		});
 
 		if (this.filter_fields) {
-			for (var i in this.filter_fields) this.add_field_option(this.filter_fields[i]);
+			for (var i in this.filter_fields)
+				this.add_field_option(this.filter_fields[i]);
 		} else {
 			this.build_options();
 		}
@@ -115,21 +121,29 @@ frappe.ui.FieldSelect = class FieldSelect {
 		}
 
 		// main table
-		var main_table_fields = std_filters.concat(frappe.meta.docfield_list[me.doctype]);
-		$.each(frappe.utils.sort(main_table_fields, "label", "string"), function (i, df) {
-			let doctype =
-				frappe.get_meta(me.doctype).istable && me.parent_doctype
-					? me.parent_doctype
-					: me.doctype;
+		var main_table_fields = std_filters.concat(
+			frappe.meta.docfield_list[me.doctype],
+		);
+		$.each(
+			frappe.utils.sort(main_table_fields, "label", "string"),
+			function (i, df) {
+				let doctype =
+					frappe.get_meta(me.doctype).istable && me.parent_doctype
+						? me.parent_doctype
+						: me.doctype;
 
-			// show fields where user has read access and if report hide flag is not set
-			if (frappe.perm.has_perm(doctype, df.permlevel, "read")) me.add_field_option(df);
-		});
+				// show fields where user has read access and if report hide flag is not set
+				if (frappe.perm.has_perm(doctype, df.permlevel, "read"))
+					me.add_field_option(df);
+			},
+		);
 
 		// child tables
 		$.each(me.table_fields, function (i, table_df) {
 			if (table_df.options) {
-				let child_table_fields = [].concat(frappe.meta.docfield_list[table_df.options]);
+				let child_table_fields = [].concat(
+					frappe.meta.docfield_list[table_df.options],
+				);
 
 				if (table_df.fieldtype === "Table MultiSelect") {
 					const link_field = frappe.meta
@@ -138,16 +152,20 @@ frappe.ui.FieldSelect = class FieldSelect {
 					child_table_fields = link_field ? [link_field] : [];
 				}
 
-				$.each(frappe.utils.sort(child_table_fields, "label", "string"), function (i, df) {
-					let doctype =
-						frappe.get_meta(me.doctype).istable && me.parent_doctype
-							? me.parent_doctype
-							: me.doctype;
+				$.each(
+					frappe.utils.sort(child_table_fields, "label", "string"),
+					function (i, df) {
+						let doctype =
+							frappe.get_meta(me.doctype).istable &&
+							me.parent_doctype
+								? me.parent_doctype
+								: me.doctype;
 
-					// show fields where user has read access and if report hide flag is not set
-					if (frappe.perm.has_perm(doctype, df.permlevel, "read"))
-						me.add_field_option(df);
-				});
+						// show fields where user has read access and if report hide flag is not set
+						if (frappe.perm.has_perm(doctype, df.permlevel, "read"))
+							me.add_field_option(df);
+					},
+				);
 			}
 		});
 	}
@@ -155,7 +173,11 @@ frappe.ui.FieldSelect = class FieldSelect {
 	add_field_option(df) {
 		let me = this;
 
-		if (df.fieldname == "docstatus" && !frappe.model.is_submittable(me.doctype)) return;
+		if (
+			df.fieldname == "docstatus" &&
+			!frappe.model.is_submittable(me.doctype)
+		)
+			return;
 
 		if (frappe.model.table_fields.includes(df.fieldtype)) {
 			me.table_fields.push(df);
@@ -175,7 +197,10 @@ frappe.ui.FieldSelect = class FieldSelect {
 
 		if (
 			frappe.model.no_value_type.indexOf(df.fieldtype) == -1 &&
-			!(me.fields_by_name[df.parent] && me.fields_by_name[df.parent][df.fieldname])
+			!(
+				me.fields_by_name[df.parent] &&
+				me.fields_by_name[df.parent][df.fieldname]
+			)
 		) {
 			this.options.push({
 				label: label,
@@ -183,7 +208,8 @@ frappe.ui.FieldSelect = class FieldSelect {
 				fieldname: df.fieldname,
 				doctype: df.parent,
 			});
-			if (!me.fields_by_name[df.parent]) me.fields_by_name[df.parent] = {};
+			if (!me.fields_by_name[df.parent])
+				me.fields_by_name[df.parent] = {};
 			me.fields_by_name[df.parent][df.fieldname] = df;
 		}
 	}

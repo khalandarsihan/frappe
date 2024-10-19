@@ -25,18 +25,24 @@ context("Realtime updates", () => {
 		});
 	});
 
-	it("List view updates in realtime on insert", { scrollBehavior: false }, () => {
-		const original = "Added for realtime update";
-		const updated = "Updated for realtime update";
-		cy.insert_doc("ToDo", { description: original }).then((doc) => {
-			cy.contains(original).should("be.visible");
+	it(
+		"List view updates in realtime on insert",
+		{ scrollBehavior: false },
+		() => {
+			const original = "Added for realtime update";
+			const updated = "Updated for realtime update";
+			cy.insert_doc("ToDo", { description: original }).then((doc) => {
+				cy.contains(original).should("be.visible");
 
-			// update doc using api - simulating parallel change by another user
-			cy.update_doc("ToDo", doc.name, { description: updated }).then(() => {
-				cy.contains(updated).should("be.visible");
+				// update doc using api - simulating parallel change by another user
+				cy.update_doc("ToDo", doc.name, { description: updated }).then(
+					() => {
+						cy.contains(updated).should("be.visible");
+					},
+				);
 			});
-		});
-	});
+		},
+	);
 
 	it("Receives msgprint from server", { scrollBehavior: false }, () => {
 		// required because immediately after load socket is still connecting.
@@ -47,29 +53,35 @@ context("Realtime updates", () => {
 		});
 	});
 
-	it("Recieves custom messages from server", { scrollBehavior: false }, () => {
-		const event = "cypress_event";
-		let handler = {
-			handle() {
-				console.log("clear");
-			},
-		};
-		cy.spy(handler, "handle").as("callback");
+	it(
+		"Recieves custom messages from server",
+		{ scrollBehavior: false },
+		() => {
+			const event = "cypress_event";
+			let handler = {
+				handle() {
+					console.log("clear");
+				},
+			};
+			cy.spy(handler, "handle").as("callback");
 
-		cy.window()
-			.its("frappe")
-			.then((frappe) => {
-				frappe.realtime.on(event, () => handler.handle());
+			cy.window()
+				.its("frappe")
+				.then((frappe) => {
+					frappe.realtime.on(event, () => handler.handle());
+				});
+
+			publish_realtime({ event }).then(() => {
+				cy.get("@callback").should("be.called");
 			});
-
-		publish_realtime({ event }).then(() => {
-			cy.get("@callback").should("be.called");
-		});
-	});
+		},
+	);
 
 	it("Progress bar", { scrollBehavior: false }, () => {
 		const title = "RealTime Progress";
-		cy.call("frappe.tests.ui_test_helpers.publish_progress", { title }).then(() => {
+		cy.call("frappe.tests.ui_test_helpers.publish_progress", {
+			title,
+		}).then(() => {
 			cy.contains(title).should("be.visible");
 		});
 	});

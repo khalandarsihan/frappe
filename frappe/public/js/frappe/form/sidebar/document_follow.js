@@ -11,7 +11,9 @@ frappe.ui.form.DocumentFollow = class DocumentFollow {
 			return;
 		}
 		this.follow_document_link = this.parent.find(".follow-document-link");
-		this.unfollow_document_link = this.parent.find(".unfollow-document-link");
+		this.unfollow_document_link = this.parent.find(
+			".unfollow-document-link",
+		);
 		this.follow_span = this.parent.find(".anchor-document-follow > span");
 		this.followed_by = this.parent.find(".followed-by");
 		this.followed_by_label = this.parent.find(".followed-by-label");
@@ -25,7 +27,9 @@ frappe.ui.form.DocumentFollow = class DocumentFollow {
 	render_sidebar() {
 		const docinfo = this.frm.get_docinfo();
 		const document_follow_enabled = frappe.boot.user.document_follow_notify;
-		const document_can_be_followed = frappe.get_meta(this.frm.doctype).track_changes;
+		const document_can_be_followed = frappe.get_meta(
+			this.frm.doctype,
+		).track_changes;
 		if (
 			frappe.session.user === "Administrator" ||
 			!document_follow_enabled ||
@@ -115,7 +119,10 @@ frappe.ui.form.DocumentFollow = class DocumentFollow {
 					for (var d in r.message) {
 						this.count_others++;
 						if (this.count_others < 4) {
-							html += frappe.avatar(r.message[d].user, "avatar-small");
+							html += frappe.avatar(
+								r.message[d].user,
+								"avatar-small",
+							);
 						}
 						if (this.count_others === 0) {
 							this.followed_by.addClass("hidden");
@@ -129,7 +136,7 @@ frappe.ui.form.DocumentFollow = class DocumentFollow {
 	follow_action() {
 		frappe.show_alert({
 			message: __(
-				"You are now following this document. You will receive daily updates via email. You can change this in User Settings."
+				"You are now following this document. You will receive daily updates via email. You can change this in User Settings.",
 			),
 			indicator: "orange",
 		});

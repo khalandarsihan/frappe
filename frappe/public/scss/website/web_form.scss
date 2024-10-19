@@ -268,11 +268,18 @@
 									display: flex;
 
 									.slide-step {
-										@include flex(flex, center, center, null);
+										@include flex(
+											flex,
+											center,
+											center,
+											null
+										);
 
 										height: 18px;
 										width: 18px;
-										border-radius: var(--border-radius-full);
+										border-radius: var(
+											--border-radius-full
+										);
 										border: 1px solid var(--gray-300);
 										margin: 0 var(--margin-xs);
 										background-color: var(--card-bg);
@@ -281,7 +288,9 @@
 											height: 6px;
 											width: 6px;
 											background-color: var(--gray-300);
-											border-radius: var(--border-radius-full);
+											border-radius: var(
+												--border-radius-full
+											);
 										}
 
 										.slide-step-complete {
@@ -298,7 +307,9 @@
 
 											.slide-step-indicator {
 												display: block;
-												background-color: var(--primary);
+												background-color: var(
+													--primary
+												);
 											}
 										}
 

@@ -2,7 +2,9 @@ frappe.ModuleEditor = class ModuleEditor {
 	constructor(frm, wrapper) {
 		this.frm = frm;
 		this.wrapper = wrapper;
-		const block_modules = this.frm.doc.block_modules.map((row) => row.module);
+		const block_modules = this.frm.doc.block_modules.map(
+			(row) => row.module,
+		);
 		this.multicheck = frappe.ui.form.make_control({
 			parent: wrapper,
 			df: {
@@ -29,9 +31,13 @@ frappe.ModuleEditor = class ModuleEditor {
 	}
 
 	show() {
-		const block_modules = this.frm.doc.block_modules.map((row) => row.module);
+		const block_modules = this.frm.doc.block_modules.map(
+			(row) => row.module,
+		);
 		const all_modules = this.frm.doc.__onload.all_modules;
-		this.multicheck.selected_options = all_modules.filter((m) => !block_modules.includes(m));
+		this.multicheck.selected_options = all_modules.filter(
+			(m) => !block_modules.includes(m),
+		);
 		this.multicheck.refresh_input();
 	}
 
@@ -50,7 +56,7 @@ frappe.ModuleEditor = class ModuleEditor {
 				let module_doc = frappe.model.add_child(
 					this.frm.doc,
 					"Block Module",
-					"block_modules"
+					"block_modules",
 				);
 				module_doc.module = module;
 			}

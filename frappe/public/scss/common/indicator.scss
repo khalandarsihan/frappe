@@ -48,8 +48,8 @@
 	margin: 0 0 0 4px;
 }
 
-$indicator-colors: green, cyan, blue, orange, yellow, gray, grey, red, pink, darkgrey, purple,
-	light-blue;
+$indicator-colors: green, cyan, blue, orange, yellow, gray, grey, red, pink,
+	darkgrey, purple, light-blue;
 @each $color in $indicator-colors {
 	.indicator.#{"" + $color} {
 		&::before,

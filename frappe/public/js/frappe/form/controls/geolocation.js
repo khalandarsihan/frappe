@@ -1,6 +1,8 @@
 frappe.provide("frappe.utils");
 
-frappe.ui.form.ControlGeolocation = class ControlGeolocation extends frappe.ui.form.ControlData {
+frappe.ui.form.ControlGeolocation = class ControlGeolocation extends (
+	frappe.ui.form.ControlData
+) {
 	static horizontal = false;
 
 	async make() {
@@ -18,7 +20,7 @@ frappe.ui.form.ControlGeolocation = class ControlGeolocation extends frappe.ui.f
 		this.map_area = $(
 			`<div class="map-wrapper border">
 				<div id="${this.map_id}" style="min-height: 400px; z-index: 1; max-width:100%"></div>
-			</div>`
+			</div>`,
 		);
 
 		$(this.disp_area).html(this.map_area);
@@ -65,7 +67,7 @@ frappe.ui.form.ControlGeolocation = class ControlGeolocation extends frappe.ui.f
 				pointToLayer: this.point_to_layer,
 				style: this.set_style,
 				onEachFeature: this.on_each_feature,
-			})
+			}),
 		);
 		this.add_non_group_layers(data_layers, this.editableLayers);
 		this.editableLayers.addTo(this.map);
@@ -86,7 +88,9 @@ frappe.ui.form.ControlGeolocation = class ControlGeolocation extends frappe.ui.f
 		if (geoJsonPoint.properties.point_type == "circle") {
 			return L.circle(latlng, { radius: geoJsonPoint.properties.radius });
 		} else if (geoJsonPoint.properties.point_type == "circlemarker") {
-			return L.circleMarker(latlng, { radius: geoJsonPoint.properties.radius });
+			return L.circleMarker(latlng, {
+				radius: geoJsonPoint.properties.radius,
+			});
 		} else {
 			return L.marker(latlng);
 		}
@@ -143,11 +147,15 @@ frappe.ui.form.ControlGeolocation = class ControlGeolocation extends frappe.ui.f
 
 	bind_leaflet_map() {
 		this.map = L.map(this.map_id);
-		this.map.setView(frappe.utils.map_defaults.center, frappe.utils.map_defaults.zoom);
-
-		L.tileLayer(frappe.utils.map_defaults.tiles, frappe.utils.map_defaults.options).addTo(
-			this.map
+		this.map.setView(
+			frappe.utils.map_defaults.center,
+			frappe.utils.map_defaults.zoom,
 		);
+
+		L.tileLayer(
+			frappe.utils.map_defaults.tiles,
+			frappe.utils.map_defaults.options,
+		).addTo(this.map);
 
 		this.editableLayers = new L.FeatureGroup();
 	}
@@ -160,7 +168,12 @@ frappe.ui.form.ControlGeolocation = class ControlGeolocation extends frappe.ui.f
 
 	bind_leaflet_draw_control() {
 		if (
-			!frappe.perm.has_perm(this.doctype, this.df.permlevel, "write", this.doc) ||
+			!frappe.perm.has_perm(
+				this.doctype,
+				this.df.permlevel,
+				"write",
+				this.doc,
+			) ||
 			this.df.read_only
 		) {
 			return;
@@ -184,7 +197,8 @@ frappe.ui.form.ControlGeolocation = class ControlGeolocation extends frappe.ui.f
 					allowIntersection: false, // Restricts shapes to simple polygons
 					drawError: {
 						color: frappe.ui.color.get("orange"), // Color the shape will turn when intersects
-						message: "<strong>Oh snap!<strong> you can't draw that!", // Message that will show when intersect
+						message:
+							"<strong>Oh snap!<strong> you can't draw that!", // Message that will show when intersect
 					},
 					shapeOptions: {
 						color: frappe.ui.color.get("blue"),

@@ -9,15 +9,19 @@ frappe.ui.form.on("Workflow", {
 		let title, note;
 		let workflow_builder_url = "/app/workflow-builder";
 		let msg = __(
-			"Workflow Builder allows you to create workflows visually. You can drag and drop states and link them to create transitions. Also you can update thieir properties from the sidebar."
+			"Workflow Builder allows you to create workflows visually. You can drag and drop states and link them to create transitions. Also you can update thieir properties from the sidebar.",
 		);
 
 		if (frm.is_new()) {
-			title = __("Create your workflow visually using the Workflow Builder.");
+			title = __(
+				"Create your workflow visually using the Workflow Builder.",
+			);
 		} else {
-			title = __("Edit your workflow visually using the Workflow Builder.");
+			title = __(
+				"Edit your workflow visually using the Workflow Builder.",
+			);
 			note = __(
-				"NOTE: If you add states or transitions in the table, it will be reflected in the Workflow Builder but you will have to position them manually. Also Workflow Builder is currently in <b>BETA</b>."
+				"NOTE: If you add states or transitions in the table, it will be reflected in the Workflow Builder but you will have to position them manually. Also Workflow Builder is currently in <b>BETA</b>.",
 			);
 			workflow_builder_url += "/" + frm.doc.name;
 		}
@@ -41,9 +45,12 @@ frappe.ui.form.on("Workflow", {
 		frm.layout.show_message(message);
 
 		if (frm.doc.document_type) {
-			frm.add_custom_button(__("Go to {0} List", [frm.doc.document_type]), () => {
-				frappe.set_route("List", frm.doc.document_type);
-			});
+			frm.add_custom_button(
+				__("Go to {0} List", [frm.doc.document_type]),
+				() => {
+					frappe.set_route("List", frm.doc.document_type);
+				},
+			);
 		}
 
 		frm.events.update_field_options(frm);
@@ -64,7 +71,10 @@ frappe.ui.form.on("Workflow", {
 		});
 	},
 	validate: async (frm) => {
-		if (frm.doc.is_active && (!frm.doc.states.length || !frm.doc.transitions.length)) {
+		if (
+			frm.doc.is_active &&
+			(!frm.doc.states.length || !frm.doc.transitions.length)
+		) {
 			let message = "Workflow must have atleast one state and transition";
 			frappe.throw({
 				message: __(message),
@@ -88,9 +98,8 @@ frappe.ui.form.on("Workflow", {
 		});
 
 		if (updated_states.length) {
-			frm.doc._update_state_docstatus = await create_docstatus_change_warning(
-				updated_states
-			);
+			frm.doc._update_state_docstatus =
+				await create_docstatus_change_warning(updated_states);
 		}
 
 		return frm.trigger("get_orphaned_states_and_count").then(() => {
@@ -111,13 +120,16 @@ frappe.ui.form.on("Workflow", {
 		frappe.model.with_doctype(doc.document_type, () => {
 			const fieldnames = frappe
 				.get_meta(doc.document_type)
-				.fields.filter((field) => !frappe.model.no_value_type.includes(field.fieldtype))
+				.fields.filter(
+					(field) =>
+						!frappe.model.no_value_type.includes(field.fieldtype),
+				)
 				.map((field) => field.fieldname);
 
 			frm.fields_dict.states.grid.update_docfield_property(
 				"update_field",
 				"options",
-				[""].concat(fieldnames)
+				[""].concat(fieldnames),
 			);
 		});
 	},
@@ -127,7 +139,7 @@ frappe.ui.form.on("Workflow", {
 			</p>
 			<p>
 				${__(
-					"There are documents which have workflow states that do not exist in this Workflow. It is recommended that you add these states to the Workflow and change their states before removing these states."
+					"There are documents which have workflow states that do not exist in this Workflow. It is recommended that you add these states to the Workflow and change their states before removing these states.",
 				)}
 			</p>`;
 		const message_html = warning_html + frm.state_table_html;
@@ -140,7 +152,7 @@ frappe.ui.form.on("Workflow", {
 			__("Worflow States Don't Exist"),
 			message_html,
 			proceed_action,
-			__("Save Anyway")
+			__("Save Anyway"),
 		);
 	},
 	set_table_html: function (frm) {
@@ -177,11 +189,14 @@ frappe.ui.form.on("Workflow", {
 		let states_list = [];
 		frm.doc.states.map((state) => states_list.push(state.state));
 		return frappe
-			.xcall("frappe.workflow.doctype.workflow.workflow.get_workflow_state_count", {
-				doctype: frm.doc.document_type,
-				workflow_state_field: frm.doc.workflow_state_field,
-				states: states_list,
-			})
+			.xcall(
+				"frappe.workflow.doctype.workflow.workflow.get_workflow_state_count",
+				{
+					doctype: frm.doc.document_type,
+					workflow_state_field: frm.doc.workflow_state_field,
+					states: states_list,
+				},
+			)
 			.then((result) => {
 				if (result && result.length) {
 					frm.states = result;
@@ -194,7 +209,9 @@ frappe.ui.form.on("Workflow", {
 		if (frm.state_table) {
 			frm.state_table.empty();
 		}
-		frm.state_table = $(`<div class="state-table"><div>`).insertAfter(wrapper);
+		frm.state_table = $(`<div class="state-table"><div>`).insertAfter(
+			wrapper,
+		);
 	},
 	render_state_table: function (frm) {
 		if (frm.states && frm.states.length) {
@@ -261,10 +278,10 @@ async function create_docstatus_change_warning(updated_states) {
 				Do you want to update the docstatus of existing documents in those states?<br>
 				This does not undo any effect bought in by the document's existing docstatus.
 				`,
-				[updated_states.join(", ")]
+				[updated_states.join(", ")],
 			),
 			() => resolve(true),
-			() => resolve(false)
+			() => resolve(false),
 		);
 	});
 }

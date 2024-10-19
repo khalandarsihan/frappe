@@ -38,15 +38,18 @@ context("Control Date, Time and DateTime", () => {
 
 				cy.new_form(doctype_name);
 				cy.get(".form-control[data-fieldname=date]").focus();
-				cy.get(".datepickers-container .datepicker.active").should("be.visible");
+				cy.get(".datepickers-container .datepicker.active").should(
+					"be.visible",
+				);
 				cy.get(
-					".datepickers-container .datepicker.active .datepicker--cell-day.-current-"
+					".datepickers-container .datepicker.active .datepicker--cell-day.-current-",
 				).click({ force: true });
 
 				cy.window()
 					.its("cur_frm")
 					.then((cur_frm) => {
-						let formatted_value = cur_frm.get_field("date").input.value;
+						let formatted_value =
+							cur_frm.get_field("date").input.value;
 						let parts = formatted_value.split(d.separator);
 						expect(parts[d.part].length).to.equal(d.length);
 					});
@@ -119,7 +122,9 @@ context("Control Date, Time and DateTime", () => {
 				cy.fill_field("datetime", d.value, "Datetime").blur();
 				cy.get_field("datetime").should("have.value", d.input_value);
 
-				cy.window().its("cur_frm.doc.datetime").should("eq", d.doc_value);
+				cy.window()
+					.its("cur_frm.doc.datetime")
+					.should("eq", d.doc_value);
 			});
 		});
 	});

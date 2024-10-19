@@ -131,9 +131,7 @@ class TestDB(FrappeTestCase):
 		# test multiple orderby's
 		delimiter = '"' if frappe.db.db_type == "postgres" else "`"
 		self.assertIn(
-			"ORDER BY {deli}creation{deli} DESC,{deli}modified{deli} ASC,{deli}name{deli} DESC".format(
-				deli=delimiter
-			),
+			f"ORDER BY {delimiter}creation{delimiter} DESC,{delimiter}modified{delimiter} ASC,{delimiter}name{delimiter} DESC",
 			frappe.db.get_value("DocType", "DocField", order_by="creation desc, modified asc, name", run=0),
 		)
 

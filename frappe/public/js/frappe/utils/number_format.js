@@ -15,7 +15,9 @@ function flt(v, decimals, number_format, rounding_method) {
 		if (v.indexOf(" ") != -1) {
 			// using slice(1).join(" ") because space could also be a group separator
 			var parts = v.split(" ");
-			v = isNaN(parseFloat(parts[0])) ? parts.slice(parts.length - 1).join(" ") : v;
+			v = isNaN(parseFloat(parts[0]))
+				? parts.slice(parts.length - 1).join(" ")
+				: v;
 		}
 
 		v = strip_number_groups(v, number_format);
@@ -33,7 +35,10 @@ function strip_number_groups(v, number_format) {
 	var info = get_number_format_info(number_format);
 
 	// strip groups (,)
-	var group_regex = new RegExp(info.group_sep === "." ? "\\." : info.group_sep, "g");
+	var group_regex = new RegExp(
+		info.group_sep === "." ? "\\." : info.group_sep,
+		"g",
+	);
 	v = v.replace(group_regex, "");
 
 	// replace decimal separator with (.)
@@ -45,7 +50,11 @@ function strip_number_groups(v, number_format) {
 	return v;
 }
 
-function convert_old_to_new_number_format(v, old_number_format, new_number_format) {
+function convert_old_to_new_number_format(
+	v,
+	old_number_format,
+	new_number_format,
+) {
 	if (!new_number_format) new_number_format = get_number_format();
 	let new_info = get_number_format_info(new_number_format);
 
@@ -63,8 +72,14 @@ function convert_old_to_new_number_format(v, old_number_format, new_number_forma
 	let v_after_decimal = v_parts[1] || "";
 
 	// replace old group separator with new group separator in v_before_decimal
-	let old_group_regex = new RegExp(old_info.group_sep === "." ? "\\." : old_info.group_sep, "g");
-	v_before_decimal = v_before_decimal.replace(old_group_regex, new_info.group_sep);
+	let old_group_regex = new RegExp(
+		old_info.group_sep === "." ? "\\." : old_info.group_sep,
+		"g",
+	);
+	v_before_decimal = v_before_decimal.replace(
+		old_group_regex,
+		new_info.group_sep,
+	);
 
 	v = v_before_decimal;
 	if (v_after_decimal) {
@@ -90,7 +105,9 @@ frappe.number_format_info = {
 window.format_number = function (v, format, decimals) {
 	if (!format) {
 		format = get_number_format();
-		if (decimals == null) decimals = cint(frappe.defaults.get_default("float_precision")) || 3;
+		if (decimals == null)
+			decimals =
+				cint(frappe.defaults.get_default("float_precision")) || 3;
 	}
 
 	var info = get_number_format_info(format);
@@ -146,7 +163,8 @@ function format_currency(v, currency, decimals) {
 	const format = get_number_format(currency);
 	const symbol = get_currency_symbol(currency);
 	const show_symbol_on_right =
-		frappe.model.get_value(":Currency", currency, "symbol_on_right") ?? false;
+		frappe.model.get_value(":Currency", currency, "symbol_on_right") ??
+		false;
 
 	if (decimals === undefined) {
 		decimals = frappe.boot.sysdefaults.currency_precision || null;
@@ -164,12 +182,17 @@ function format_currency(v, currency, decimals) {
 
 function get_currency_symbol(currency) {
 	if (frappe.boot) {
-		if (frappe.boot.sysdefaults && frappe.boot.sysdefaults.hide_currency_symbol == "Yes")
+		if (
+			frappe.boot.sysdefaults &&
+			frappe.boot.sysdefaults.hide_currency_symbol == "Yes"
+		)
 			return null;
 
 		if (!currency) currency = frappe.boot.sysdefaults.currency;
 
-		return frappe.model.get_value(":Currency", currency, "symbol") || currency;
+		return (
+			frappe.model.get_value(":Currency", currency, "symbol") || currency
+		);
 	} else {
 		// load in template
 		return frappe.currency_symbols[currency];
@@ -178,7 +201,9 @@ function get_currency_symbol(currency) {
 
 function get_number_format(currency) {
 	return (
-		(frappe.boot && frappe.boot.sysdefaults && frappe.boot.sysdefaults.number_format) ||
+		(frappe.boot &&
+			frappe.boot.sysdefaults &&
+			frappe.boot.sysdefaults.number_format) ||
 		"#,###.##"
 	);
 }
@@ -198,7 +223,9 @@ function get_number_format_info(format) {
 
 function _round(num, precision, rounding_method) {
 	rounding_method =
-		rounding_method || frappe.boot.sysdefaults.rounding_method || "Banker's Rounding (legacy)";
+		rounding_method ||
+		frappe.boot.sysdefaults.rounding_method ||
+		"Banker's Rounding (legacy)";
 
 	let is_negative = num < 0 ? true : false;
 
@@ -208,7 +235,8 @@ function _round(num, precision, rounding_method) {
 		var n = +(d ? Math.abs(num) * m : Math.abs(num)).toFixed(8); // Avoid rounding errors
 		var i = Math.floor(n),
 			f = n - i;
-		var r = !precision && f == 0.5 ? (i % 2 == 0 ? i : i + 1) : Math.round(n);
+		var r =
+			!precision && f == 0.5 ? (i % 2 == 0 ? i : i + 1) : Math.round(n);
 		r = d ? r / m : r;
 		return is_negative ? -r : r;
 	} else if (rounding_method == "Banker's Rounding") {
@@ -260,8 +288,15 @@ function roundNumber(num, precision) {
 function precision(fieldname, doc) {
 	if (cur_frm) {
 		if (!doc) doc = cur_frm.doc;
-		var df = frappe.meta.get_docfield(doc.doctype, fieldname, doc.parent || doc.name);
-		if (!df) console.log(fieldname + ": could not find docfield in method precision()");
+		var df = frappe.meta.get_docfield(
+			doc.doctype,
+			fieldname,
+			doc.parent || doc.name,
+		);
+		if (!df)
+			console.log(
+				fieldname + ": could not find docfield in method precision()",
+			);
 		return frappe.meta.get_field_precision(df, doc);
 	} else {
 		return frappe.boot.sysdefaults.float_precision;
@@ -277,7 +312,9 @@ function remainder(numerator, denominator, precision) {
 	var multiplier = Math.pow(10, precision);
 	let _remainder;
 	if (precision) {
-		_remainder = ((numerator * multiplier) % (denominator * multiplier)) / multiplier;
+		_remainder =
+			((numerator * multiplier) % (denominator * multiplier)) /
+			multiplier;
 	} else {
 		_remainder = numerator % denominator;
 	}
@@ -287,11 +324,19 @@ function remainder(numerator, denominator, precision) {
 
 function round_based_on_smallest_currency_fraction(value, currency, precision) {
 	var smallest_currency_fraction_value = flt(
-		frappe.model.get_value(":Currency", currency, "smallest_currency_fraction_value")
+		frappe.model.get_value(
+			":Currency",
+			currency,
+			"smallest_currency_fraction_value",
+		),
 	);
 
 	if (smallest_currency_fraction_value) {
-		var remainder_val = remainder(value, smallest_currency_fraction_value, precision);
+		var remainder_val = remainder(
+			value,
+			smallest_currency_fraction_value,
+			precision,
+		);
 		if (remainder_val > smallest_currency_fraction_value / 2) {
 			value += smallest_currency_fraction_value - remainder_val;
 		} else {

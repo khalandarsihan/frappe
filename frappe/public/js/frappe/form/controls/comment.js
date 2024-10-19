@@ -3,7 +3,9 @@ import Mention from "./quill-mention/quill.mention";
 
 Quill.register("modules/mention", Mention, true);
 
-frappe.ui.form.ControlComment = class ControlComment extends frappe.ui.form.ControlTextEditor {
+frappe.ui.form.ControlComment = class ControlComment extends (
+	frappe.ui.form.ControlTextEditor
+) {
 	make_wrapper() {
 		this.comment_wrapper = !this.no_wrapper
 			? $(`
@@ -53,7 +55,7 @@ frappe.ui.form.ControlComment = class ControlComment extends frappe.ui.form.Cont
 			"text-change",
 			frappe.utils.debounce(() => {
 				this.update_state();
-			}, 300)
+			}, 300),
 		);
 	}
 

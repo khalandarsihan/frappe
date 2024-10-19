@@ -44,7 +44,7 @@ watch(
 	(value) => {
 		update_control.value = false;
 		code_control.value?.set_value(value);
-	}
+	},
 );
 
 watch(
@@ -53,7 +53,7 @@ watch(
 		if (code_control.value) {
 			code_control.value.ace_editor_target.css("max-height", value);
 		}
-	}
+	},
 );
 </script>
 
@@ -64,7 +64,11 @@ watch(
 			<slot name="actions" />
 		</div>
 		<div ref="code"></div>
-		<div v-if="df.description" class="mt-2 description" v-html="df.description"></div>
+		<div
+			v-if="df.description"
+			class="mt-2 description"
+			v-html="df.description"
+		></div>
 	</div>
 	<div v-else class="control" ref="code"></div>
 </template>

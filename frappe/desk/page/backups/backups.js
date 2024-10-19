@@ -41,5 +41,7 @@ frappe.pages["backups"].on_page_load = function (wrapper) {
 
 	frappe.breadcrumbs.add("Setup");
 
-	$(frappe.render_template("backups")).appendTo(page.body.addClass("no-border"));
+	$(frappe.render_template("backups")).appendTo(
+		page.body.addClass("no-border"),
+	);
 };

@@ -20,7 +20,10 @@ Object.assign(frappe.energy_points, {
 	format_history_log(log) {
 		// redundant code to honor readability and to avoid confusion
 		const separator = `<span>&nbsp;-&nbsp;</span>`;
-		const route = frappe.utils.get_form_link(log.reference_doctype, log.reference_name);
+		const route = frappe.utils.get_form_link(
+			log.reference_doctype,
+			log.reference_name,
+		);
 		return `<div class="flex">
   			<span class="${log.points >= 0 ? "green" : "red"} mr-2">
   				${this.get_points(log.points)}
@@ -58,6 +61,9 @@ Object.assign(frappe.energy_points, {
 		if (log.type === "Revert") {
 			return __("{0} reverted {1}", [owner_name, log.revert_of]);
 		}
-		return __("gained by {0} via automatic rule {1}", [user, log.rule.bold()]);
+		return __("gained by {0} via automatic rule {1}", [
+			user,
+			log.rule.bold(),
+		]);
 	},
 });

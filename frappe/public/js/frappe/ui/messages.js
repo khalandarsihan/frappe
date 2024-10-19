@@ -13,7 +13,7 @@ frappe.messages.get_waiting_message = function (msg) {
 	return repl(
 		'<div class="msg-box" style="width: 63%; margin: 30px auto;">\
 		<p class="text-center">%(msg)s</p></div>',
-		{ msg: msg }
+		{ msg: msg },
 	);
 };
 
@@ -56,7 +56,13 @@ frappe.confirm = function (message, confirm_action, reject_action) {
 	return d;
 };
 
-frappe.warn = function (title, message_html, proceed_action, primary_label, is_minimizable) {
+frappe.warn = function (
+	title,
+	message_html,
+	proceed_action,
+	primary_label,
+	is_minimizable,
+) {
 	const d = new frappe.ui.Dialog({
 		title: title,
 		indicator: "red",
@@ -65,13 +71,20 @@ frappe.warn = function (title, message_html, proceed_action, primary_label, is_m
 			if (proceed_action) proceed_action();
 			d.hide();
 		},
-		secondary_action_label: __("Cancel", null, "Secondary button in warning dialog"),
+		secondary_action_label: __(
+			"Cancel",
+			null,
+			"Secondary button in warning dialog",
+		),
 		secondary_action: () => d.hide(),
 		minimizable: is_minimizable,
 	});
 
 	d.$body.append(`<div class="frappe-confirm-message">${message_html}</div>`);
-	d.standard_actions.find(".btn-primary").removeClass("btn-primary").addClass("btn-danger");
+	d.standard_actions
+		.find(".btn-primary")
+		.removeClass("btn-primary")
+		.addClass("btn-danger");
 
 	d.show();
 	return d;
@@ -102,7 +115,7 @@ frappe.prompt = function (fields, callback, title, primary_label) {
 			}
 			d.hide();
 			callback(values);
-		}
+		},
 	);
 	d.show();
 	return d;
@@ -183,13 +196,16 @@ frappe.msgprint = function (msg, title, is_minimizable) {
 		});
 
 		// class "msgprint" is used in tests
-		frappe.msg_dialog.msg_area = $('<div class="msgprint">').appendTo(frappe.msg_dialog.body);
+		frappe.msg_dialog.msg_area = $('<div class="msgprint">').appendTo(
+			frappe.msg_dialog.body,
+		);
 
 		frappe.msg_dialog.clear = function () {
 			frappe.msg_dialog.msg_area.empty();
 		};
 
-		frappe.msg_dialog.indicator = frappe.msg_dialog.header.find(".indicator");
+		frappe.msg_dialog.indicator =
+			frappe.msg_dialog.header.find(".indicator");
 	}
 
 	// setup and bind an action to the primary button
@@ -230,8 +246,12 @@ frappe.msgprint = function (msg, title, is_minimizable) {
 		}
 
 		frappe.msg_dialog.set_primary_action(
-			__(data.primary_action.label || data.primary_action_label || "Done"),
-			data.primary_action.action
+			__(
+				data.primary_action.label ||
+					data.primary_action_label ||
+					"Done",
+			),
+			data.primary_action.action,
 		);
 	} else {
 		if (frappe.msg_dialog.has_primary_action) {
@@ -242,7 +262,9 @@ frappe.msgprint = function (msg, title, is_minimizable) {
 
 	if (data.secondary_action) {
 		frappe.msg_dialog.set_secondary_action(data.secondary_action.action);
-		frappe.msg_dialog.set_secondary_action_label(__(data.secondary_action.label || "Close"));
+		frappe.msg_dialog.set_secondary_action_label(
+			__(data.secondary_action.label || "Close"),
+		);
 	}
 
 	if (data.message == null) {
@@ -264,13 +286,16 @@ frappe.msgprint = function (msg, title, is_minimizable) {
 		// set title only if it is explicitly given
 		// and no existing title exists
 		frappe.msg_dialog.set_title(
-			data.title || __("Message", null, "Default title of the message dialog")
+			data.title ||
+				__("Message", null, "Default title of the message dialog"),
 		);
 	}
 
 	// show / hide indicator
 	if (data.indicator) {
-		frappe.msg_dialog.indicator.removeClass().addClass("indicator " + data.indicator);
+		frappe.msg_dialog.indicator
+			.removeClass()
+			.addClass("indicator " + data.indicator);
 	} else {
 		frappe.msg_dialog.indicator.removeClass().addClass("hidden");
 	}
@@ -320,7 +345,10 @@ frappe.hide_msgprint = function (instant) {
 
 // update html in existing msgprint
 frappe.update_msgprint = function (html) {
-	if (!frappe.msg_dialog || (frappe.msg_dialog && !frappe.msg_dialog.$wrapper.is(":visible"))) {
+	if (
+		!frappe.msg_dialog ||
+		(frappe.msg_dialog && !frappe.msg_dialog.$wrapper.is(":visible"))
+	) {
 		frappe.msgprint(html);
 	} else {
 		frappe.msg_dialog.msg_area.html(html);
@@ -349,11 +377,17 @@ frappe.verify_password = function (callback) {
 			});
 		},
 		__("Verify Password"),
-		__("Verify")
+		__("Verify"),
 	);
 };
 
-frappe.show_progress = (title, count, total = 100, description, hide_on_completion = false) => {
+frappe.show_progress = (
+	title,
+	count,
+	total = 100,
+	description,
+	hide_on_completion = false,
+) => {
 	let dialog;
 	if (
 		frappe.cur_progress &&
@@ -371,7 +405,9 @@ frappe.show_progress = (title, count, total = 100, description, hide_on_completi
 			</div>
 			<p class="description text-muted small"></p>
 		</div`).appendTo(dialog.body);
-		dialog.progress_bar = dialog.progress.css({ "margin-top": "10px" }).find(".progress-bar");
+		dialog.progress_bar = dialog.progress
+			.css({ "margin-top": "10px" })
+			.find(".progress-bar");
 		dialog.$wrapper.removeClass("fade");
 		dialog.show();
 		frappe.cur_progress = dialog;
@@ -397,7 +433,11 @@ frappe.hide_progress = function () {
 };
 
 // Floating Message
-frappe.show_alert = frappe.toast = function (message, seconds = 7, actions = {}) {
+frappe.show_alert = frappe.toast = function (
+	message,
+	seconds = 7,
+	actions = {},
+) {
 	let indicator_icon_map = {
 		orange: "solid-warning",
 		yellow: "solid-warning",
@@ -413,12 +453,16 @@ frappe.show_alert = frappe.toast = function (message, seconds = 7, actions = {})
 	}
 
 	if (!$("#dialog-container").length) {
-		$('<div id="dialog-container"><div id="alert-container"></div></div>').appendTo("body");
+		$(
+			'<div id="dialog-container"><div id="alert-container"></div></div>',
+		).appendTo("body");
 	}
 
 	let icon;
 	if (message.indicator) {
-		icon = indicator_icon_map[message.indicator.toLowerCase()] || "solid-" + message.indicator;
+		icon =
+			indicator_icon_map[message.indicator.toLowerCase()] ||
+			"solid-" + message.indicator;
 	} else {
 		icon = "solid-info";
 	}

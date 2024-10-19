@@ -3,7 +3,7 @@ frappe.preview_email = function (
 	args,
 	header,
 	with_container = false,
-	only_html = false
+	only_html = false,
 ) {
 	return frappe
 		.call({
@@ -23,7 +23,8 @@ frappe.preview_email = function (
 				return html;
 			}
 			var d = frappe.msgprint({
-				message: '<iframe width="100%" height="600px" style="border: none;"></iframe>',
+				message:
+					'<iframe width="100%" height="600px" style="border: none;"></iframe>',
 				wide: true,
 			});
 

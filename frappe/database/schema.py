@@ -352,11 +352,7 @@ def get_definition(fieldtype, precision=None, length=None):
 
 def add_column(doctype, column_name, fieldtype, precision=None, length=None, default=None, not_null=False):
 	frappe.db.commit()
-	query = "alter table `tab{}` add column if not exists {} {}".format(
-		doctype,
-		column_name,
-		get_definition(fieldtype, precision, length),
-	)
+	query = f"alter table `tab{doctype}` add column if not exists {column_name} {get_definition(fieldtype, precision, length)}"
 
 	if not_null:
 		query += " not null"

@@ -19,7 +19,7 @@ onClickOutside(container, () => (store.form.selected_field = null), {
 watch(
 	() => store.form.layout,
 	() => (store.dirty = true),
-	{ deep: true }
+	{ deep: true },
 );
 
 onMounted(() => store.fetch());

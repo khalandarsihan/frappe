@@ -1,4 +1,6 @@
-frappe.ui.form.ControlPassword = class ControlPassword extends frappe.ui.form.ControlData {
+frappe.ui.form.ControlPassword = class ControlPassword extends (
+	frappe.ui.form.ControlData
+) {
 	static input_type = "password";
 	make() {
 		super.make();
@@ -17,7 +19,7 @@ frappe.ui.form.ControlPassword = class ControlPassword extends frappe.ui.form.Co
 						aria-valuemin="0" aria-valuemax="100">
 					</div>
 				</div>
-			</div>`
+			</div>`,
 		).insertAfter(this.$input);
 
 		this.progress_text = this.indicator.find(".progress-text");
@@ -27,10 +29,11 @@ frappe.ui.form.ControlPassword = class ControlPassword extends frappe.ui.form.Co
 		this.$input.on(
 			"keyup",
 			frappe.utils.debounce(() => {
-				let hide_icon = me.$input.val() && !me.$input.val().includes("*");
+				let hide_icon =
+					me.$input.val() && !me.$input.val().includes("*");
 				me.toggle_password.toggleClass("hidden", !hide_icon);
 				me.get_password_strength(me.$input.val());
-			}, 500)
+			}, 500),
 		);
 
 		this.toggle_password = $(`
@@ -96,7 +99,9 @@ frappe.ui.form.ControlPassword = class ControlPassword extends frappe.ui.form.Co
 
 		this.indicator.removeClass("hidden");
 
-		this.progress_text.html(progress_text).css("color", `var(--${color}-500)`);
+		this.progress_text
+			.html(progress_text)
+			.css("color", `var(--${color}-500)`);
 
 		this.progress_bar
 			.css("width", progress_percent + "%")
@@ -104,7 +109,9 @@ frappe.ui.form.ControlPassword = class ControlPassword extends frappe.ui.form.Co
 			.removeClass()
 			.addClass("progress-bar progress-bar-" + progress_color);
 
-		let message = __("Include symbols, numbers and capital letters in the password");
+		let message = __(
+			"Include symbols, numbers and capital letters in the password",
+		);
 		this.message.html(message).toggleClass("hidden", color == "green");
 	}
 };

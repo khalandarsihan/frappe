@@ -8,7 +8,7 @@ frappe.ui.form.on("Client Script", {
 	refresh(frm) {
 		if (frm.doc.dt && frm.doc.script) {
 			frm.add_custom_button(__("Go to {0}", [frm.doc.dt]), () =>
-				frappe.set_route("List", frm.doc.dt, "List")
+				frappe.set_route("List", frm.doc.dt, "List"),
 			);
 		}
 
@@ -52,7 +52,11 @@ frappe.ui.form.on("Client Script", {
 
 			if (!frm.is_new()) {
 				frm.add_custom_button(__("Compare Versions"), () => {
-					new frappe.ui.DiffView("Client Script", "script", frm.doc.name);
+					new frappe.ui.DiffView(
+						"Client Script",
+						"script",
+						frm.doc.name,
+					);
 				});
 			}
 		}
@@ -65,7 +69,10 @@ frappe.ui.form.on("Client Script", {
 	},
 
 	dt(frm) {
-		frm.toggle_display("view", !frappe.boot.single_types.includes(frm.doc.dt));
+		frm.toggle_display(
+			"view",
+			!frappe.boot.single_types.includes(frm.doc.dt),
+		);
 
 		if (!frm.doc.script) {
 			frm.events.add_script_for_doctype(frm, frm.doc.dt);

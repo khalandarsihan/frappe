@@ -2,7 +2,11 @@
 import Section from "./Section.vue";
 import EditableInput from "./EditableInput.vue";
 import { useStore } from "../store";
-import { section_boilerplate, confirm_dialog, is_touch_screen_device } from "../utils";
+import {
+	section_boilerplate,
+	confirm_dialog,
+	is_touch_screen_device,
+} from "../utils";
 import draggable from "vuedraggable";
 import { ref, computed } from "vue";
 import { useMagicKeys, whenever } from "@vueuse/core";
@@ -45,7 +49,9 @@ function add_new_section() {
 
 function is_tab_empty(tab) {
 	// check if sections have columns and it contains fields
-	return !tab.sections.some((section) => section.columns.some((column) => column.fields.length));
+	return !tab.sections.some((section) =>
+		section.columns.some((column) => column.fields.length),
+	);
 }
 
 function remove_tab(tab, event, force = false) {
@@ -53,7 +59,9 @@ function remove_tab(tab, event, force = false) {
 	if (!event?.currentTarget?.offsetParent && !force) return;
 
 	if (store.is_customize_form && store.current_tab.df.is_custom_field == 0) {
-		frappe.msgprint(__("Cannot delete standard field. You can hide it if you want"));
+		frappe.msgprint(
+			__("Cannot delete standard field. You can hide it if you want"),
+		);
 		throw "cannot delete standard field";
 	} else if (store.has_standard_field(store.current_tab)) {
 		delete_tab(tab);
@@ -65,12 +73,12 @@ function remove_tab(tab, event, force = false) {
 			__(
 				"Are you sure you want to delete the tab? All the sections along with fields in the tab will be moved to the previous tab.",
 				null,
-				"Confirmation dialog message"
+				"Confirmation dialog message",
 			),
 			() => delete_tab(tab),
 			__("Delete tab", null, "Button text"),
 			() => delete_tab(tab, true),
-			__("Delete entire tab with fields", null, "Button text")
+			__("Delete entire tab with fields", null, "Button text"),
 		);
 	}
 }
@@ -122,9 +130,16 @@ function delete_tab(tab, with_children) {
 		>
 			<template #item="{ element }">
 				<div
-					:class="['tab', store.form.active_tab == element.df.name ? 'active' : '']"
+					:class="[
+						'tab',
+						store.form.active_tab == element.df.name
+							? 'active'
+							: '',
+					]"
 					:title="element.df.fieldname"
-					:data-is-user-generated="store.is_user_generated_field(element)"
+					:data-is-user-generated="
+						store.is_user_generated_field(element)
+					"
 					@click.stop="activate_tab(element)"
 					@dragstart="dragged = true"
 					@dragend="dragged = false"
@@ -181,12 +196,16 @@ function delete_tab(tab, with_children) {
 					<Section
 						:tab="tab"
 						:section="element"
-						:data-is-user-generated="store.is_user_generated_field(element)"
+						:data-is-user-generated="
+							store.is_user_generated_field(element)
+						"
 					/>
 				</template>
 			</draggable>
 			<div class="empty-tab" :hidden="store.read_only">
-				<div v-if="has_tabs">{{ __("Drag & Drop a section here from another tab") }}</div>
+				<div v-if="has_tabs">
+					{{ __("Drag & Drop a section here from another tab") }}
+				</div>
 				<div v-if="has_tabs">{{ __("OR") }}</div>
 				<button class="btn btn-default btn-sm" @click="add_new_section">
 					{{ __("Add a new section") }}

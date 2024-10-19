@@ -20,7 +20,11 @@ frappe.views.ListFactory = class ListFactory extends frappe.views.Factory {
 		let view_class = frappe.views[view_name + "View"];
 		if (!view_class) view_class = frappe.views.ListView;
 
-		if (view_class && view_class.load_last_view && view_class.load_last_view()) {
+		if (
+			view_class &&
+			view_class.load_last_view &&
+			view_class.load_last_view()
+		) {
 			// view can have custom routing logic
 			return;
 		}
@@ -75,11 +79,15 @@ frappe.views.ListFactory = class ListFactory extends frappe.views.Factory {
 
 	set_module_breadcrumb() {
 		if (frappe.route_history.length > 1) {
-			const prev_route = frappe.route_history[frappe.route_history.length - 2];
+			const prev_route =
+				frappe.route_history[frappe.route_history.length - 2];
 			if (prev_route[0] === "modules") {
 				const doctype = this.route[1],
 					module = prev_route[1];
-				if (frappe.module_links[module] && frappe.module_links[module].includes(doctype)) {
+				if (
+					frappe.module_links[module] &&
+					frappe.module_links[module].includes(doctype)
+				) {
 					// save the last page from the breadcrumb was accessed
 					frappe.breadcrumbs.set_doctype_module(doctype, module);
 				}

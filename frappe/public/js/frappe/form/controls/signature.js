@@ -1,4 +1,6 @@
-frappe.ui.form.ControlSignature = class ControlSignature extends frappe.ui.form.ControlData {
+frappe.ui.form.ControlSignature = class ControlSignature extends (
+	frappe.ui.form.ControlData
+) {
 	make() {
 		var me = this;
 		this.saving = false;
@@ -6,13 +8,17 @@ frappe.ui.form.ControlSignature = class ControlSignature extends frappe.ui.form.
 		super.make();
 
 		if (this.df.label) {
-			$(this.wrapper).find("label").text(__(this.df.label, null, this.df.parent));
+			$(this.wrapper)
+				.find("label")
+				.text(__(this.df.label, null, this.df.parent));
 		}
 		this.set_doc_url();
 
 		frappe.require("/assets/frappe/js/lib/jSignature.min.js").then(() => {
 			// make jSignature field
-			me.body = $('<div class="signature-field"></div>').prependTo(me.$input_wrapper);
+			me.body = $('<div class="signature-field"></div>').prependTo(
+				me.$input_wrapper,
+			);
 
 			new ResizeObserver(() => me.make_pad()).observe(me.body[0]);
 		});

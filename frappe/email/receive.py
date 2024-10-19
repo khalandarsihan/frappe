@@ -1,6 +1,7 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
+import _socket
 import datetime
 import email
 import email.utils
@@ -13,7 +14,6 @@ import time
 from contextlib import suppress
 from email.header import decode_header
 
-import _socket
 import chardet
 from email_reply_parser import EmailReplyParser
 
@@ -328,14 +328,7 @@ class EmailServer:
 			partial_mail = Email(headers)
 
 		if partial_mail:
-			return (
-				"\nDate: {date}\nFrom: {from_email}\nSubject: {subject}\n\n\nTraceback: \n{traceback}".format(
-					date=partial_mail.date,
-					from_email=partial_mail.from_email,
-					subject=partial_mail.subject,
-					traceback=traceback,
-				)
-			)
+			return f"\nDate: {partial_mail.date}\nFrom: {partial_mail.from_email}\nSubject: {partial_mail.subject}\n\n\nTraceback: \n{traceback}"
 		return traceback
 
 	def update_flag(self, folder, uid_list=None):

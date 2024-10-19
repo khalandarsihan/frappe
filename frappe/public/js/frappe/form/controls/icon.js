@@ -1,6 +1,8 @@
 import Picker from "../../icon_picker/icon_picker";
 
-frappe.ui.form.ControlIcon = class ControlIcon extends frappe.ui.form.ControlData {
+frappe.ui.form.ControlIcon = class ControlIcon extends (
+	frappe.ui.form.ControlData
+) {
 	make_input() {
 		this.df.placeholder = this.df.placeholder || __("Choose an icon");
 		super.make_input();
@@ -11,7 +13,8 @@ frappe.ui.form.ControlIcon = class ControlIcon extends frappe.ui.form.ControlDat
 	get_all_icons() {
 		frappe.symbols = [];
 		$("#all-symbols > svg > symbol[id]").each(function () {
-			this.id.includes("icon-") && frappe.symbols.push(this.id.replace("icon-", ""));
+			this.id.includes("icon-") &&
+				frappe.symbols.push(this.id.replace("icon-", ""));
 		});
 	}
 
@@ -54,7 +57,7 @@ frappe.ui.form.ControlIcon = class ControlIcon extends frappe.ui.form.ControlDat
 
 		if (!this.selected_icon) {
 			this.selected_icon = $(
-				`<div class="selected-icon">${frappe.utils.icon("folder-normal", "md")}</div>`
+				`<div class="selected-icon">${frappe.utils.icon("folder-normal", "md")}</div>`,
 			);
 			this.selected_icon.insertAfter(this.$input);
 		}
@@ -91,7 +94,9 @@ frappe.ui.form.ControlIcon = class ControlIcon extends frappe.ui.form.ControlDat
 	set_formatted_input(value) {
 		super.set_formatted_input(value);
 		this.$input.val(value);
-		this.selected_icon.find("use").attr("href", "#icon-" + (value || "folder-normal"));
+		this.selected_icon
+			.find("use")
+			.attr("href", "#icon-" + (value || "folder-normal"));
 		this.selected_icon.toggleClass("no-value", !value);
 	}
 

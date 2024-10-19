@@ -14,7 +14,9 @@ frappe.listview_settings["ToDo"] = {
 			return __("Open", null, "Access");
 		},
 		get_description: function (doc) {
-			return __("Open {0}", [`${__(doc.reference_type)}: ${doc.reference_name}`]);
+			return __("Open {0}", [
+				`${__(doc.reference_type)}: ${doc.reference_name}`,
+			]);
 		},
 		action: function (doc) {
 			frappe.set_route("Form", doc.reference_type, doc.reference_name);

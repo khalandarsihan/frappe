@@ -3,7 +3,10 @@
 
 frappe.ui.form.on("Submission Queue", {
 	refresh: function (frm) {
-		if (frm.doc.status === "Queued" && frappe.boot.user.roles.includes("System Manager")) {
+		if (
+			frm.doc.status === "Queued" &&
+			frappe.boot.user.roles.includes("System Manager")
+		) {
 			frm.add_custom_button(__("Unlock Reference Document"), () => {
 				frappe.confirm(
 					`
@@ -12,7 +15,7 @@ frappe.ui.form.on("Submission Queue", {
 					and could lead to non-ideal conditions.`,
 					() => {
 						frm.call("unlock_doc");
-					}
+					},
 				);
 			});
 		}

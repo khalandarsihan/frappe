@@ -92,9 +92,8 @@ class ParameterizedFunction(Function):
 		)
 
 		if self.schema is not None:
-			function_sql = "{schema}.{function}".format(
-				schema=self.schema.get_sql(quote_char=quote_char, dialect=dialect, **kwargs),
-				function=function_sql,
+			function_sql = (
+				f"{self.schema.get_sql(quote_char=quote_char, dialect=dialect, **kwargs)}.{function_sql}"
 			)
 
 		if with_alias:

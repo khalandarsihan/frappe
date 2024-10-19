@@ -27,7 +27,9 @@ context("Login", () => {
 		cy.get("#login_password").type("qwer");
 
 		cy.findByRole("button", { name: "Login" }).click();
-		cy.findByRole("button", { name: "Invalid Login. Try again." }).should("exist");
+		cy.findByRole("button", { name: "Invalid Login. Try again." }).should(
+			"exist",
+		);
 		cy.location("pathname").should("eq", "/login");
 	});
 
@@ -53,7 +55,8 @@ context("Login", () => {
 
 		// redirect-to /me page with params to mock OAuth 2.0 like request
 		cy.visit(
-			"/login?redirect-to=/me?" + encodeURIComponent(payload.toString().replace("+", " "))
+			"/login?redirect-to=/me?" +
+				encodeURIComponent(payload.toString().replace("+", " ")),
 		);
 
 		cy.get("#login_email").type("Administrator");
@@ -62,6 +65,9 @@ context("Login", () => {
 		cy.findByRole("button", { name: "Login" }).click();
 
 		// verify redirected location and url params after login
-		cy.url().should("include", "/me?" + payload.toString().replace("+", "%20"));
+		cy.url().should(
+			"include",
+			"/me?" + payload.toString().replace("+", "%20"),
+		);
 	});
 });

@@ -187,8 +187,7 @@ def add_to_date(
 	seconds=0,
 	as_string: Literal[False] = False,
 	as_datetime: Literal[False] = False,
-) -> datetime.date:
-	...
+) -> datetime.date: ...
 
 
 @typing.overload
@@ -203,8 +202,7 @@ def add_to_date(
 	seconds=0,
 	as_string: Literal[False] = False,
 	as_datetime: Literal[True] = True,
-) -> datetime.datetime:
-	...
+) -> datetime.datetime: ...
 
 
 @typing.overload
@@ -219,8 +217,7 @@ def add_to_date(
 	seconds=0,
 	as_string: Literal[True] = True,
 	as_datetime: bool = False,
-) -> str:
-	...
+) -> str: ...
 
 
 def add_to_date(
@@ -375,13 +372,11 @@ def nowtime() -> str:
 
 
 @typing.overload
-def get_first_day(dt, d_years=0, d_months=0, as_str: Literal[False] = False) -> datetime.date:
-	...
+def get_first_day(dt, d_years=0, d_months=0, as_str: Literal[False] = False) -> datetime.date: ...
 
 
 @typing.overload
-def get_first_day(dt, d_years=0, d_months=0, as_str: Literal[True] = False) -> str:
-	...
+def get_first_day(dt, d_years=0, d_months=0, as_str: Literal[True] = False) -> str: ...
 
 
 # TODO: first arg
@@ -404,13 +399,11 @@ def get_first_day(dt, d_years: int = 0, d_months: int = 0, as_str: bool = False)
 
 
 @typing.overload
-def get_quarter_start(dt, as_str: Literal[False] = False) -> datetime.date:
-	...
+def get_quarter_start(dt, as_str: Literal[False] = False) -> datetime.date: ...
 
 
 @typing.overload
-def get_quarter_start(dt, as_str: Literal[True] = False) -> str:
-	...
+def get_quarter_start(dt, as_str: Literal[True] = False) -> str: ...
 
 
 def get_quarter_start(dt, as_str: bool = False) -> str | datetime.date:
@@ -889,13 +882,11 @@ def cast(fieldtype, value=None):
 
 
 @typing.overload
-def flt(s: NumericType | str, precision: Literal[0]) -> int:
-	...
+def flt(s: NumericType | str, precision: Literal[0]) -> int: ...
 
 
 @typing.overload
-def flt(s: NumericType | str, precision: int | None = None) -> float:
-	...
+def flt(s: NumericType | str, precision: int | None = None) -> float: ...
 
 
 def flt(s: NumericType | str, precision: int | None = None, rounding_method: str | None = None) -> float:
@@ -1645,8 +1636,8 @@ def get_link_to_report(
 
 		filters = "&".join(conditions)
 
-		return """<a href='{}'>{}</a>""".format(
-			get_url_to_report_with_filters(name, filters, report_type, doctype), label
+		return (
+			f"""<a href='{get_url_to_report_with_filters(name, filters, report_type, doctype)}'>{label}</a>"""
 		)
 	else:
 		return f"""<a href='{get_url_to_report(name, report_type, doctype)}'>{label}</a>"""

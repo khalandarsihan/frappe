@@ -10,7 +10,9 @@ export default class ListSettings {
 		this.settings = settings;
 		this.dialog = null;
 		this.fields =
-			this.settings && this.settings.fields ? JSON.parse(this.settings.fields) : [];
+			this.settings && this.settings.fields
+				? JSON.parse(this.settings.fields)
+				: [];
 		this.subject_field = null;
 
 		frappe.model.with_doctype("List View Settings", () => {
@@ -49,7 +51,10 @@ export default class ListSettings {
 					removed_listview_fields: me.removed_fields || [],
 				},
 				callback: function (r) {
-					me.listview.refresh_columns(r.message.meta, r.message.listview_settings);
+					me.listview.refresh_columns(
+						r.message.meta,
+						r.message.listview_settings,
+					);
 					me.dialog.hide();
 				},
 			});
@@ -98,7 +103,8 @@ export default class ListSettings {
 		let fields_html = me.dialog.get_field("fields_html");
 		let wrapper = fields_html.$wrapper[0];
 		let fields = ``;
-		let total_fields = me.dialog.get_values().total_fields || me.settings.total_fields;
+		let total_fields =
+			me.dialog.get_values().total_fields || me.settings.total_fields;
 
 		for (let idx in me.fields) {
 			if (idx == parseInt(total_fields)) {
@@ -106,7 +112,8 @@ export default class ListSettings {
 			}
 			let is_sortable = idx == 0 ? `` : `sortable`;
 			let show_sortable_handle = idx == 0 ? `hide` : ``;
-			let can_remove = idx == 0 || is_status_field(me.fields[idx]) ? `hide` : ``;
+			let can_remove =
+				idx == 0 || is_status_field(me.fields[idx]) ? `hide` : ``;
 
 			fields += `
 				<div class="control-input flex align-center form-control fields_order ${is_sortable}"
@@ -145,21 +152,25 @@ export default class ListSettings {
 			</div>
 		`);
 
-		new Sortable(wrapper.getElementsByClassName("control-input-wrapper")[0], {
-			handle: ".sortable-handle",
-			draggable: ".sortable",
-			onUpdate: () => {
-				me.update_fields();
-				me.refresh();
+		new Sortable(
+			wrapper.getElementsByClassName("control-input-wrapper")[0],
+			{
+				handle: ".sortable-handle",
+				draggable: ".sortable",
+				onUpdate: () => {
+					me.update_fields();
+					me.refresh();
+				},
 			},
-		});
+		);
 	}
 
 	add_new_fields() {
 		let me = this;
 
 		let fields_html = me.dialog.get_field("fields_html");
-		let add_new_fields = fields_html.$wrapper[0].getElementsByClassName("add-new-fields")[0];
+		let add_new_fields =
+			fields_html.$wrapper[0].getElementsByClassName("add-new-fields")[0];
 		add_new_fields.onclick = () => me.column_selector();
 	}
 
@@ -167,11 +178,14 @@ export default class ListSettings {
 		let me = this;
 
 		let fields_html = me.dialog.get_field("fields_html");
-		let remove_fields = fields_html.$wrapper[0].getElementsByClassName("remove-field");
+		let remove_fields =
+			fields_html.$wrapper[0].getElementsByClassName("remove-field");
 
 		for (let idx = 0; idx < remove_fields.length; idx++) {
 			remove_fields.item(idx).onclick = () =>
-				me.remove_fields(remove_fields.item(idx).getAttribute("data-fieldname"));
+				me.remove_fields(
+					remove_fields.item(idx).getAttribute("data-fieldname"),
+				);
 		}
 	}
 
@@ -190,8 +204,8 @@ export default class ListSettings {
 		me.set_removed_fields(
 			me.get_removed_listview_fields(
 				me.fields.map((f) => f.fieldname),
-				existing_fields
-			)
+				existing_fields,
+			),
 		);
 		me.refresh();
 		me.update_fields();
@@ -208,7 +222,9 @@ export default class ListSettings {
 
 		for (let idx = 0; idx < fields_order.length; idx++) {
 			me.fields.push({
-				fieldname: fields_order.item(idx).getAttribute("data-fieldname"),
+				fieldname: fields_order
+					.item(idx)
+					.getAttribute("data-fieldname"),
 				label: __(fields_order.item(idx).getAttribute("data-label")),
 			});
 		}
@@ -235,7 +251,7 @@ export default class ListSettings {
 					fieldname: "fields",
 					options: me.get_doctype_fields(
 						me.meta,
-						me.fields.map((f) => f.fieldname)
+						me.fields.map((f) => f.fieldname),
 					),
 					columns: 2,
 				},
@@ -247,8 +263,8 @@ export default class ListSettings {
 			me.set_removed_fields(
 				me.get_removed_listview_fields(
 					values,
-					me.fields.map((f) => f.fieldname)
-				)
+					me.fields.map((f) => f.fieldname),
+				),
 			);
 
 			me.fields = [];
@@ -258,7 +274,10 @@ export default class ListSettings {
 			for (let idx in values) {
 				let value = values[idx];
 
-				if (me.fields.length === parseInt(me.dialog.get_values().total_fields)) {
+				if (
+					me.fields.length ===
+					parseInt(me.dialog.get_values().total_fields)
+				) {
 					break;
 				} else if (value != me.subject_field.fieldname) {
 					let field = frappe.meta.get_docfield(me.doctype, value);
@@ -286,7 +305,7 @@ export default class ListSettings {
 				"frappe.desk.doctype.list_view_settings.list_view_settings.get_default_listview_fields",
 				{
 					doctype: me.doctype,
-				}
+				},
 			)
 			.then((fields) => {
 				let field = dialog.get_field("fields");
@@ -336,7 +355,10 @@ export default class ListSettings {
 		};
 
 		if (meta.title_field) {
-			let field = frappe.meta.get_docfield(me.doctype, meta.title_field.trim());
+			let field = frappe.meta.get_docfield(
+				me.doctype,
+				meta.title_field.trim(),
+			);
 
 			me.subject_field = {
 				label: __(field.label, null, me.doctype),

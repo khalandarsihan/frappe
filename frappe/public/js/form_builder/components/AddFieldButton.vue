@@ -77,21 +77,27 @@ const add_field_btn_ref = ref(null);
 const autocomplete_ref = ref(null);
 const popper = ref(null);
 
-onClickOutside(add_field_btn_ref, () => (show.value = false), { ignore: [autocomplete_ref] });
+onClickOutside(add_field_btn_ref, () => (show.value = false), {
+	ignore: [autocomplete_ref],
+});
 
 function setupPopper() {
 	if (!popper.value) {
-		popper.value = createPopper(add_field_btn_ref.value, autocomplete_ref.value, {
-			placement: "bottom-start",
-			modifiers: [
-				{
-					name: "offset",
-					options: {
-						offset: [0, 4],
+		popper.value = createPopper(
+			add_field_btn_ref.value,
+			autocomplete_ref.value,
+			{
+				placement: "bottom-start",
+				modifiers: [
+					{
+						name: "offset",
+						options: {
+							offset: [0, 4],
+						},
 					},
-				},
-			],
-		});
+				],
+			},
+		);
 	} else {
 		popper.value.update();
 	}

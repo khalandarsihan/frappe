@@ -27,12 +27,16 @@ export const useStore = defineStore("workflow-builder-store", () => {
 
 		if (!statefields.value.length) {
 			await frappe.model.with_doctype("Workflow Document State");
-			statefields.value = frappe.get_meta("Workflow Document State").fields;
+			statefields.value = frappe.get_meta(
+				"Workflow Document State",
+			).fields;
 		}
 
 		if (!transitionfields.value.length) {
 			await frappe.model.with_doctype("Workflow Transition");
-			transitionfields.value = frappe.get_meta("Workflow Transition").fields;
+			transitionfields.value = frappe.get_meta(
+				"Workflow Transition",
+			).fields;
 		}
 
 		if (!workflow_doc_fields.value.length) {
@@ -59,7 +63,10 @@ export const useStore = defineStore("workflow-builder-store", () => {
 				JSON.parse(workflow_doc.value.workflow_data)) ||
 			[];
 
-		workflow.value.elements = get_workflow_elements(workflow_doc.value, workflow_data);
+		workflow.value.elements = get_workflow_elements(
+			workflow_doc.value,
+			workflow_data,
+		);
 
 		setup_undo_redo();
 		setup_breadcrumbs();
@@ -172,9 +179,15 @@ export const useStore = defineStore("workflow-builder-store", () => {
 		});
 
 		actions.forEach((action) => {
-			let states = workflow.value.elements.filter((e) => e.type == "state");
-			let state = states.find((state) => state.data.state == action.data.from);
-			let next_state = states.find((state) => state.data.state == action.data.to);
+			let states = workflow.value.elements.filter(
+				(e) => e.type == "state",
+			);
+			let state = states.find(
+				(state) => state.data.state == action.data.from,
+			);
+			let next_state = states.find(
+				(state) => state.data.state == action.data.to,
+			);
 			let error = validate_transitions(state.data, next_state.data);
 			if (error) {
 				frappe.throw({
@@ -187,7 +200,7 @@ export const useStore = defineStore("workflow-builder-store", () => {
 					...action.data,
 					state: action.data.from,
 					next_state: action.data.to,
-				})
+				}),
 			);
 		});
 
@@ -200,7 +213,11 @@ export const useStore = defineStore("workflow-builder-store", () => {
 			if (e.ctrlKey || e.metaKey) {
 				if (e.key === "z" && !e.shiftKey && ref_history.value.canUndo) {
 					ref_history.value.undo();
-				} else if (e.key === "z" && e.shiftKey && ref_history.value.canRedo) {
+				} else if (
+					e.key === "z" &&
+					e.shiftKey &&
+					ref_history.value.canRedo
+				) {
 					ref_history.value.redo();
 				}
 			}

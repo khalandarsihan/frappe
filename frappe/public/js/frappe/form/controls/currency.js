@@ -1,6 +1,12 @@
-frappe.ui.form.ControlCurrency = class ControlCurrency extends frappe.ui.form.ControlFloat {
+frappe.ui.form.ControlCurrency = class ControlCurrency extends (
+	frappe.ui.form.ControlFloat
+) {
 	format_for_input(value) {
-		var formatted_value = format_number(value, this.get_number_format(), this.get_precision());
+		var formatted_value = format_number(
+			value,
+			this.get_number_format(),
+			this.get_precision(),
+		);
 		return isNaN(Number(value)) ? "" : formatted_value;
 	}
 
@@ -11,7 +17,9 @@ frappe.ui.form.ControlCurrency = class ControlCurrency extends frappe.ui.form.Co
 			if (frappe.boot.sysdefaults.currency_precision) {
 				this.df.precision = frappe.boot.sysdefaults.currency_precision;
 			} else {
-				this.df.precision = get_number_format_info(this.get_number_format()).precision;
+				this.df.precision = get_number_format_info(
+					this.get_number_format(),
+				).precision;
 			}
 		}
 

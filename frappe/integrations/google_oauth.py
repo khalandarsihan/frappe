@@ -111,9 +111,7 @@ class GoogleOAuth:
 		return {
 			"url": "https://accounts.google.com/o/oauth2/v2/auth?"
 			+ "access_type=offline&response_type=code&prompt=consent&include_granted_scopes=true&"
-			+ "client_id={}&scope={}&redirect_uri={}&state={}".format(
-				self.google_settings.client_id, self.scopes, callback_url, state
-			)
+			+ f"client_id={self.google_settings.client_id}&scope={self.scopes}&redirect_uri={callback_url}&state={state}"
 		}
 
 	def get_google_service_object(self, access_token: str, refresh_token: str):

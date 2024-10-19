@@ -22,7 +22,9 @@ context("Form", () => {
 			.window()
 			.its("frappe")
 			.then((frappe) => {
-				return frappe.call("frappe.tests.ui_test_helpers.create_contact_records");
+				return frappe.call(
+					"frappe.tests.ui_test_helpers.create_contact_records",
+				);
 			});
 	});
 
@@ -60,18 +62,28 @@ context("Form", () => {
 		cy.click_listview_row_item_with_text("Test Form Contact 3");
 
 		cy.scrollTo(0);
-		cy.get("#page-Contact .page-head").findByTitle("Test Form Contact 3").should("exist");
+		cy.get("#page-Contact .page-head")
+			.findByTitle("Test Form Contact 3")
+			.should("exist");
 		cy.get(".prev-doc").should("be.visible").click();
-		cy.get(".msgprint-dialog .modal-body").contains("No further records").should("be.visible");
+		cy.get(".msgprint-dialog .modal-body")
+			.contains("No further records")
+			.should("be.visible");
 		cy.hide_dialog();
 
 		cy.scrollTo(0);
-		cy.get("#page-Contact .page-head").findByTitle("Test Form Contact 3").should("exist");
+		cy.get("#page-Contact .page-head")
+			.findByTitle("Test Form Contact 3")
+			.should("exist");
 		cy.get(".next-doc").should("be.visible").click();
-		cy.get(".msgprint-dialog .modal-body").contains("No further records").should("be.visible");
+		cy.get(".msgprint-dialog .modal-body")
+			.contains("No further records")
+			.should("be.visible");
 		cy.hide_dialog();
 
-		cy.get("#page-Contact .page-head").findByTitle("Test Form Contact 3").should("exist");
+		cy.get("#page-Contact .page-head")
+			.findByTitle("Test Form Contact 3")
+			.should("exist");
 
 		// clear filters
 		cy.visit("/app/contact");
@@ -91,13 +103,19 @@ context("Form", () => {
 		cy.get("@table").find('[data-idx="1"]').as("row1");
 		cy.get("@table").find('[data-idx="2"]').as("row2");
 		cy.get("@row1").click();
-		cy.get("@row1").find("input.input-with-feedback.form-control").as("email_input1");
+		cy.get("@row1")
+			.find("input.input-with-feedback.form-control")
+			.as("email_input1");
 
-		cy.get("@email_input1").type(website_input, { waitForAnimations: false });
+		cy.get("@email_input1").type(website_input, {
+			waitForAnimations: false,
+		});
 		cy.fill_field("company_name", "Test Company");
 
 		cy.get("@row2").click();
-		cy.get("@row2").find("input.input-with-feedback.form-control").as("email_input2");
+		cy.get("@row2")
+			.find("input.input-with-feedback.form-control")
+			.as("email_input2");
 		cy.get("@email_input2").type(valid_email, { waitForAnimations: false });
 
 		cy.get("@row1").click();
@@ -121,7 +139,9 @@ context("Form", () => {
 		cy.window()
 			.its("cur_frm")
 			.then((frm) => {
-				cy.get('.frappe-control[data-fieldname="phone_nos"]').as("table");
+				cy.get('.frappe-control[data-fieldname="phone_nos"]').as(
+					"table",
+				);
 
 				// set property before form_render event of child table
 				cy.get("@table")
@@ -134,7 +154,7 @@ context("Form", () => {
 							1,
 							"Contact Phone",
 							"is_primary_phone",
-							cdn
+							cdn,
 						);
 					});
 
@@ -157,7 +177,7 @@ context("Form", () => {
 							0,
 							"Contact Phone",
 							"is_primary_phone",
-							cdn
+							cdn,
 						);
 					});
 

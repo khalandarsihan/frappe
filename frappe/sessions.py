@@ -6,6 +6,7 @@ Boot session from cache or build
 Session bootstraps info needed by common client side activities including
 permission, homepage, default variables, system defaults etc
 """
+
 import json
 from urllib.parse import unquote
 

@@ -4,7 +4,11 @@ frappe.ui.form.on("System Settings", {
 			method: "frappe.core.doctype.system_settings.system_settings.load",
 			callback: function (data) {
 				frappe.all_timezones = data.message.timezones;
-				frm.set_df_property("time_zone", "options", frappe.all_timezones);
+				frm.set_df_property(
+					"time_zone",
+					"options",
+					frappe.all_timezones,
+				);
 
 				$.each(data.message.defaults, function (key, val) {
 					frm.set_value(key, val, null, true);
@@ -45,11 +49,18 @@ frappe.ui.form.on("System Settings", {
 		 *   optionally an override value.
 		 * @returns {boolean} - Whether the resulting value has effectively changed
 		 */
-		const has_effectively_changed = ([new_fallback, prev_fallback, override = undefined]) =>
-			!override && prev_fallback !== new_fallback;
+		const has_effectively_changed = ([
+			new_fallback,
+			prev_fallback,
+			override = undefined,
+		]) => !override && prev_fallback !== new_fallback;
 
 		const attr_tuples = [
-			[frm.doc.language, frappe.boot.sysdefaults.language, frappe.boot.user.language],
+			[
+				frm.doc.language,
+				frappe.boot.sysdefaults.language,
+				frappe.boot.user.language,
+			],
 			[frm.doc.rounding_method, frappe.boot.sysdefaults.rounding_method], // no user override.
 		];
 
@@ -63,9 +74,10 @@ frappe.ui.form.on("System Settings", {
 	},
 
 	rounding_method: function (frm) {
-		if (frm.doc.rounding_method == frappe.boot.sysdefaults.rounding_method) return;
+		if (frm.doc.rounding_method == frappe.boot.sysdefaults.rounding_method)
+			return;
 		let msg = __(
-			"Changing rounding method on site with data can result in unexpected behaviour."
+			"Changing rounding method on site with data can result in unexpected behaviour.",
 		);
 		msg += "<br>";
 		msg += __("Do you still want to proceed?");
@@ -74,8 +86,11 @@ frappe.ui.form.on("System Settings", {
 			msg,
 			() => {},
 			() => {
-				frm.set_value("rounding_method", frappe.boot.sysdefaults.rounding_method);
-			}
+				frm.set_value(
+					"rounding_method",
+					frappe.boot.sysdefaults.rounding_method,
+				);
+			},
 		);
 	},
 

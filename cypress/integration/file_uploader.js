@@ -32,7 +32,9 @@ context("FileUploader", () => {
 				action: "drag-drop",
 			});
 
-		cy.get_open_dialog().find(".file-name").should("contain", "example.json");
+		cy.get_open_dialog()
+			.find(".file-name")
+			.should("contain", "example.json");
 		cy.intercept("POST", "/api/method/upload_file").as("upload_file");
 		cy.get_open_dialog().findByRole("button", { name: "Upload" }).click();
 		cy.wait("@upload_file").its("response.statusCode").should("eq", 200);
@@ -43,7 +45,9 @@ context("FileUploader", () => {
 		open_upload_dialog();
 
 		cy.get_open_dialog().findByRole("button", { name: "Library" }).click();
-		cy.findByPlaceholderText("Search by filename or extension").type("example.json");
+		cy.findByPlaceholderText("Search by filename or extension").type(
+			"example.json",
+		);
 		cy.get_open_dialog().findAllByText("example.json").first().click();
 		cy.intercept("POST", "/api/method/upload_file").as("upload_file");
 		cy.get_open_dialog().findByRole("button", { name: "Upload" }).click();

@@ -15,7 +15,7 @@ context("MultiSelectDialog", () => {
 			],
 		};
 		const promises = Array.from({ length: 25 }).map(() =>
-			cy.insert_doc("Contact", contact_template, true)
+			cy.insert_doc("Contact", contact_template, true),
 		);
 		Promise.all(promises);
 	});
@@ -52,7 +52,9 @@ context("MultiSelectDialog", () => {
 		});
 
 		// add_filters_group: 1 should add a filter group
-		cy.get_open_dialog().get(`.frappe-control[data-fieldname="filter_area"]`).should("exist");
+		cy.get_open_dialog()
+			.get(`.frappe-control[data-fieldname="filter_area"]`)
+			.should("exist");
 	});
 
 	it("checks for child item selection", () => {
@@ -70,9 +72,13 @@ context("MultiSelectDialog", () => {
 
 		cy.get_open_dialog().get(`.dt-row-header`).should("contain", "Contact");
 
-		cy.get_open_dialog().get(`.dt-row-header`).should("contain", "Email Id");
+		cy.get_open_dialog()
+			.get(`.dt-row-header`)
+			.should("contain", "Email Id");
 
-		cy.get_open_dialog().get(`.dt-row-header`).should("contain", "Is Primary");
+		cy.get_open_dialog()
+			.get(`.dt-row-header`)
+			.should("contain", "Is Primary");
 	});
 
 	it("tests more button", () => {
@@ -92,7 +98,9 @@ context("MultiSelectDialog", () => {
 				expect($rows).to.have.length(20);
 			});
 
-		cy.intercept("POST", "api/method/frappe.client.get_list").as("get-more-records");
+		cy.intercept("POST", "api/method/frappe.client.get_list").as(
+			"get-more-records",
+		);
 		cy.get("@more-btn").find("button").click({ force: true });
 		cy.wait("@get-more-records");
 

@@ -6,13 +6,17 @@ context.skip("Form Tour", () => {
 			.window()
 			.its("frappe")
 			.then((frappe) => {
-				return frappe.call("frappe.tests.ui_test_helpers.create_form_tour");
+				return frappe.call(
+					"frappe.tests.ui_test_helpers.create_form_tour",
+				);
 			});
 	});
 
 	const open_test_form_tour = () => {
 		cy.visit("/app/form-tour/Test Form Tour");
-		cy.findByRole("button", { name: "Show Tour" }).should("be.visible").as("show_tour");
+		cy.findByRole("button", { name: "Show Tour" })
+			.should("be.visible")
+			.as("show_tour");
 		cy.get("@show_tour").click();
 		cy.wait(500);
 		cy.url().should("include", "/app/contact");
@@ -25,13 +29,21 @@ context.skip("Form Tour", () => {
 
 		cy.get(".frappe-driver").should("be.visible");
 		cy.get('.frappe-control[data-fieldname="first_name"]').as("first_name");
-		cy.get("@first_name").should("have.class", "driver-highlighted-element");
-		cy.get(".frappe-driver").findByRole("button", { name: "Next" }).as("next_btn");
+		cy.get("@first_name").should(
+			"have.class",
+			"driver-highlighted-element",
+		);
+		cy.get(".frappe-driver")
+			.findByRole("button", { name: "Next" })
+			.as("next_btn");
 
 		// next btn shouldn't move to next step, if first name is not entered
 		cy.get("@next_btn").click();
 		cy.wait(500);
-		cy.get("@first_name").should("have.class", "driver-highlighted-element");
+		cy.get("@first_name").should(
+			"have.class",
+			"driver-highlighted-element",
+		);
 
 		// after filling the field, next step should be highlighted
 		cy.fill_field("first_name", "Test Name", "Data");
@@ -68,10 +80,17 @@ context.skip("Form Tour", () => {
 		cy.wait(500);
 
 		// assert table field is highlighted
-		cy.get('.grid-row-open .frappe-control[data-fieldname="phone"]').as("phone");
+		cy.get('.grid-row-open .frappe-control[data-fieldname="phone"]').as(
+			"phone",
+		);
 		cy.get("@phone").should("have.class", "driver-highlighted-element");
 		// enter value in a table field
-		let field = cy.fill_table_field("phone_nos", "1", "phone", "1234567890");
+		let field = cy.fill_table_field(
+			"phone_nos",
+			"1",
+			"phone",
+			"1234567890",
+		);
 		field.blur();
 
 		// move to collapse row step
@@ -87,8 +106,13 @@ context.skip("Form Tour", () => {
 		cy.wait(500);
 
 		// assert save btn is highlighted
-		cy.get(".primary-action").should("have.class", "driver-highlighted-element");
+		cy.get(".primary-action").should(
+			"have.class",
+			"driver-highlighted-element",
+		);
 		cy.wait(500);
-		cy.get(".frappe-driver").findByRole("button", { name: "Save" }).should("be.visible");
+		cy.get(".frappe-driver")
+			.findByRole("button", { name: "Save" })
+			.should("be.visible");
 	});
 });

@@ -3,9 +3,11 @@
 
 frappe.ui.form.on("Blog Post", {
 	refresh: function (frm) {
-		frappe.db.get_single_value("Blog Settings", "show_cta_in_blog").then((value) => {
-			frm.set_df_property("hide_cta", "hidden", !value);
-		});
+		frappe.db
+			.get_single_value("Blog Settings", "show_cta_in_blog")
+			.then((value) => {
+				frm.set_df_property("hide_cta", "hidden", !value);
+			});
 
 		frm.trigger("add_publish_button");
 
@@ -33,10 +35,13 @@ frappe.ui.form.on("Blog Post", {
 		}
 	},
 	add_publish_button(frm) {
-		frm.add_custom_button(frm.doc.published ? __("Unpublish") : __("Publish"), () => {
-			frm.set_value("published", !frm.doc.published);
-			frm.save();
-		});
+		frm.add_custom_button(
+			frm.doc.published ? __("Unpublish") : __("Publish"),
+			() => {
+				frm.set_value("published", !frm.doc.published);
+				frm.save();
+			},
+		);
 	},
 });
 
@@ -44,8 +49,14 @@ function generate_google_search_preview(frm) {
 	if (!(frm.doc.meta_title || frm.doc.title)) return;
 	let google_preview = frm.get_field("google_preview");
 	let seo_title = (frm.doc.meta_title || frm.doc.title).slice(0, 60);
-	let seo_description = (frm.doc.meta_description || frm.doc.blog_intro || "").slice(0, 160);
-	let date = frm.doc.published_on ? moment(frm.doc.published_on).format("ll") + "-" : "";
+	let seo_description = (
+		frm.doc.meta_description ||
+		frm.doc.blog_intro ||
+		""
+	).slice(0, 160);
+	let date = frm.doc.published_on
+		? moment(frm.doc.published_on).format("ll") + "-"
+		: "";
 	let route_array = frm.doc.route ? frm.doc.route.split("/") : [];
 	route_array.pop();
 

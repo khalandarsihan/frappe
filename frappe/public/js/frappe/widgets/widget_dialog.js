@@ -71,7 +71,9 @@ class WidgetDialog {
 		}
 
 		let $loading = this.dialog.get_field("filter_area_loading").$wrapper;
-		$(`<span class="text-muted">${__("Loading Filters...")}</span>`).appendTo($loading);
+		$(
+			`<span class="text-muted">${__("Loading Filters...")}</span>`,
+		).appendTo($loading);
 
 		this.filters = [];
 
@@ -174,7 +176,7 @@ class QuickListDialog extends WidgetDialog {
 		if (this.values && this.values.quick_list_filter) {
 			this.filters = frappe.utils.get_filter_from_json(
 				this.values.quick_list_filter,
-				this.values.document_type
+				this.values.document_type,
 			);
 		}
 	}
@@ -317,7 +319,9 @@ class CardDialog extends WidgetDialog {
 				let row = idx + 1;
 
 				if (!item.link_type) {
-					message = __("Following fields have missing values") + ": <br><br><ul>";
+					message =
+						__("Following fields have missing values") +
+						": <br><br><ul>";
 					message += `<li>${__("Link Type in Row")} ${row}</li>`;
 				}
 
@@ -402,25 +406,38 @@ class ShortcutDialog extends WidgetDialog {
 						frappe.model.with_doctype(doctype, async () => {
 							let meta = frappe.get_meta(doctype);
 
-							if (doctype && frappe.boot.single_types.includes(doctype)) {
+							if (
+								doctype &&
+								frappe.boot.single_types.includes(doctype)
+							) {
 								this.hide_filters();
 							} else if (doctype) {
 								this.setup_filter(doctype);
 								this.show_filters();
 							}
 
-							const views = ["List", "Report Builder", "Dashboard", "New"];
+							const views = [
+								"List",
+								"Report Builder",
+								"Dashboard",
+								"New",
+							];
 							if (meta.is_tree === 1) views.push("Tree");
-							if (frappe.boot.calendars.includes(doctype)) views.push("Calendar");
+							if (frappe.boot.calendars.includes(doctype))
+								views.push("Calendar");
 
 							const response = await frappe.db.get_value(
 								"Kanban Board",
 								{ reference_doctype: doctype },
-								"name"
+								"name",
 							);
 							if (response?.message?.name) views.push("Kanban");
 
-							this.dialog.set_df_property("doc_view", "options", views.join("\n"));
+							this.dialog.set_df_property(
+								"doc_view",
+								"options",
+								views.join("\n"),
+							);
 						});
 					} else {
 						this.hide_filters();
@@ -441,15 +458,17 @@ class ShortcutDialog extends WidgetDialog {
 				fieldtype: "Select",
 				fieldname: "doc_view",
 				label: __("DocType View"),
-				options: "List\nReport Builder\nDashboard\nTree\nNew\nCalendar\nKanban",
+				options:
+					"List\nReport Builder\nDashboard\nTree\nNew\nCalendar\nKanban",
 				description: __(
-					"Which view of the associated DocType should this shortcut take you to?"
+					"Which view of the associated DocType should this shortcut take you to?",
 				),
 				default: "List",
 				depends_on: (state) => {
 					if (this.dialog) {
 						let doctype = this.dialog.get_value("link_to");
-						let is_single = frappe.boot.single_types.includes(doctype);
+						let is_single =
+							frappe.boot.single_types.includes(doctype);
 						return doctype && state.type == "DocType" && !is_single;
 					}
 
@@ -460,7 +479,8 @@ class ShortcutDialog extends WidgetDialog {
 						this.dialog.fields_dict.kanban_board.get_query = () => {
 							return {
 								filters: {
-									reference_doctype: this.dialog.get_value("link_to"),
+									reference_doctype:
+										this.dialog.get_value("link_to"),
 								},
 							};
 						};
@@ -508,19 +528,32 @@ class ShortcutDialog extends WidgetDialog {
 				fieldtype: "Select",
 				fieldname: "color",
 				label: __("Color"),
-				options: ["Grey", "Green", "Red", "Orange", "Pink", "Yellow", "Blue", "Cyan"],
+				options: [
+					"Grey",
+					"Green",
+					"Red",
+					"Orange",
+					"Pink",
+					"Yellow",
+					"Blue",
+					"Cyan",
+				],
 				default: "Grey",
 				input_class: "color-select",
 				onchange: () => {
-					let color = this.dialog.fields_dict.color.value.toLowerCase();
+					let color =
+						this.dialog.fields_dict.color.value.toLowerCase();
 					let $select = this.dialog.fields_dict.color.$input;
 					if (!$select.parent().find(".color-box").get(0)) {
-						$(`<div class="color-box"></div>`).insertBefore($select.get(0));
+						$(`<div class="color-box"></div>`).insertBefore(
+							$select.get(0),
+						);
 					}
 					$select
 						.parent()
 						.find(".color-box")
-						.get(0).style.backgroundColor = `var(--text-on-${color})`;
+						.get(0).style.backgroundColor =
+						`var(--text-on-${color})`;
 				},
 			},
 			{
@@ -546,7 +579,7 @@ class ShortcutDialog extends WidgetDialog {
 		if (this.values && this.values.stats_filter) {
 			this.filters = frappe.utils.get_filter_from_json(
 				this.values.stats_filter,
-				this.values.link_to
+				this.values.link_to,
 			);
 		}
 	}
@@ -557,7 +590,9 @@ class ShortcutDialog extends WidgetDialog {
 			data.stats_filter = JSON.stringify(filters);
 		}
 
-		data.label = data.label ? data.label : frappe.model.unscrub(data.link_to);
+		data.label = data.label
+			? data.label
+			: frappe.model.unscrub(data.link_to);
 
 		if (data.url) {
 			let _url = data.url;
@@ -653,7 +688,9 @@ class NumberCardDialog extends WidgetDialog {
 				options: "DocType",
 				onchange: () => {
 					this.document_type = this.dialog.get_value("document_type");
-					this.set_aggregate_function_fields(this.dialog.get_values());
+					this.set_aggregate_function_fields(
+						this.dialog.get_values(),
+					);
 					this.setup_filter(this.document_type);
 				},
 				hidden: 1,
@@ -724,18 +761,24 @@ class NumberCardDialog extends WidgetDialog {
 			frappe.get_meta(this.document_type).fields.map((df) => {
 				if (frappe.model.numeric_fieldtypes.includes(df.fieldtype)) {
 					if (df.fieldtype == "Currency") {
-						if (!df.options || df.options !== "Company:company:default_currency") {
+						if (
+							!df.options ||
+							df.options !== "Company:company:default_currency"
+						) {
 							return;
 						}
 					}
-					aggregate_function_fields.push({ label: df.label, value: df.fieldname });
+					aggregate_function_fields.push({
+						label: df.label,
+						value: df.fieldname,
+					});
 				}
 			});
 		}
 		this.dialog.set_df_property(
 			"aggregate_function_based_on",
 			"options",
-			aggregate_function_fields
+			aggregate_function_fields,
 		);
 	}
 
@@ -748,7 +791,9 @@ class NumberCardDialog extends WidgetDialog {
 		if (data.new_or_existing == "Existing Card") {
 			data.name = data.card;
 		}
-		data.stats_filter = this.filter_group && JSON.stringify(this.filter_group.get_filters());
+		data.stats_filter =
+			this.filter_group &&
+			JSON.stringify(this.filter_group.get_filters());
 		data.document_type = this.document_type;
 		return data;
 	}

@@ -16,17 +16,22 @@ frappe.views.InboxView = class InboxView extends frappe.views.ListView {
 			}
 			frappe.set_route("List", "Communication", "Inbox", email_account);
 			return true;
-		} else if (!route[3] || (route[3] !== "All Accounts" && !is_valid(route[3]))) {
+		} else if (
+			!route[3] ||
+			(route[3] !== "All Accounts" && !is_valid(route[3]))
+		) {
 			frappe.throw(
 				__(
-					"No email account associated with the User. Please add an account under User > Email Inbox."
-				)
+					"No email account associated with the User. Please add an account under User > Email Inbox.",
+				),
 			);
 		}
 		return false;
 
 		function is_valid(email_account) {
-			return frappe.boot.email_accounts.find((d) => d.email_account === email_account);
+			return frappe.boot.email_accounts.find(
+				(d) => d.email_account === email_account,
+			);
 		}
 	}
 
@@ -74,13 +79,16 @@ frappe.views.InboxView = class InboxView extends frappe.views.ListView {
 	}
 
 	get_seen_class(doc) {
-		return Boolean(doc.seen) || JSON.parse(doc._seen || "[]").includes(frappe.session.user)
+		return Boolean(doc.seen) ||
+			JSON.parse(doc._seen || "[]").includes(frappe.session.user)
 			? ""
 			: "bold";
 	}
 
 	get is_sent_emails() {
-		const f = this.filter_area.get().find((filter) => filter[1] === "sent_or_received");
+		const f = this.filter_area
+			.get()
+			.find((filter) => filter[1] === "sent_or_received");
 		return f && f[3] === "Sent";
 	}
 
@@ -103,7 +111,10 @@ frappe.views.InboxView = class InboxView extends frappe.views.ListView {
 			: "";
 
 		let link = "";
-		if (email.reference_doctype && email.reference_doctype !== this.doctype) {
+		if (
+			email.reference_doctype &&
+			email.reference_doctype !== this.doctype
+		) {
 			link = `<a class="text-muted grey"
 				href="${frappe.utils.get_form_link(email.reference_doctype, email.reference_name)}"
 				title="${__("Linked with {0}", [email.reference_doctype])}">
@@ -116,8 +127,8 @@ frappe.views.InboxView = class InboxView extends frappe.views.ListView {
 			email.status == "Closed"
 				? `<span class="fa fa-check fa-large" title="${__(email.status)}"></span>`
 				: email.status == "Replied"
-				? `<span class="fa fa-mail-reply fa-large" title="${__(email.status)}"></span>`
-				: "";
+					? `<span class="fa fa-mail-reply fa-large" title="${__(email.status)}"></span>`
+					: "";
 
 		return `
 			<div class="level-item list-row-activity">
@@ -144,7 +155,13 @@ frappe.views.InboxView = class InboxView extends frappe.views.ListView {
 		} else if (["Spam", "Trash"].includes(email_account)) {
 			filters = default_filters.concat([
 				["Communication", "email_status", "=", email_account, true],
-				["Communication", "email_account", "in", frappe.boot.all_accounts, true],
+				[
+					"Communication",
+					"email_account",
+					"in",
+					frappe.boot.all_accounts,
+					true,
+				],
 			]);
 		} else {
 			var op = "=";

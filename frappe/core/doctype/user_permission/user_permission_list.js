@@ -16,9 +16,21 @@ frappe.listview_settings["User Permission"] = {
 							dialog.fields_dict.docname.set_input(undefined);
 							dialog.set_df_property("docname", "hidden", 1);
 							dialog.set_df_property("is_default", "hidden", 1);
-							dialog.set_df_property("apply_to_all_doctypes", "hidden", 1);
-							dialog.set_df_property("applicable_doctypes", "hidden", 1);
-							dialog.set_df_property("hide_descendants", "hidden", 1);
+							dialog.set_df_property(
+								"apply_to_all_doctypes",
+								"hidden",
+								1,
+							);
+							dialog.set_df_property(
+								"applicable_doctypes",
+								"hidden",
+								1,
+							);
+							dialog.set_df_property(
+								"hide_descendants",
+								"hidden",
+								1,
+							);
 						},
 					},
 					{
@@ -45,17 +57,24 @@ frappe.listview_settings["User Permission"] = {
 									dialog.fields_dict.docname.value &&
 									dialog.fields_dict.user.value
 								) {
-									me.get_applicable_doctype(dialog).then((applicable) => {
-										me.get_multi_select_options(dialog, applicable).then(
-											(options) => {
+									me.get_applicable_doctype(dialog).then(
+										(applicable) => {
+											me.get_multi_select_options(
+												dialog,
+												applicable,
+											).then((options) => {
 												me.applicable_options = options;
-												me.on_docname_change(dialog, options, applicable);
+												me.on_docname_change(
+													dialog,
+													options,
+													applicable,
+												);
 												if (options.length > 5) {
 													dialog.fields_dict.applicable_doctypes.setup_select_all();
 												}
-											}
-										);
-									});
+											});
+										},
+									);
 								}
 							}
 						},
@@ -81,7 +100,10 @@ frappe.listview_settings["User Permission"] = {
 								dialog.fields_dict.docname.value &&
 								dialog.fields_dict.user.value
 							) {
-								me.on_apply_to_all_doctypes_change(dialog, me.applicable_options);
+								me.on_apply_to_all_doctypes_change(
+									dialog,
+									me.applicable_options,
+								);
 								if (me.applicable_options.length > 5) {
 									dialog.fields_dict.applicable_doctypes.setup_select_all();
 								}
@@ -121,7 +143,9 @@ frappe.listview_settings["User Permission"] = {
 						callback: function (r) {
 							if (r.message === 1) {
 								frappe.show_alert({
-									message: __("User Permissions created sucessfully"),
+									message: __(
+										"User Permissions created sucessfully",
+									),
 									indicator: "blue",
 								});
 							} else {
@@ -166,7 +190,7 @@ frappe.listview_settings["User Permission"] = {
 						frappe
 							.xcall(
 								"frappe.core.doctype.user_permission.user_permission.clear_user_permissions",
-								data
+								data,
 							)
 							.then((data) => {
 								dialog.hide();
@@ -194,12 +218,18 @@ frappe.listview_settings["User Permission"] = {
 	},
 
 	validate: function (dialog, data) {
-		if (dialog.fields_dict.applicable_doctypes.get_unchecked_options().length == 0) {
+		if (
+			dialog.fields_dict.applicable_doctypes.get_unchecked_options()
+				.length == 0
+		) {
 			data.apply_to_all_doctypes = 1;
 			data.applicable_doctypes = [];
 			return data;
 		}
-		if (data.apply_to_all_doctypes == 0 && !("applicable_doctypes" in data)) {
+		if (
+			data.apply_to_all_doctypes == 0 &&
+			!("applicable_doctypes" in data)
+		) {
 			frappe.throw(__("Please select applicable Doctypes"));
 		}
 		return data;
@@ -252,7 +282,9 @@ frappe.listview_settings["User Permission"] = {
 		dialog.set_df_property("is_default", "hidden", 0);
 		dialog.set_df_property("apply_to_all_doctypes", "hidden", 0);
 		dialog.set_value("apply_to_all_doctypes", "checked", 1);
-		let show = frappe.boot.nested_set_doctypes.includes(dialog.get_value("doctype"));
+		let show = frappe.boot.nested_set_doctypes.includes(
+			dialog.get_value("doctype"),
+		);
 		dialog.set_df_property("hide_descendants", "hidden", !show);
 		dialog.refresh();
 	},
@@ -263,8 +295,8 @@ frappe.listview_settings["User Permission"] = {
 			dialog.set_title("Update User Permissions");
 			dialog.set_df_property("applicable_doctypes", "options", options);
 			if (
-				dialog.fields_dict.applicable_doctypes.get_checked_options().length ==
-				options.length
+				dialog.fields_dict.applicable_doctypes.get_checked_options()
+					.length == options.length
 			) {
 				dialog.set_df_property("applicable_doctypes", "hidden", 1);
 			} else {

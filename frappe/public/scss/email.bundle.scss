@@ -16,8 +16,9 @@ $blue-500: #2d95f0;
 $text-color: $gray-900;
 $border-color: $gray-100;
 $dark-border-color: $gray-200;
-$font-stack: "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
-	"Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+$font-stack: "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto",
+	"Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+	sans-serif;
 $text-muted: $gray-600;
 $text-extra-muted: $gray-400;
 $border-radius: 6px;
@@ -374,7 +375,8 @@ blockquote {
 	content: "\2610";
 }
 .ql-editor li[data-list="ordered"] {
-	counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+	counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8
+		list-9;
 	counter-increment: list-0;
 }
 .ql-editor li[data-list="ordered"] > .ql-ui:before {

@@ -27,12 +27,18 @@ let docfield_df = computed(() => {
 
 		if (
 			in_list(["fetch_from", "fetch_if_empty"], df.fieldname) &&
-			in_list(frappe.model.no_value_type, store.form.selected_field.fieldtype)
+			in_list(
+				frappe.model.no_value_type,
+				store.form.selected_field.fieldtype,
+			)
 		) {
 			return false;
 		}
 
-		if (df.fieldname === "reqd" && store.form.selected_field.fieldtype === "Check") {
+		if (
+			df.fieldname === "reqd" &&
+			store.form.selected_field.fieldtype === "Check"
+		) {
 			return false;
 		}
 
@@ -41,7 +47,9 @@ let docfield_df = computed(() => {
 			df.options = "";
 			args.value = {};
 
-			if (in_list(["Table", "Link"], store.form.selected_field.fieldtype)) {
+			if (
+				in_list(["Table", "Link"], store.form.selected_field.fieldtype)
+			) {
 				df.fieldtype = "Link";
 				df.options = "DocType";
 
@@ -52,14 +60,21 @@ let docfield_df = computed(() => {
 		}
 
 		// show link_filters docfield only when link field is selected
-		if (df.fieldname === "link_filters" && store.form.selected_field.fieldtype !== "Link") {
+		if (
+			df.fieldname === "link_filters" &&
+			store.form.selected_field.fieldtype !== "Link"
+		) {
 			return false;
 		}
 
 		if (search_text.value) {
 			if (
-				df.label.toLowerCase().includes(search_text.value.toLowerCase()) ||
-				df.fieldname.toLowerCase().includes(search_text.value.toLowerCase())
+				df.label
+					.toLowerCase()
+					.includes(search_text.value.toLowerCase()) ||
+				df.fieldname
+					.toLowerCase()
+					.includes(search_text.value.toLowerCase())
 			) {
 				return true;
 			}

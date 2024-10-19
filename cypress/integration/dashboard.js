@@ -24,7 +24,7 @@ describe("Dashboard view", { scrollBehavior: false }, () => {
 				type: "Line",
 				filters_json: "[]",
 			},
-			true
+			true,
 		);
 
 		cy.insert_doc(
@@ -39,7 +39,7 @@ describe("Dashboard view", { scrollBehavior: false }, () => {
 					},
 				],
 			},
-			true
+			true,
 		);
 
 		cy.visit(`/app/dashboard-view/${dashboard}`);

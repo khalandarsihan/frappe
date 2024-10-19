@@ -255,7 +255,9 @@ input.list-check-all,
 input.list-row-checkbox {
 	margin-top: 0px;
 	margin-bottom: 0px;
-	--checkbox-right-margin: calc(var(--checkbox-size) / 2 + #{$level-margin-right});
+	--checkbox-right-margin: calc(
+		var(--checkbox-size) / 2 + #{$level-margin-right}
+	);
 	background-color: var(--card-bg);
 }
 
@@ -456,7 +458,10 @@ input.list-check-all {
 	}
 
 	&.btn {
-		@include button-variant($background: $light-yellow, $border: darken($light-yellow, 5%));
+		@include button-variant(
+			$background: $light-yellow,
+			$border: darken($light-yellow, 5%)
+		);
 		box-shadow: none;
 	}
 }

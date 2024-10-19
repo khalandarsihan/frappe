@@ -36,7 +36,8 @@ export default class LinksWidget extends Widget {
 			description.popover({
 				trigger: "hover",
 				placement: "top",
-				content: () => `<div class="card-description small">${__(this.description)}</div>`,
+				content: () =>
+					`<div class="card-description small">${__(this.description)}</div>`,
 				html: true,
 			});
 		}
@@ -95,7 +96,10 @@ export default class LinksWidget extends Widget {
 				report_ref_doctype: item.report_ref_doctype,
 			};
 
-			if (item.link_type.toLowerCase() == "report" && !item.is_query_report) {
+			if (
+				item.link_type.toLowerCase() == "report" &&
+				!item.is_query_report
+			) {
 				opts.doctype = item.dependencies;
 			}
 

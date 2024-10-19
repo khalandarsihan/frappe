@@ -8,15 +8,17 @@ frappe.ui.form.ControlMarkdownEditor = class ControlMarkdownEditor extends (
 
 		let editor_class = this.constructor.editor_class;
 		this.ace_editor_target.wrap(`<div class="${editor_class}-container">`);
-		this.markdown_container = this.$input_wrapper.find(`.${editor_class}-container`);
+		this.markdown_container = this.$input_wrapper.find(
+			`.${editor_class}-container`,
+		);
 
 		this.editor.getSession().setUseWrapMode(true);
 
 		this.showing_preview = false;
 		this.preview_toggle_btn = $(
 			`<button class="btn btn-default btn-xs ${editor_class}-toggle">${__(
-				"Preview"
-			)}</button>`
+				"Preview",
+			)}</button>`,
 		).click((e) => {
 			if (!this.showing_preview) {
 				this.update_preview();
@@ -32,7 +34,9 @@ frappe.ui.form.ControlMarkdownEditor = class ControlMarkdownEditor extends (
 		});
 		this.markdown_container.prepend(this.preview_toggle_btn);
 
-		this.markdown_preview = $(`<div class="${editor_class}-preview border rounded">`).hide();
+		this.markdown_preview = $(
+			`<div class="${editor_class}-preview border rounded">`,
+		).hide();
 		this.markdown_container.append(this.markdown_preview);
 
 		this.setup_image_drop();
@@ -72,7 +76,10 @@ frappe.ui.form.ControlMarkdownEditor = class ControlMarkdownEditor extends (
 			let files = dataTransfer.files;
 			if (!files[0].type.includes("image")) {
 				frappe.show_alert({
-					message: __("You can only insert images in Markdown fields", [files[0].name]),
+					message: __(
+						"You can only insert images in Markdown fields",
+						[files[0].name],
+					),
 					indicator: "orange",
 				});
 				return;
@@ -95,7 +102,7 @@ frappe.ui.form.ControlMarkdownEditor = class ControlMarkdownEditor extends (
 					}
 					this.editor.session.insert(
 						this.editor.getCursorPosition(),
-						`![](${encodeURI(file_doc.file_url)})`
+						`![](${encodeURI(file_doc.file_url)})`,
 					);
 				},
 			});

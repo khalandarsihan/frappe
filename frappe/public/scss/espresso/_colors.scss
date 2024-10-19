@@ -1,6 +1,6 @@
 // colors
-$color_list: gray, blue, green, red, orange, amber, yellow, cyan, teal, violet, pink, purple,
-	white-overlay, black-overlay;
+$color_list: gray, blue, green, red, orange, amber, yellow, cyan, teal, violet,
+	pink, purple, white-overlay, black-overlay;
 
 $gray-50: #f8f8f8;
 $gray-100: #f3f3f3;
@@ -191,8 +191,14 @@ $light-yellow: #fef4e2;
 		rgba(17, 142, 245, 0.067) 0%,
 		rgba(7, 127, 247, 0.029) 100%
 	);
-	--angular-white: conic-gradient(rgba(255, 255, 255, 1) 72.38%, rgba(255, 255, 255, 1) 99.87%);
-	--angular-black: conic-gradient(rgba(56, 56, 56, 0.22) 72.38%, rgba(56, 56, 56, 0.22) 99.87%);
+	--angular-white: conic-gradient(
+		rgba(255, 255, 255, 1) 72.38%,
+		rgba(255, 255, 255, 1) 99.87%
+	);
+	--angular-black: conic-gradient(
+		rgba(56, 56, 56, 0.22) 72.38%,
+		rgba(56, 56, 56, 0.22) 99.87%
+	);
 	--angular-green: conic-gradient(
 		rgba(23, 117, 75, 0.092) 72.38%,
 		rgba(23, 117, 75, 0.092) 99.87%
@@ -201,5 +207,8 @@ $light-yellow: #fef4e2;
 		rgba(205, 41, 41, 0.804) 72.38%,
 		rgba(205, 41, 41, 0.804) 99.87%
 	);
-	--angular-blue: conic-gradient(rgba(0, 110, 219, 0) 72.38%, rgba(0, 110, 219, 0) 99.87%);
+	--angular-blue: conic-gradient(
+		rgba(0, 110, 219, 0) 72.38%,
+		rgba(0, 110, 219, 0) 99.87%
+	);
 }

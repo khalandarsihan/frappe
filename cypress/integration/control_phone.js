@@ -30,14 +30,18 @@ context("Control Phone", () => {
 		cy.get(".phone-picker .phone-wrapper[id='afghanistan']").click();
 		cy.wait(100);
 		cy.get(".selected-phone .country").should("have.text", "+93");
-		cy.get(".selected-phone > img").should("have.attr", "src").and("include", "/af.svg");
+		cy.get(".selected-phone > img")
+			.should("have.attr", "src")
+			.and("include", "/af.svg");
 
 		cy.get(".selected-phone").click();
 		cy.wait(100);
 		cy.get(".phone-picker .phone-wrapper[id='india']").click();
 		cy.wait(100);
 		cy.get(".selected-phone .country").should("have.text", "+91");
-		cy.get(".selected-phone > img").should("have.attr", "src").and("include", "/in.svg");
+		cy.get(".selected-phone > img")
+			.should("have.attr", "src")
+			.and("include", "/in.svg");
 
 		let phone_number = "9312672712";
 		cy.get(".selected-phone > img").click().first();
@@ -59,11 +63,11 @@ context("Control Phone", () => {
 		cy.get(".selected-phone").click().first();
 		cy.get(".phone-picker").get(".search-phones").click().type(search_text);
 		cy.get(".phone-section .phone-wrapper:not(.hidden)").then((i) => {
-			cy.get(`.phone-section .phone-wrapper[id*="${search_text.toLowerCase()}"]`).then(
-				(countries) => {
-					expect(i.length).to.equal(countries.length);
-				}
-			);
+			cy.get(
+				`.phone-section .phone-wrapper[id*="${search_text.toLowerCase()}"]`,
+			).then((countries) => {
+				expect(i.length).to.equal(countries.length);
+			});
 		});
 	});
 
@@ -93,7 +97,9 @@ context("Control Phone", () => {
 		cy.click_listview_row_item(0);
 		cy.title().should("eq", "Test Phone 1");
 		cy.get(".selected-phone .country").should("have.text", "+91");
-		cy.get(".selected-phone > img").should("have.attr", "src").and("include", "/in.svg");
+		cy.get(".selected-phone > img")
+			.should("have.attr", "src")
+			.and("include", "/in.svg");
 		cy.get_field("phone").should("have.value", "9823341234");
 	});
 });

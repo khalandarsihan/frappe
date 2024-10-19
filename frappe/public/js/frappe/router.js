@@ -17,7 +17,10 @@ frappe.route_hooks = {};
 
 $(window).on("hashchange", function (e) {
 	// v1 style routing, route is in hash
-	if (window.location.hash && !frappe.router.is_app_route(e.currentTarget.pathname)) {
+	if (
+		window.location.hash &&
+		!frappe.router.is_app_route(e.currentTarget.pathname)
+	) {
 		let sub_path = frappe.router.get_sub_path(window.location.hash);
 		frappe.router.push_state(sub_path);
 		return false;
@@ -35,7 +38,8 @@ window.addEventListener("popstate", (e) => {
 $("body").on("click", "a", function (e) {
 	const target_element = e.currentTarget;
 	const href = target_element.getAttribute("href");
-	const is_on_same_host = target_element.hostname === window.location.hostname;
+	const is_on_same_host =
+		target_element.hostname === window.location.hostname;
 
 	if (target_element.getAttribute("target") === "_blank") {
 		return;
@@ -144,9 +148,11 @@ frappe.router = {
 
 		let sub_path = this.get_sub_path();
 		if (frappe.boot.setup_complete) {
-			!frappe.re_route["setup-wizard"] && (frappe.re_route["setup-wizard"] = "app");
+			!frappe.re_route["setup-wizard"] &&
+				(frappe.re_route["setup-wizard"] = "app");
 		} else if (!sub_path.startsWith("setup-wizard")) {
-			frappe.re_route["setup-wizard"] && delete frappe.re_route["setup-wizard"];
+			frappe.re_route["setup-wizard"] &&
+				delete frappe.re_route["setup-wizard"];
 			frappe.set_route(["setup-wizard"]);
 		}
 		if (this.re_route(sub_path)) return;
@@ -182,18 +188,28 @@ frappe.router = {
 			route = ["Workspaces", frappe.workspaces[route[0]].title];
 		} else if (route[0] == "private") {
 			// private workspace
-			let private_workspace = route[1] && `${route[1]}-${frappe.user.name.toLowerCase()}`;
-			if (!frappe.workspaces[private_workspace] && localStorage.new_workspace) {
+			let private_workspace =
+				route[1] && `${route[1]}-${frappe.user.name.toLowerCase()}`;
+			if (
+				!frappe.workspaces[private_workspace] &&
+				localStorage.new_workspace
+			) {
 				let new_workspace = JSON.parse(localStorage.new_workspace);
 				if (frappe.router.slug(new_workspace.title) === route[1]) {
 					frappe.workspaces[private_workspace] = new_workspace;
 				}
 			}
 			if (!frappe.workspaces[private_workspace]) {
-				frappe.msgprint(__("Workspace <b>{0}</b> does not exist", [route[1]]));
+				frappe.msgprint(
+					__("Workspace <b>{0}</b> does not exist", [route[1]]),
+				);
 				return ["Workspaces"];
 			}
-			route = ["Workspaces", "private", frappe.workspaces[private_workspace].title];
+			route = [
+				"Workspaces",
+				"private",
+				frappe.workspaces[private_workspace].title,
+			];
 		} else if (this.routes[route[0]]) {
 			// route
 			route = await this.set_doctype_route(route);
@@ -220,7 +236,7 @@ frappe.router = {
 					doctype_route,
 					meta.force_re_route_to_default_view && meta.default_view
 						? meta.default_view
-						: null
+						: null,
 				);
 			} else if (route[1] && route[1] !== "view") {
 				let docname = route[1];
@@ -320,7 +336,9 @@ frappe.router = {
 			route[0] = factory;
 			// has a view generator, generate!
 			if (!frappe.view_factory[factory]) {
-				frappe.view_factory[factory] = new frappe.views[factory + "Factory"]();
+				frappe.view_factory[factory] = new frappe.views[
+					factory + "Factory"
+				]();
 			}
 
 			frappe.view_factory[factory].show();
@@ -372,7 +390,9 @@ frappe.router = {
 			sub_path += frappe.route_hash || "";
 			frappe.route_hash = null;
 			if (frappe.open_in_new_tab) {
-				localStorage["route_options"] = JSON.stringify(frappe.route_options);
+				localStorage["route_options"] = JSON.stringify(
+					frappe.route_options,
+				);
 				window.open(sub_path, "_blank");
 				frappe.open_in_new_tab = false;
 			} else {
@@ -419,7 +439,11 @@ frappe.router = {
 		let new_route = route;
 		if (view === "list") {
 			if (route[2] && route[2] !== "list" && !$.isPlainObject(route[2])) {
-				new_route = [this.slug(route[1]), "view", route[2].toLowerCase()];
+				new_route = [
+					this.slug(route[1]),
+					"view",
+					route[2].toLowerCase(),
+				];
 
 				// calendar / inbox / file folder
 				if (route[3]) new_route.push(...route.slice(3, route.length));
@@ -473,7 +497,9 @@ frappe.router = {
 		// 3. Public home
 		// 4. First workspace in list
 		let private_home = `home-${frappe.user.name.toLowerCase()}`;
-		let default_workspace = frappe.router.slug(frappe.boot.user.default_workspace?.name || "");
+		let default_workspace = frappe.router.slug(
+			frappe.boot.user.default_workspace?.name || "",
+		);
 
 		let workspace =
 			frappe.workspaces[default_workspace] ||
@@ -496,7 +522,9 @@ frappe.router = {
 		// change the URL and call the router
 		if (window.location.pathname !== url) {
 			// push/replace state so the browser looks fine
-			const method = frappe.route_flags.replace_route ? "replaceState" : "pushState";
+			const method = frappe.route_flags.replace_route
+				? "replaceState"
+				: "pushState";
 			history[method](null, null, url);
 
 			// now process the route
@@ -544,7 +572,9 @@ frappe.router = {
 		}
 
 		if (localStorage.getItem("route_options")) {
-			frappe.route_options = JSON.parse(localStorage.getItem("route_options"));
+			frappe.route_options = JSON.parse(
+				localStorage.getItem("route_options"),
+			);
 			localStorage.removeItem("route_options");
 		}
 

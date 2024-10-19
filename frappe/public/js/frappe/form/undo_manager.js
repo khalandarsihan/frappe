@@ -4,7 +4,14 @@ export class UndoManager {
 		this.undo_stack = [];
 		this.redo_stack = [];
 	}
-	record_change({ fieldname, old_value, new_value, doctype, docname, is_child }) {
+	record_change({
+		fieldname,
+		old_value,
+		new_value,
+		doctype,
+		docname,
+		is_child,
+	}) {
 		if (old_value == new_value) {
 			return;
 		}
@@ -58,7 +65,7 @@ export class UndoManager {
 				change.doctype,
 				change.docname,
 				change.fieldname,
-				change.old_value
+				change.old_value,
 			);
 		} else {
 			this.frm.set_value(change.fieldname, change.old_value);

@@ -18,7 +18,10 @@ frappe.ui.form.on("Milestone Tracker", {
 				// get all date and datetime fields
 				frappe.get_meta(doctype).fields.map((df) => {
 					if (["Link", "Select"].includes(df.fieldtype)) {
-						track_fields.push({ label: df.label, value: df.fieldname });
+						track_fields.push({
+							label: df.label,
+							value: df.fieldname,
+						});
 					}
 				});
 				frm.set_df_property("track_field", "options", track_fields);

@@ -6,7 +6,12 @@ frappe.ui.app_icon = {
 	get_html: function (module, small) {
 		var icon = module.icon;
 		var color = module.color;
-		if (icon && icon.match(/([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g)) {
+		if (
+			icon &&
+			icon.match(
+				/([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g,
+			)
+		) {
 			module.emoji = module.icon;
 		}
 		var icon_style = "";

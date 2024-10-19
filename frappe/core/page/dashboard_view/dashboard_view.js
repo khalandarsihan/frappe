@@ -39,21 +39,28 @@ class Dashboard {
 				frappe.set_re_route("dashboard-view", frappe.last_dashboard);
 			} else {
 				// default dashboard
-				frappe.db.get_list("Dashboard", { filters: { is_default: 1 } }).then((data) => {
-					if (data && data.length) {
-						frappe.set_re_route("dashboard-view", data[0].name);
-					} else {
-						// no default, get the latest one
-						frappe.db.get_list("Dashboard", { limit: 1 }).then((data) => {
-							if (data && data.length) {
-								frappe.set_re_route("dashboard-view", data[0].name);
-							} else {
-								// create a new dashboard!
-								frappe.new_doc("Dashboard");
-							}
-						});
-					}
-				});
+				frappe.db
+					.get_list("Dashboard", { filters: { is_default: 1 } })
+					.then((data) => {
+						if (data && data.length) {
+							frappe.set_re_route("dashboard-view", data[0].name);
+						} else {
+							// no default, get the latest one
+							frappe.db
+								.get_list("Dashboard", { limit: 1 })
+								.then((data) => {
+									if (data && data.length) {
+										frappe.set_re_route(
+											"dashboard-view",
+											data[0].name,
+										);
+									} else {
+										// create a new dashboard!
+										frappe.new_doc("Dashboard");
+									}
+								});
+						}
+					});
 			}
 		}
 	}
@@ -80,22 +87,27 @@ class Dashboard {
 	}
 
 	refresh() {
-		frappe.run_serially([() => this.render_cards(), () => this.render_charts()]);
+		frappe.run_serially([
+			() => this.render_cards(),
+			() => this.render_charts(),
+		]);
 	}
 
 	render_charts() {
 		return this.get_permitted_items(
-			"frappe.desk.doctype.dashboard.dashboard.get_permitted_charts"
+			"frappe.desk.doctype.dashboard.dashboard.get_permitted_charts",
 		).then((charts) => {
 			if (!charts.length) {
 				frappe.msgprint(
 					__("No Permitted Charts on this Dashboard"),
-					__("No Permitted Charts")
+					__("No Permitted Charts"),
 				);
 			}
 
 			frappe.dashboard_utils.get_dashboard_settings().then((settings) => {
-				let chart_config = settings.chart_config ? JSON.parse(settings.chart_config) : {};
+				let chart_config = settings.chart_config
+					? JSON.parse(settings.chart_config)
+					: {};
 				this.charts = charts.map((chart) => {
 					return {
 						chart_name: chart.chart,
@@ -125,7 +137,7 @@ class Dashboard {
 
 	render_cards() {
 		return this.get_permitted_items(
-			"frappe.desk.doctype.dashboard.dashboard.get_permitted_cards"
+			"frappe.desk.doctype.dashboard.dashboard.get_permitted_cards",
 		).then((cards) => {
 			if (!cards.length) {
 				return;
@@ -167,7 +179,11 @@ class Dashboard {
 		this.page.clear_menu();
 
 		this.page.add_menu_item(__("Edit"), () => {
-			frappe.set_route("Form", "Dashboard", frappe.dashboard.dashboard_name);
+			frappe.set_route(
+				"Form",
+				"Dashboard",
+				frappe.dashboard.dashboard_name,
+			);
 		});
 
 		this.page.add_menu_item(__("New"), () => {
@@ -175,9 +191,14 @@ class Dashboard {
 		});
 
 		this.page.add_menu_item(__("Refresh All"), () => {
-			this.chart_group && this.chart_group.widgets_list.forEach((chart) => chart.refresh());
+			this.chart_group &&
+				this.chart_group.widgets_list.forEach((chart) =>
+					chart.refresh(),
+				);
 			this.number_card_group &&
-				this.number_card_group.widgets_list.forEach((card) => card.render_card());
+				this.number_card_group.widgets_list.forEach((card) =>
+					card.render_card(),
+				);
 		});
 
 		frappe.db.get_list("Dashboard").then((dashboards) => {
@@ -187,7 +208,7 @@ class Dashboard {
 					this.page.add_menu_item(
 						name,
 						() => frappe.set_route("dashboard-view", name),
-						1
+						1,
 					);
 				}
 			});

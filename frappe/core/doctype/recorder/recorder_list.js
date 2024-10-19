@@ -3,7 +3,8 @@ frappe.listview_settings["Recorder"] = {
 
 	onload(listview) {
 		listview.page.sidebar.remove();
-		if (!has_common(frappe.user_roles, ["Administrator", "System Manager"])) return;
+		if (!has_common(frappe.user_roles, ["Administrator", "System Manager"]))
+			return;
 
 		if (listview.list_view_settings) {
 			listview.list_view_settings.disable_comment_count = true;
@@ -44,7 +45,8 @@ frappe.listview_settings["Recorder"] = {
 					const el = document.createElement("a");
 					el.setAttribute(
 						"href",
-						"data:application/json," + encodeURIComponent(JSON.stringify(data))
+						"data:application/json," +
+							encodeURIComponent(JSON.stringify(data)),
 					);
 					el.setAttribute("download", filename);
 					el.click();
@@ -68,7 +70,9 @@ frappe.listview_settings["Recorder"] = {
 	},
 
 	refresh(listview) {
-		this.fetch_recorder_status(listview).then(() => this.refresh_controls(listview));
+		this.fetch_recorder_status(listview).then(() =>
+			this.refresh_controls(listview),
+		);
 	},
 
 	refresh_controls(listview) {
@@ -84,13 +88,16 @@ frappe.listview_settings["Recorder"] = {
 
 	setup_recorder_controls(listview) {
 		let me = this;
-		listview.page.set_primary_action(listview.enabled ? __("Stop") : __("Start"), () => {
-			if (listview.enabled) {
-				me.stop_recorder(listview);
-			} else {
-				me.start_recorder(listview);
-			}
-		});
+		listview.page.set_primary_action(
+			listview.enabled ? __("Stop") : __("Start"),
+			() => {
+				if (listview.enabled) {
+					me.stop_recorder(listview);
+				} else {
+					me.start_recorder(listview);
+				}
+			},
+		);
 	},
 
 	stop_recorder(listview) {
@@ -198,7 +205,7 @@ frappe.listview_settings["Recorder"] = {
 				});
 			},
 			__("Configure Recorder"),
-			__("Start Recording")
+			__("Start Recording"),
 		);
 	},
 

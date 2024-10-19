@@ -1,4 +1,6 @@
-frappe.ui.form.ControlDate = class ControlDate extends frappe.ui.form.ControlData {
+frappe.ui.form.ControlDate = class ControlDate extends (
+	frappe.ui.form.ControlData
+) {
 	static trigger_change_on_input_event = false;
 	make_input() {
 		super.make_input();
@@ -27,9 +29,9 @@ frappe.ui.form.ControlDate = class ControlDate extends frappe.ui.form.ControlDat
 		if (!should_refresh) {
 			if (this.datepicker.selectedDates.length > 0) {
 				// if date is selected but different from value, refresh
-				const selected_date = moment(this.datepicker.selectedDates[0]).format(
-					this.date_format
-				);
+				const selected_date = moment(
+					this.datepicker.selectedDates[0],
+				).format(this.date_format);
 
 				should_refresh = selected_date !== value;
 			} else {
@@ -53,7 +55,9 @@ frappe.ui.form.ControlDate = class ControlDate extends frappe.ui.form.ControlDat
 		}
 
 		let date_format =
-			sysdefaults && sysdefaults.date_format ? sysdefaults.date_format : "yyyy-mm-dd";
+			sysdefaults && sysdefaults.date_format
+				? sysdefaults.date_format
+				: "yyyy-mm-dd";
 
 		this.today_text = __("Today");
 		this.date_format = frappe.defaultDateFormat;
@@ -105,7 +109,8 @@ frappe.ui.form.ControlDate = class ControlDate extends frappe.ui.form.ControlDat
 		const $header = $(".page-head");
 		const header_bottom = $header.position().top + $header.outerHeight();
 		const picker_height = this.datepicker.$datepicker.outerHeight() + 12;
-		const picker_top = this.$input.offset().top - $(window).scrollTop() - picker_height;
+		const picker_top =
+			this.$input.offset().top - $(window).scrollTop() - picker_height;
 
 		var position = "top left";
 		// 12 is the default datepicker.opts[offset]
@@ -160,8 +165,12 @@ frappe.ui.form.ControlDate = class ControlDate extends frappe.ui.form.ControlDat
 		if (value && !frappe.datetime.validate(value)) {
 			let sysdefaults = frappe.sys_defaults;
 			let date_format =
-				sysdefaults && sysdefaults.date_format ? sysdefaults.date_format : "yyyy-mm-dd";
-			frappe.msgprint(__("Date {0} must be in format: {1}", [value, date_format]));
+				sysdefaults && sysdefaults.date_format
+					? sysdefaults.date_format
+					: "yyyy-mm-dd";
+			frappe.msgprint(
+				__("Date {0} must be in format: {1}", [value, date_format]),
+			);
 			return "";
 		}
 		return value;
@@ -175,7 +184,9 @@ frappe.ui.form.ControlDate = class ControlDate extends frappe.ui.form.ControlDat
 			try {
 				options = JSON.parse(df_options);
 			} catch (error) {
-				console.warn(`Invalid JSON in options of "${this.df.fieldname}"`);
+				console.warn(
+					`Invalid JSON in options of "${this.df.fieldname}"`,
+				);
 			}
 		} else if (typeof df_options === "object") {
 			options = df_options;

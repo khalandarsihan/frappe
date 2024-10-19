@@ -11,12 +11,15 @@ context("Data Field Input Validation in New Form", () => {
 	function validateField(fieldname, invalid_value, valid_value) {
 		// Invalid, should have has-error class
 		cy.get_field(fieldname).clear().type(invalid_value).blur();
-		cy.get(`.frappe-control[data-fieldname="${fieldname}"]`).should("have.class", "has-error");
+		cy.get(`.frappe-control[data-fieldname="${fieldname}"]`).should(
+			"have.class",
+			"has-error",
+		);
 		// Valid value, should not have has-error class
 		cy.get_field(fieldname).clear().type(valid_value);
 		cy.get(`.frappe-control[data-fieldname="${fieldname}"]`).should(
 			"not.have.class",
-			"has-error"
+			"has-error",
 		);
 	}
 
@@ -30,7 +33,11 @@ context("Data Field Input Validation in New Form", () => {
 			validateField("url", "jkl", "https://frappe.io");
 			validateField("url", "abcd.com", "http://google.com/home");
 			validateField("url", "&&http://google.uae", "gopher://frappe.io");
-			validateField("url", "ftt2:://google.in?q=news", "ftps2://frappe.io/__/#home");
+			validateField(
+				"url",
+				"ftt2:://google.in?q=news",
+				"ftps2://frappe.io/__/#home",
+			);
 			validateField("url", "ftt2://", "ntps://localhost"); // For intranet URLs
 		});
 

@@ -9,7 +9,8 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 		return super.setup_defaults().then(() => {
 			this.page_title = __("{0} Dashboard", [__(this.doctype)]);
 			this.dashboard_settings =
-				frappe.get_user_settings(this.doctype)["dashboard_settings"] || null;
+				frappe.get_user_settings(this.doctype)["dashboard_settings"] ||
+				null;
 		});
 	}
 
@@ -34,9 +35,11 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 	}
 
 	setup_dashboard_customization() {
-		this.page.add_menu_item(__("Customize Dashboard"), () => this.customize());
+		this.page.add_menu_item(__("Customize Dashboard"), () =>
+			this.customize(),
+		);
 		this.page.add_menu_item(__("Reset Dashboard Customizations"), () =>
-			this.reset_dashboard_customization()
+			this.reset_dashboard_customization(),
 		);
 		this.add_customization_buttons();
 	}
@@ -64,13 +67,16 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 				this.save_dashboard_customization();
 				this.page.standard_actions.show();
 			},
-			{ btn_class: "btn-primary" }
+			{ btn_class: "btn-primary" },
 		);
 
-		this.discard_customizations_button = this.page.add_button(__("Discard"), () => {
-			this.discard_dashboard_customization();
-			this.page.standard_actions.show();
-		});
+		this.discard_customizations_button = this.page.add_button(
+			__("Discard"),
+			() => {
+				this.discard_dashboard_customization();
+				this.page.standard_actions.show();
+			},
+		);
 
 		this.toggle_customization_buttons(false);
 	}
@@ -99,7 +105,7 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 							document_type: this.doctype,
 							is_public: 1,
 						},
-						"charts"
+						"charts",
 					),
 				() =>
 					this.fetch_dashboard_items(
@@ -108,7 +114,7 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 							document_type: this.doctype,
 							is_public: 1,
 						},
-						"number_cards"
+						"number_cards",
 					),
 				() => this.render_dashboard(),
 			]);
@@ -124,7 +130,8 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 				: {};
 			this.charts.map((chart) => {
 				chart.label = chart.chart_name;
-				chart.chart_settings = this.dashboard_chart_settings[chart.chart_name] || {};
+				chart.chart_settings =
+					this.dashboard_chart_settings[chart.chart_name] || {};
 			});
 			this.render_dashboard_charts();
 		});
@@ -189,7 +196,7 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 
 	render_empty_state() {
 		const no_result_message_html = `<p>${__(
-			"You haven't added any Dashboard Charts or Number Cards yet."
+			"You haven't added any Dashboard Charts or Number Cards yet.",
 		)}
 			<br>${__("Click On Customize to add your first widget")}</p>`;
 
@@ -197,7 +204,8 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 				${__("Customize")}
 			</button></p>`;
 
-		const empty_state_image = "/assets/frappe/images/ui-states/list-empty-state.svg";
+		const empty_state_image =
+			"/assets/frappe/images/ui-states/list-empty-state.svg";
 
 		const empty_state_html = `<div class="msg-box no-border empty-dashboard">
 			<div>
@@ -251,27 +259,35 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 		frappe.model.user_settings.save(
 			this.doctype,
 			"dashboard_settings",
-			this.dashboard_settings
+			this.dashboard_settings,
 		);
 		this.make_dashboard();
 	}
 
 	discard_dashboard_customization() {
 		this.dashboard_settings =
-			frappe.get_user_settings(this.doctype)["dashboard_settings"] || null;
+			frappe.get_user_settings(this.doctype)["dashboard_settings"] ||
+			null;
 		this.toggle_customize(false);
 		this.render_dashboard();
 	}
 
 	reset_dashboard_customization() {
-		frappe.confirm(__("Are you sure you want to reset all customizations?"), () => {
-			this.dashboard_settings = null;
-			frappe.model.user_settings
-				.save(this.doctype, "dashboard_settings", this.dashboard_settings)
-				.then(() => this.make_dashboard());
+		frappe.confirm(
+			__("Are you sure you want to reset all customizations?"),
+			() => {
+				this.dashboard_settings = null;
+				frappe.model.user_settings
+					.save(
+						this.doctype,
+						"dashboard_settings",
+						this.dashboard_settings,
+					)
+					.then(() => this.make_dashboard());
 
-			this.toggle_customize(false);
-		});
+				this.toggle_customize(false);
+			},
+		);
 	}
 
 	toggle_customize(show) {
@@ -315,7 +331,8 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 					label: "Chart Label",
 					fieldname: "label",
 					fieldtype: "Data",
-					mandatory_depends_on: 'eval: doc.new_or_existing == "New Chart"',
+					mandatory_depends_on:
+						'eval: doc.new_or_existing == "New Chart"',
 				},
 				{
 					fieldname: "cb_1",
@@ -326,7 +343,8 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 					fieldname: "chart_type",
 					fieldtype: "Select",
 					options: ["Time Series", "Group By"],
-					mandatory_depends_on: 'eval: doc.new_or_existing == "New Chart"',
+					mandatory_depends_on:
+						'eval: doc.new_or_existing == "New Chart"',
 				},
 				{
 					fieldname: "sb_2",
@@ -347,7 +365,12 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 					fieldtype: "Select",
 					fieldname: "timespan",
 					depends_on: 'eval: doc.chart_type == "Time Series"',
-					options: ["Last Year", "Last Quarter", "Last Month", "Last Week"],
+					options: [
+						"Last Year",
+						"Last Quarter",
+						"Last Month",
+						"Last Week",
+					],
 					default: "Last Year",
 				},
 				{
@@ -366,14 +389,21 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 					fieldtype: "Select",
 					fieldname: "based_on",
 					options: fields.date_fields,
-					mandatory_depends_on: 'eval: doc.chart_type == "Time Series"',
+					mandatory_depends_on:
+						'eval: doc.chart_type == "Time Series"',
 				},
 				{
 					label: "Time Interval",
 					fieldname: "time_interval",
 					fieldtype: "Select",
 					depends_on: 'eval: doc.chart_type == "Time Series"',
-					options: ["Yearly", "Quarterly", "Monthly", "Weekly", "Daily"],
+					options: [
+						"Yearly",
+						"Quarterly",
+						"Monthly",
+						"Weekly",
+						"Daily",
+					],
 					default: "Monthly",
 				},
 				{
@@ -395,7 +425,8 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 					fieldtype: "Select",
 					fieldname: "aggregate_function_based_on",
 					options: fields.aggregate_function_fields,
-					depends_on: 'eval: ["Sum", "Average"].includes(doc.group_by_type)',
+					depends_on:
+						'eval: ["Sum", "Average"].includes(doc.group_by_type)',
 				},
 				{
 					fieldname: "cb_2",
@@ -451,7 +482,7 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 					frappe
 						.xcall(
 							"frappe.desk.doctype.dashboard_chart.dashboard_chart.create_dashboard_chart",
-							{ args: chart }
+							{ args: chart },
 						)
 						.then((doc) => {
 							this.chart_group.new_widget.on_create({
@@ -488,12 +519,18 @@ frappe.views.DashboardView = class DashboardView extends frappe.views.ListView {
 			}
 			if (frappe.model.numeric_fieldtypes.includes(df.fieldtype)) {
 				if (df.fieldtype == "Currency") {
-					if (!df.options || df.options !== "Company:company:default_currency") {
+					if (
+						!df.options ||
+						df.options !== "Company:company:default_currency"
+					) {
 						return;
 					}
 				}
 				value_fields.push({ label: df.label, value: df.fieldname });
-				aggregate_function_fields.push({ label: df.label, value: df.fieldname });
+				aggregate_function_fields.push({
+					label: df.label,
+					value: df.fieldname,
+				});
 			}
 			if (["Link", "Select"].includes(df.fieldtype)) {
 				group_by_fields.push({ label: df.label, value: df.fieldname });

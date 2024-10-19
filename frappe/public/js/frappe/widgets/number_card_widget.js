@@ -28,33 +28,38 @@ export default class NumberCardWidget extends Widget {
 	}
 
 	make_card() {
-		frappe.model.with_doc("Number Card", this.number_card_name || this.name).then((card) => {
-			if (!card) {
-				if (this.document_type) {
-					frappe.run_serially([
-						() => this.create_number_card(),
-						() => this.render_card(),
-					]);
+		frappe.model
+			.with_doc("Number Card", this.number_card_name || this.name)
+			.then((card) => {
+				if (!card) {
+					if (this.document_type) {
+						frappe.run_serially([
+							() => this.create_number_card(),
+							() => this.render_card(),
+						]);
+					} else {
+						// widget doesn't exist so delete
+						this.delete(false);
+						return;
+					}
 				} else {
-					// widget doesn't exist so delete
-					this.delete(false);
-					return;
+					this.card_doc = card;
+					this.render_card();
 				}
-			} else {
-				this.card_doc = card;
-				this.render_card();
-			}
 
-			this.set_events();
-		});
+				this.set_events();
+			});
 	}
 
 	create_number_card() {
 		this.set_doc_args();
 		return frappe
-			.xcall("frappe.desk.doctype.number_card.number_card.create_number_card", {
-				args: this.card_doc,
-			})
+			.xcall(
+				"frappe.desk.doctype.number_card.number_card.create_number_card",
+				{
+					args: this.card_doc,
+				},
+			)
 			.then((doc) => {
 				this.name = doc.name;
 				this.card_doc = doc;
@@ -76,7 +81,9 @@ export default class NumberCardWidget extends Widget {
 		}
 
 		const is_document_type = this.card_doc.type !== "Report";
-		const name = is_document_type ? this.card_doc.document_type : this.card_doc.report_name;
+		const name = is_document_type
+			? this.card_doc.document_type
+			: this.card_doc.report_name;
 		const route = frappe.utils.generate_route({
 			name: name,
 			type: is_document_type ? "doctype" : "report",
@@ -115,7 +122,7 @@ export default class NumberCardWidget extends Widget {
 				aggregate_function_based_on: this.aggregate_function_based_on,
 				color: this.color,
 				filters_json: this.stats_filter,
-			}
+			},
 		);
 	}
 
@@ -177,7 +184,10 @@ export default class NumberCardWidget extends Widget {
 	}
 
 	async get_data() {
-		this.data = await frappe.xcall(this.settings.method, this.settings.args);
+		this.data = await frappe.xcall(
+			this.settings.method,
+			this.settings.args,
+		);
 		return this.settings.get_number(this.data);
 	}
 
@@ -193,13 +203,16 @@ export default class NumberCardWidget extends Widget {
 	get_number_for_doctype_card(res) {
 		this.number = res;
 		if (this.card_doc.function !== "Count") {
-			return frappe.model.with_doctype(this.card_doc.document_type, () => {
-				const based_on_df = frappe.meta.get_docfield(
-					this.card_doc.document_type,
-					this.card_doc.aggregate_function_based_on
-				);
-				this.set_formatted_number(based_on_df);
-			});
+			return frappe.model.with_doctype(
+				this.card_doc.document_type,
+				() => {
+					const based_on_df = frappe.meta.get_docfield(
+						this.card_doc.document_type,
+						this.card_doc.aggregate_function_based_on,
+					);
+					this.set_formatted_number(based_on_df);
+				},
+			);
 		} else {
 			this.formatted_number = res;
 		}
@@ -212,17 +225,26 @@ export default class NumberCardWidget extends Widget {
 			return acc;
 		}, []);
 		const col = res.columns.find((col) => col.fieldname == field);
-		this.number = frappe.report_utils.get_result_of_fn(this.card_doc.report_function, vals);
+		this.number = frappe.report_utils.get_result_of_fn(
+			this.card_doc.report_function,
+			vals,
+		);
 		this.set_formatted_number(col, this._generate_common_doc(res.result));
 	}
 
 	set_formatted_number(df, doc) {
 		const default_country = frappe.sys_defaults.country;
-		const shortened_number = frappe.utils.shorten_number(this.number, default_country, 5);
+		const shortened_number = frappe.utils.shorten_number(
+			this.number,
+			default_country,
+			5,
+		);
 		let number_parts = shortened_number.split(" ");
 
 		const symbol = number_parts[1] || "";
-		number_parts[0] = window.convert_old_to_new_number_format(number_parts[0]);
+		number_parts[0] = window.convert_old_to_new_number_format(
+			number_parts[0],
+		);
 		const formatted_number = frappe.format(number_parts[0], df, null, doc);
 		this.formatted_number =
 			($(formatted_number).text() || formatted_number) + " " + __(symbol);
@@ -246,7 +268,9 @@ export default class NumberCardWidget extends Widget {
 	}
 
 	render_number() {
-		const style_attr = this.card_doc.color ? `style="color: ${this.card_doc.color};"` : "";
+		const style_attr = this.card_doc.color
+			? `style="color: ${this.card_doc.color};"`
+			: "";
 
 		$(this.body).html(`<div class="widget-content">
 			<div class="number" ${style_attr}>${this.formatted_number}</div>
@@ -254,7 +278,10 @@ export default class NumberCardWidget extends Widget {
 	}
 
 	render_stats() {
-		if (this.card_doc.type !== "Document Type" || !this.card_doc.show_percentage_stats) {
+		if (
+			this.card_doc.type !== "Document Type" ||
+			!this.card_doc.show_percentage_stats
+		) {
 			return;
 		}
 
@@ -262,7 +289,10 @@ export default class NumberCardWidget extends Widget {
 		let color_class = "";
 
 		return this.get_percentage_stats().then(() => {
-			if (this.percentage_stat == 0 || this.percentage_stat == undefined) {
+			if (
+				this.percentage_stat == 0 ||
+				this.percentage_stat == undefined
+			) {
 				color_class = "grey-stat";
 			} else if (this.percentage_stat > 0) {
 				caret_html = `<span class="indicator-pill-round green">
@@ -282,7 +312,8 @@ export default class NumberCardWidget extends Widget {
 				Monthly: __("since last month"),
 				Yearly: __("since last year"),
 			};
-			const stats_qualifier = stats_qualifier_map[this.card_doc.stats_time_interval];
+			const stats_qualifier =
+				stats_qualifier_map[this.card_doc.stats_time_interval];
 
 			let stat = (() => {
 				if (this.percentage_stat == undefined) return NaN;
@@ -294,7 +325,8 @@ export default class NumberCardWidget extends Widget {
 			// don't show stats if not valid number - skip showing `NaN %` in card
 			if (isNaN(stat)) return;
 
-			$(this.body).find(".widget-content").append(`<div class="card-stats ${color_class}">
+			$(this.body).find(".widget-content")
+				.append(`<div class="card-stats ${color_class}">
 				<span class="percentage-stat-area">
 					${caret_html} ${stat} % ${stats_qualifier}
 				</span>
@@ -304,11 +336,14 @@ export default class NumberCardWidget extends Widget {
 
 	get_percentage_stats() {
 		return frappe
-			.xcall("frappe.desk.doctype.number_card.number_card.get_percentage_difference", {
-				doc: this.card_doc,
-				filters: this.filters,
-				result: this.number,
-			})
+			.xcall(
+				"frappe.desk.doctype.number_card.number_card.get_percentage_difference",
+				{
+					doc: this.card_doc,
+					filters: this.filters,
+					result: this.number,
+				},
+			)
 			.then((res) => {
 				if (res !== undefined) {
 					this.percentage_stat = frappe.utils.shorten_number(res);
@@ -351,7 +386,7 @@ export default class NumberCardWidget extends Widget {
 							(action) =>
 								`<li class="dropdown-item">
 									<a data-action="${action.action}">${action.label}</a>
-								</li>`
+								</li>`,
 						)
 						.join("")}
 				</ul>

@@ -83,11 +83,7 @@ class PostgresTable(DBTable):
 				using_clause = f"USING {col.fieldname}::smallint"
 
 			query.append(
-				"ALTER COLUMN `{}` TYPE {} {}".format(
-					col.fieldname,
-					get_definition(col.fieldtype, precision=col.precision, length=col.length),
-					using_clause,
-				)
+				f"ALTER COLUMN `{col.fieldname}` TYPE {get_definition(col.fieldtype, precision=col.precision, length=col.length)} {using_clause}"
 			)
 
 		for col in self.set_default:
@@ -117,9 +113,7 @@ class PostgresTable(DBTable):
 
 		for col in self.add_unique:
 			# if index key not exists
-			create_contraint_query += 'CREATE UNIQUE INDEX IF NOT EXISTS "unique_{index_name}" ON `{table_name}`(`{field}`);'.format(
-				index_name=col.fieldname, table_name=self.table_name, field=col.fieldname
-			)
+			create_contraint_query += f'CREATE UNIQUE INDEX IF NOT EXISTS "unique_{col.fieldname}" ON `{self.table_name}`(`{col.fieldname}`);'
 
 		drop_contraint_query = ""
 		for col in self.drop_index:

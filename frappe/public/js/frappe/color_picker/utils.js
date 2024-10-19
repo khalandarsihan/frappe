@@ -62,13 +62,20 @@ export default {
 
 	rgb_to_hex(r, g, b) {
 		return (
-			"#" + this.component_to_hex(r) + this.component_to_hex(g) + this.component_to_hex(b)
+			"#" +
+			this.component_to_hex(r) +
+			this.component_to_hex(g) +
+			this.component_to_hex(b)
 		);
 	},
 
 	hex_to_rgb_values(hex) {
 		const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-		return [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)];
+		return [
+			parseInt(result[1], 16),
+			parseInt(result[2], 16),
+			parseInt(result[3], 16),
+		];
 	},
 
 	hsv_to_hex(h, s, v) {

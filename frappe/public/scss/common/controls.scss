@@ -194,7 +194,9 @@ select.form-control {
 	}
 }
 
-.frappe-control:not([data-fieldtype="MultiSelectPills"]):not([data-fieldtype="Table MultiSelect"]) {
+.frappe-control:not([data-fieldtype="MultiSelectPills"]):not(
+		[data-fieldtype="Table MultiSelect"]
+	) {
 	&.has-error {
 		input {
 			border: 1px solid var(--error-border);

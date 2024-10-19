@@ -23,8 +23,15 @@ frappe.ui.form.on("Audit Trail", {
 				callback: function (r) {
 					let document_names = r.message[0];
 					let changed_fields = r.message[1];
-					frm.events.render_changed_fields(frm, document_names, changed_fields);
-					frm.events.render_rows_added_or_removed(frm, changed_fields);
+					frm.events.render_changed_fields(
+						frm,
+						document_names,
+						changed_fields,
+					);
+					frm.events.render_rows_added_or_removed(
+						frm,
+						changed_fields,
+					);
 				},
 			});
 		});
@@ -37,7 +44,7 @@ frappe.ui.form.on("Audit Trail", {
 			row_changed: changed_fields.row_changed,
 		};
 		$(frappe.render_template("audit_trail", render_dict)).appendTo(
-			frm.fields_dict.version_table.$wrapper.empty()
+			frm.fields_dict.version_table.$wrapper.empty(),
 		);
 		frm.set_df_property("version_table", "hidden", 0);
 	},
@@ -56,11 +63,15 @@ frappe.ui.form.on("Audit Trail", {
 			section_dict = {
 				added_or_removed: added_or_removed[key],
 			};
-			$(frappe.render_template("audit_trail_rows_added_removed", section_dict)).appendTo(
-				frm.fields_dict[key].$wrapper.empty()
-			);
+			$(
+				frappe.render_template(
+					"audit_trail_rows_added_removed",
+					section_dict,
+				),
+			).appendTo(frm.fields_dict[key].$wrapper.empty());
 
-			if (!frm.fields_dict[key].disp_area.innerHTML.includes("<table")) hide_section = 1;
+			if (!frm.fields_dict[key].disp_area.innerHTML.includes("<table"))
+				hide_section = 1;
 			frm.set_df_property(key + "_section", "hidden", hide_section);
 		}
 	},

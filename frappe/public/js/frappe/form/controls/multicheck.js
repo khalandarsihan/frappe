@@ -1,4 +1,6 @@
-frappe.ui.form.ControlMultiCheck = class ControlMultiCheck extends frappe.ui.form.Control {
+frappe.ui.form.ControlMultiCheck = class ControlMultiCheck extends (
+	frappe.ui.form.Control
+) {
 	// UI: multiple checkboxes
 	// Value: Array of values
 	// Options: Array of label/value/checked option objects
@@ -6,11 +8,13 @@ frappe.ui.form.ControlMultiCheck = class ControlMultiCheck extends frappe.ui.for
 	make() {
 		super.make();
 		if (this.df.label) {
-			this.$label = $(`<label class="control-label">${this.df.label}</label>`).appendTo(
-				this.wrapper
-			);
+			this.$label = $(
+				`<label class="control-label">${this.df.label}</label>`,
+			).appendTo(this.wrapper);
 		}
-		this.$load_state = $(`<div class="load-state text-muted small">${__("Loading")}...</div>`);
+		this.$load_state = $(
+			`<div class="load-state text-muted small">${__("Loading")}...</div>`,
+		);
 		this.$select_buttons = this.get_select_buttons().appendTo(this.wrapper);
 		this.$load_state.appendTo(this.wrapper);
 
@@ -19,8 +23,12 @@ frappe.ui.form.ControlMultiCheck = class ControlMultiCheck extends frappe.ui.for
 		// - fixed number of columns, e.g. `3`
 		// - both minimum column width and maximum number of columns, e.g. `"15rem 5"`
 		const columns = this.df.columns;
-		this.$checkbox_area = $('<div class="checkbox-options"></div>').appendTo(this.wrapper);
-		this.$checkbox_area.get(0).style.setProperty("--checkbox-options-columns", columns);
+		this.$checkbox_area = $(
+			'<div class="checkbox-options"></div>',
+		).appendTo(this.wrapper);
+		this.$checkbox_area
+			.get(0)
+			.style.setProperty("--checkbox-options-columns", columns);
 	}
 
 	refresh() {
@@ -77,10 +85,14 @@ frappe.ui.form.ControlMultiCheck = class ControlMultiCheck extends frappe.ui.for
 		this.$checkbox_area.empty();
 		if (this.df.sort_options != false) {
 			// Sort if sort_options is undefined, null or truthy.
-			this.options.sort((a, b) => cstr(a.label).localeCompare(cstr(b.label)));
+			this.options.sort((a, b) =>
+				cstr(a.label).localeCompare(cstr(b.label)),
+			);
 		}
 		this.options.forEach((option) => {
-			let checkbox = this.get_checkbox_element(option).appendTo(this.$checkbox_area);
+			let checkbox = this.get_checkbox_element(option).appendTo(
+				this.$checkbox_area,
+			);
 			if (option.danger) {
 				checkbox.find(".label-area").addClass("text-danger");
 			}
@@ -110,7 +122,9 @@ frappe.ui.form.ControlMultiCheck = class ControlMultiCheck extends frappe.ui.for
 	}
 
 	set_checked_options() {
-		this.selected_options = this.options.filter((o) => o.checked).map((o) => o.value);
+		this.selected_options = this.options
+			.filter((o) => o.checked)
+			.map((o) => o.value);
 		this.select_options(this.selected_options);
 	}
 
@@ -125,15 +139,21 @@ frappe.ui.form.ControlMultiCheck = class ControlMultiCheck extends frappe.ui.for
 	}
 
 	select_all(deselect = false) {
-		$(this.wrapper).find(`:checkbox`).prop("checked", deselect).trigger("click");
+		$(this.wrapper)
+			.find(`:checkbox`)
+			.prop("checked", deselect)
+			.trigger("click");
 	}
 
 	select_options(selected_options) {
 		this.options
 			.map((option) => option.value)
 			.forEach((value) => {
-				let $checkbox = $(this.wrapper).find(`:checkbox[data-unit="${value}"]`)[0];
-				if ($checkbox) $checkbox.checked = selected_options.includes(value);
+				let $checkbox = $(this.wrapper).find(
+					`:checkbox[data-unit="${value}"]`,
+				)[0];
+				if ($checkbox)
+					$checkbox.checked = selected_options.includes(value);
 			});
 	}
 

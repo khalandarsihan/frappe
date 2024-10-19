@@ -155,11 +155,7 @@ class Page(Document):
 						context = frappe._dict({})
 						try:
 							out = frappe.get_attr(
-								"{app}.{module}.page.{page}.{page}.get_context".format(
-									app=frappe.local.module_app[scrub(self.module)],
-									module=scrub(self.module),
-									page=page_name,
-								)
+								f"{frappe.local.module_app[scrub(self.module)]}.{scrub(self.module)}.page.{page_name}.{page_name}.get_context"
 							)(context)
 
 							if out:

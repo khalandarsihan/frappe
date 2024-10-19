@@ -6,7 +6,10 @@ frappe.ui.form.on("Web Page", {
 		if (frm.is_new()) {
 			if (frm.doc.insert_code) {
 				if (!frm.doc.javascript) {
-					frm.set_value("javascript", `frappe.ready(() => {\n\t\n});`);
+					frm.set_value(
+						"javascript",
+						`frappe.ready(() => {\n\t\n});`,
+					);
 				}
 			}
 		}
@@ -40,7 +43,9 @@ frappe.ui.form.on("Web Page", {
 		// and web page is manually unpublished,
 		// set end date to current date.
 		if (!frm.doc.published && frm.doc.end_date) {
-			var end_date = frappe.datetime.str_to_obj(frappe.datetime.now_datetime());
+			var end_date = frappe.datetime.str_to_obj(
+				frappe.datetime.now_datetime(),
+			);
 
 			// Set date a few seconds in the future to avoid throwing
 			// start and end date validation error
@@ -58,9 +63,16 @@ frappe.ui.form.on("Web Page Block", {
 	edit_values(frm, cdt, cdn) {
 		let row = frm.selected_doc;
 		let values = JSON.parse(row.web_template_values || "{}");
-		open_web_template_values_editor(row.web_template, values).then((new_values) => {
-			frappe.model.set_value(cdt, cdn, "web_template_values", JSON.stringify(new_values));
-		});
+		open_web_template_values_editor(row.web_template, values).then(
+			(new_values) => {
+				frappe.model.set_value(
+					cdt,
+					cdn,
+					"web_template_values",
+					JSON.stringify(new_values),
+				);
+			},
+		);
 	},
 });
 
@@ -69,21 +81,21 @@ frappe.tour["Web Page"] = [
 		fieldname: "title",
 		title: __("Title of the page"),
 		description: __(
-			"This title will be used as the title of the webpage as well as in meta tags"
+			"This title will be used as the title of the webpage as well as in meta tags",
 		),
 	},
 	{
 		fieldname: "published",
 		title: __("Makes the page public"),
 		description: __(
-			"Checking this will publish the page on your website and it'll be visible to everyone."
+			"Checking this will publish the page on your website and it'll be visible to everyone.",
 		),
 	},
 	{
 		fieldname: "route",
 		title: __("URL of the page"),
 		description: __(
-			"This will be automatically generated when you publish the page, you can also enter a route yourself if you wish"
+			"This will be automatically generated when you publish the page, you can also enter a route yourself if you wish",
 		),
 	},
 	{
@@ -102,35 +114,35 @@ frappe.tour["Web Page"] = [
 		fieldname: "insert_code",
 		title: __("Client Script"),
 		description: __(
-			"Checking this will show a text area where you can write custom javascript that will run on this page."
+			"Checking this will show a text area where you can write custom javascript that will run on this page.",
 		),
 	},
 	{
 		fieldname: "meta_title",
 		title: __("Meta title for SEO"),
 		description: __(
-			"By default the title is used as meta title, adding a value here will override it."
+			"By default the title is used as meta title, adding a value here will override it.",
 		),
 	},
 	{
 		fieldname: "meta_title",
 		title: __("Meta Title"),
 		description: __(
-			"By default the title is used as meta title, adding a value here will override it."
+			"By default the title is used as meta title, adding a value here will override it.",
 		),
 	},
 	{
 		fieldname: "meta_description",
 		title: __("Meta Description"),
 		description: __(
-			"The meta description is an HTML attribute that provides a brief summary of a web page. Search engines such as Google often display the meta description in search results, which can influence click-through rates."
+			"The meta description is an HTML attribute that provides a brief summary of a web page. Search engines such as Google often display the meta description in search results, which can influence click-through rates.",
 		),
 	},
 	{
 		fieldname: "meta_image",
 		title: __("Meta Image"),
 		description: __(
-			"The meta image is unique image representing the content of the page. Images for this Card should be at least 280px in width, and at least 150px in height."
+			"The meta image is unique image representing the content of the page. Images for this Card should be at least 280px in width, and at least 150px in height.",
 		),
 	},
 ];

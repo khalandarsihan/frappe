@@ -41,7 +41,9 @@ const can_export = (frm) => {
 	if (!doctype) {
 		frappe.msgprint(__("Please select the Document Type."));
 	} else if (!parent_multicheck_options.length) {
-		frappe.msgprint(__("Atleast one field of Parent Document Type is mandatory"));
+		frappe.msgprint(
+			__("Atleast one field of Parent Document Type is mandatory"),
+		);
 	} else {
 		is_valid_form = true;
 	}
@@ -49,7 +51,8 @@ const can_export = (frm) => {
 };
 
 const export_data = (frm) => {
-	let get_template_url = "/api/method/frappe.core.doctype.data_export.exporter.export_data";
+	let get_template_url =
+		"/api/method/frappe.core.doctype.data_export.exporter.export_data";
 	var export_params = () => {
 		let columns = {};
 		Object.keys(frm.fields_multicheck).forEach((dt) => {
@@ -59,11 +62,15 @@ const export_data = (frm) => {
 		return {
 			doctype: frm.doc.reference_doctype,
 			select_columns: JSON.stringify(columns),
-			filters: frm.filter_list.get_filters().map((filter) => filter.slice(1, 4)),
+			filters: frm.filter_list
+				.get_filters()
+				.map((filter) => filter.slice(1, 4)),
 			file_type: frm.doc.file_type,
 			template: !frm.doc.export_without_main_header,
 			with_data: 1,
-			export_without_column_meta: frm.doc.export_without_main_header ? true : false,
+			export_without_column_meta: frm.doc.export_without_main_header
+				? true
+				: false,
 		};
 	};
 
@@ -99,14 +106,19 @@ const set_field_options = (frm) => {
 
 	frm.fields_multicheck = {};
 	related_doctypes.forEach((dt) => {
-		frm.fields_multicheck[dt] = add_doctype_field_multicheck_control(dt, parent_wrapper);
+		frm.fields_multicheck[dt] = add_doctype_field_multicheck_control(
+			dt,
+			parent_wrapper,
+		);
 	});
 
 	frm.refresh();
 };
 
 const make_multiselect_buttons = (parent_wrapper) => {
-	const button_container = $(parent_wrapper).append('<div class="flex"></div>').find(".flex");
+	const button_container = $(parent_wrapper)
+		.append('<div class="flex"></div>')
+		.find(".flex");
 
 	["Select All", "Unselect All"].map((d) => {
 		frappe.ui.form.make_control({
@@ -133,13 +145,18 @@ const make_multiselect_buttons = (parent_wrapper) => {
 		$(parent_wrapper)
 			.find('[data-fieldtype="MultiCheck"]')
 			.map((index, element) => {
-				$(element).find(`:checkbox`).prop("checked", checked).trigger("click");
+				$(element)
+					.find(`:checkbox`)
+					.prop("checked", checked)
+					.trigger("click");
 			});
 	}
 };
 
 const get_doctypes = (parentdt) => {
-	return [parentdt].concat(frappe.meta.get_table_fields(parentdt).map((df) => df.options));
+	return [parentdt].concat(
+		frappe.meta.get_table_fields(parentdt).map((df) => df.options),
+	);
 };
 
 const add_doctype_field_multicheck_control = (doctype, parent_wrapper) => {

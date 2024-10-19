@@ -13,11 +13,17 @@ frappe.notification = {
 		frappe.model.with_doctype(frm.doc.document_type, function () {
 			let get_select_options = function (df, parent_field) {
 				// Append parent_field name along with fieldname for child table fields
-				let select_value = parent_field ? df.fieldname + "," + parent_field : df.fieldname;
+				let select_value = parent_field
+					? df.fieldname + "," + parent_field
+					: df.fieldname;
 
 				return {
 					value: select_value,
-					label: df.fieldname + " (" + __(df.label, null, df.parent) + ")",
+					label:
+						df.fieldname +
+						" (" +
+						__(df.label, null, df.parent) +
+						")",
 				};
 			};
 
@@ -29,12 +35,21 @@ frappe.notification = {
 				});
 				// append creation and modified date to Date Change field
 				return date_options.concat([
-					{ value: "creation", label: `creation (${__("Created On")})` },
-					{ value: "modified", label: `modified (${__("Last Modified Date")})` },
+					{
+						value: "creation",
+						label: `creation (${__("Created On")})`,
+					},
+					{
+						value: "modified",
+						label: `modified (${__("Last Modified Date")})`,
+					},
 				]);
 			};
 
-			let fields = frappe.get_doc("DocType", frm.doc.document_type).fields;
+			let fields = frappe.get_doc(
+				"DocType",
+				frm.doc.document_type,
+			).fields;
 			let options = $.map(fields, function (d) {
 				return frappe.model.no_value_type.includes(d.fieldtype)
 					? null
@@ -42,18 +57,33 @@ frappe.notification = {
 			});
 
 			// set value changed options
-			frm.set_df_property("value_changed", "options", [""].concat(options));
-			frm.set_df_property("set_property_after_alert", "options", [""].concat(options));
+			frm.set_df_property(
+				"value_changed",
+				"options",
+				[""].concat(options),
+			);
+			frm.set_df_property(
+				"set_property_after_alert",
+				"options",
+				[""].concat(options),
+			);
 
 			// set date changed options
-			frm.set_df_property("date_changed", "options", get_date_change_options());
+			frm.set_df_property(
+				"date_changed",
+				"options",
+				get_date_change_options(),
+			);
 
 			let receiver_fields = [];
 			if (frm.doc.channel === "Email") {
 				receiver_fields = $.map(fields, function (d) {
 					// Add User and Email fields from child into select dropdown
 					if (frappe.model.table_fields.includes(d.fieldtype)) {
-						let child_fields = frappe.get_doc("DocType", d.options).fields;
+						let child_fields = frappe.get_doc(
+							"DocType",
+							d.options,
+						).fields;
 						return $.map(child_fields, function (df) {
 							return df.options == "Email" ||
 								(df.options == "User" && df.fieldtype == "Link")
@@ -78,7 +108,7 @@ frappe.notification = {
 			frm.fields_dict.recipients.grid.update_docfield_property(
 				"receiver_by_document_field",
 				"options",
-				[""].concat(["owner"]).concat(receiver_fields)
+				[""].concat(["owner"]).concat(receiver_fields),
 			);
 		});
 	},
@@ -104,7 +134,9 @@ Last comment: {{ comments[-1].comment }} by {{ comments[-1].by }}
 &lt;/ul&gt;
 </pre>
 			`;
-		} else if (["Slack", "System Notification", "SMS"].includes(frm.doc.channel)) {
+		} else if (
+			["Slack", "System Notification", "SMS"].includes(frm.doc.channel)
+		) {
 			template = `<h5>Message Example</h5>
 
 <pre>*Order Overdue*
@@ -196,7 +228,7 @@ frappe.ui.form.on("Notification", {
 			frm.set_df_property(
 				"channel",
 				"description",
-				`To use SMS Channel, initialize <a href="/app/sms-settings">SMS Settings</a>.`
+				`To use SMS Channel, initialize <a href="/app/sms-settings">SMS Settings</a>.`,
 			);
 		} else {
 			frm.set_df_property("channel", "description", ` `);

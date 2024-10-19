@@ -16,9 +16,12 @@ context("Customize Form", () => {
 			Random: "hash",
 			"By script": "",
 		};
-		Cypress._.forOwn(naming_rule_default_autoname_map, (value, naming_rule) => {
-			cy.fill_field("naming_rule", naming_rule, "Select");
-			cy.get_field("autoname", "Data").should("have.value", value);
-		});
+		Cypress._.forOwn(
+			naming_rule_default_autoname_map,
+			(value, naming_rule) => {
+				cy.fill_field("naming_rule", naming_rule, "Select");
+				cy.get_field("autoname", "Data").should("have.value", value);
+			},
+		);
 	});
 });

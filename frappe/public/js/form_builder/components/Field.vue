@@ -35,7 +35,9 @@ const component = computed(() => {
 
 function remove_field() {
 	if (store.is_customize_form && props.field.df.is_custom_field == 0) {
-		frappe.msgprint(__("Cannot delete standard field. You can hide it if you want"));
+		frappe.msgprint(
+			__("Cannot delete standard field. You can hide it if you want"),
+		);
 		throw "cannot delete standard field";
 	}
 	let index = props.column.fields.indexOf(props.field);
@@ -45,7 +47,7 @@ function remove_field() {
 
 function move_fields_to_column() {
 	let current_section = store.current_tab.sections.find((section) =>
-		section.columns.find((column) => column == props.column)
+		section.columns.find((column) => column == props.column),
 	);
 	move_children_to_parent(props, "column", "field", current_section);
 }
@@ -107,32 +109,39 @@ function make_dialog(frm) {
 		let current_doctype = frm.doc.doc_type;
 		let fieldname = props.field.df.fieldname;
 		let property = "link_filters";
-		let property_setter_id = current_doctype + "-" + fieldname + "-" + property;
+		let property_setter_id =
+			current_doctype + "-" + fieldname + "-" + property;
 
-		frappe.db.exists("Property Setter", property_setter_id).then((exits) => {
-			if (exits) {
-				frm.dialog.set_secondary_action_label(__("Reset To Default"));
-				frm.dialog.set_secondary_action(() => {
-					frappe.call({
-						method: "frappe.custom.doctype.customize_form.customize_form.get_link_filters_from_doc_without_customisations",
-						args: {
-							doctype: current_doctype,
-							fieldname: fieldname,
-						},
-						callback: function (r) {
-							if (r.message) {
-								props.field.df.link_filters = r.message;
+		frappe.db
+			.exists("Property Setter", property_setter_id)
+			.then((exits) => {
+				if (exits) {
+					frm.dialog.set_secondary_action_label(
+						__("Reset To Default"),
+					);
+					frm.dialog.set_secondary_action(() => {
+						frappe.call({
+							method: "frappe.custom.doctype.customize_form.customize_form.get_link_filters_from_doc_without_customisations",
+							args: {
+								doctype: current_doctype,
+								fieldname: fieldname,
+							},
+							callback: function (r) {
+								if (r.message) {
+									props.field.df.link_filters = r.message;
 
-								frm.filter_group.clear_filters();
-								add_existing_filter(frm, props.field.df);
-								// hide the secondary action button
-								frm.dialog.get_secondary_btn().addClass("hidden");
-							}
-						},
+									frm.filter_group.clear_filters();
+									add_existing_filter(frm, props.field.df);
+									// hide the secondary action button
+									frm.dialog
+										.get_secondary_btn()
+										.addClass("hidden");
+								}
+							},
+						});
 					});
-				});
-			}
-		});
+				}
+			});
 	}
 }
 
@@ -221,14 +230,20 @@ onMounted(() => selected.value && label_input.value.focus_on_label());
 					>
 						<div v-html="frappe.utils.icon('filter', 'sm')"></div>
 					</button>
-					<AddFieldButton ref="add_field_ref" :column="column" :field="field">
+					<AddFieldButton
+						ref="add_field_ref"
+						:column="column"
+						:field="field"
+					>
 						<div v-html="frappe.utils.icon('add', 'sm')" />
 					</AddFieldButton>
 					<button
 						v-if="column.fields.indexOf(field)"
 						class="btn btn-xs btn-icon"
 						:title="
-							__('Move the current field and the following fields to a new column')
+							__(
+								'Move the current field and the following fields to a new column',
+							)
 						"
 						@click="move_fields_to_column"
 					>
@@ -239,7 +254,9 @@ onMounted(() => selected.value && label_input.value.focus_on_label());
 						:title="__('Duplicate field')"
 						@click.stop="duplicate_field"
 					>
-						<div v-html="frappe.utils.icon('duplicate', 'sm')"></div>
+						<div
+							v-html="frappe.utils.icon('duplicate', 'sm')"
+						></div>
 					</button>
 					<button
 						class="btn btn-xs btn-icon"

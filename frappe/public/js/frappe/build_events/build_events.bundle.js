@@ -17,9 +17,11 @@ frappe.realtime.on("build_event", (data) => {
 					if (parts.length === 2) {
 						let filename = parts[0].split("/").slice(-1)[0];
 
-						frappe.assets._executed = frappe.assets._executed.filter(
-							(asset) => !asset.includes(`${filename}.bundle`)
-						);
+						frappe.assets._executed =
+							frappe.assets._executed.filter(
+								(asset) =>
+									!asset.includes(`${filename}.bundle`),
+							);
 					}
 				}
 			}
@@ -48,7 +50,9 @@ function show_build_success(data) {
 	}
 
 	if (!success) {
-		let target = $('<div class="build-success-container">').appendTo($container).get(0);
+		let target = $('<div class="build-success-container">')
+			.appendTo($container)
+			.get(0);
 		success = createApp(BuildSuccess).mount(target);
 	}
 	success.show(data);
@@ -59,7 +63,9 @@ function show_build_error(data) {
 		success.hide();
 	}
 	if (!error) {
-		let target = $('<div class="build-error-container">').appendTo($container).get(0);
+		let target = $('<div class="build-error-container">')
+			.appendTo($container)
+			.get(0);
 		error = createApp(BuildError).mount(target);
 	}
 	error.show(data);

@@ -11,7 +11,9 @@ frappe.ui.form.ControlMultiSelectPills = class ControlMultiSelectPills extends (
 			.appendTo(this.$input_area);
 
 		this.$input.removeClass("form-control");
-		this.$input_area.find(".awesomplete").appendTo(this.$multiselect_wrapper);
+		this.$input_area
+			.find(".awesomplete")
+			.appendTo(this.$multiselect_wrapper);
 
 		this.$input.on("awesomplete-selectcomplete", () => {
 			this.$input.val("").focus();
@@ -32,7 +34,10 @@ frappe.ui.form.ControlMultiSelectPills = class ControlMultiSelectPills extends (
 
 		this.$input.on("keydown", (e) => {
 			// if backspace key pressed on empty input, delete last value
-			if (e.keyCode == frappe.ui.keyCode.BACKSPACE && e.target.value === "") {
+			if (
+				e.keyCode == frappe.ui.keyCode.BACKSPACE &&
+				e.target.value === ""
+			) {
 				this.rows = this.rows.slice(0, this.rows.length - 1);
 				this.parse_validate_and_set_in_model("");
 			}
@@ -109,11 +114,17 @@ frappe.ui.form.ControlMultiSelectPills = class ControlMultiSelectPills extends (
 			filter: function (text, input) {
 				let d = this.get_item(text.value);
 				if (!d) {
-					return Awesomplete.FILTER_CONTAINS(text, input.match(/[^,]*$/)[0]);
+					return Awesomplete.FILTER_CONTAINS(
+						text,
+						input.match(/[^,]*$/)[0],
+					);
 				}
 
 				let getMatch = (value) =>
-					Awesomplete.FILTER_CONTAINS(value, input.match(/[^,]*$/)[0]);
+					Awesomplete.FILTER_CONTAINS(
+						value,
+						input.match(/[^,]*$/)[0],
+					);
 
 				// match typed input with label or value or description
 				let v = getMatch(d.label);

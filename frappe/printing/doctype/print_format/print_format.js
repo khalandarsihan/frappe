@@ -9,12 +9,18 @@ frappe.ui.form.on("Print Format", {
 	refresh: function (frm) {
 		frm.set_intro("");
 		frm.toggle_enable(["html", "doc_type", "module"], false);
-		if (frappe.session.user === "Administrator" || frm.doc.standard === "No") {
+		if (
+			frappe.session.user === "Administrator" ||
+			frm.doc.standard === "No"
+		) {
 			frm.toggle_enable(["html", "doc_type", "module"], true);
 			frm.enable_save();
 		}
 
-		if (frm.doc.standard === "Yes" && frappe.session.user !== "Administrator") {
+		if (
+			frm.doc.standard === "Yes" &&
+			frappe.session.user !== "Administrator"
+		) {
 			frm.set_intro(__("Please duplicate this to make changes"));
 		}
 		frm.trigger("render_buttons");
@@ -31,7 +37,10 @@ frappe.ui.form.on("Print Format", {
 						return;
 					}
 					if (frm.doc.print_format_builder_beta) {
-						frappe.set_route("print-format-builder-beta", frm.doc.name);
+						frappe.set_route(
+							"print-format-builder-beta",
+							frm.doc.name,
+						);
 					} else {
 						frappe.set_route("print-format-builder", frm.doc.name);
 					}
@@ -41,7 +50,9 @@ frappe.ui.form.on("Print Format", {
 			}
 			if (frappe.model.can_write("Customize Form")) {
 				frappe.model.with_doctype(frm.doc.doc_type, function () {
-					let current_format = frappe.get_meta(frm.doc.doc_type).default_print_format;
+					let current_format = frappe.get_meta(
+						frm.doc.doc_type,
+					).default_print_format;
 					if (current_format == frm.doc.name) {
 						return;
 					}
@@ -79,9 +90,12 @@ frappe.ui.form.on("Print Format", {
 			frappe.model.with_doctype(doctype, () => {
 				const meta = frappe.get_meta(doctype);
 				const has_int_float_currency_field = meta.fields.filter((df) =>
-					["Int", "Float", "Currency"].includes(df.fieldtype)
+					["Int", "Float", "Currency"].includes(df.fieldtype),
 				);
-				frm.toggle_display("absolute_value", has_int_float_currency_field.length);
+				frm.toggle_display(
+					"absolute_value",
+					has_int_float_currency_field.length,
+				);
 			});
 		}
 	},

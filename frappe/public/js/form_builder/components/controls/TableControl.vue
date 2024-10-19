@@ -50,7 +50,11 @@ let table_columns = computedAsync(async () => {
 		</div>
 
 		<!-- description -->
-		<div v-if="df.description" class="mt-2 description" v-html="df.description"></div>
+		<div
+			v-if="df.description"
+			class="mt-2 description"
+			v-html="df.description"
+		></div>
 	</div>
 </template>
 

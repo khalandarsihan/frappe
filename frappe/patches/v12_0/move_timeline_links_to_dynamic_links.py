@@ -22,31 +22,13 @@ def execute():
 		if communication.timeline_doctype and communication.timeline_name:
 			name += 1
 			values.append(
-				"""({}, "{}", "timeline_links", "Communication", "{}", "{}", "{}", "{}", "{}", "{}")""".format(
-					counter,
-					str(name),
-					frappe.db.escape(communication.name),
-					frappe.db.escape(communication.timeline_doctype),
-					frappe.db.escape(communication.timeline_name),
-					communication.creation,
-					communication.modified,
-					communication.modified_by,
-				)
+				f"""({counter}, "{name!s}", "timeline_links", "Communication", "{frappe.db.escape(communication.name)}", "{frappe.db.escape(communication.timeline_doctype)}", "{frappe.db.escape(communication.timeline_name)}", "{communication.creation}", "{communication.modified}", "{communication.modified_by}")"""
 			)
 			counter += 1
 		if communication.link_doctype and communication.link_name:
 			name += 1
 			values.append(
-				"""({}, "{}", "timeline_links", "Communication", "{}", "{}", "{}", "{}", "{}", "{}")""".format(
-					counter,
-					str(name),
-					frappe.db.escape(communication.name),
-					frappe.db.escape(communication.link_doctype),
-					frappe.db.escape(communication.link_name),
-					communication.creation,
-					communication.modified,
-					communication.modified_by,
-				)
+				f"""({counter}, "{name!s}", "timeline_links", "Communication", "{frappe.db.escape(communication.name)}", "{frappe.db.escape(communication.link_doctype)}", "{frappe.db.escape(communication.link_name)}", "{communication.creation}", "{communication.modified}", "{communication.modified_by}")"""
 			)
 
 		if values and (count % 10000 == 0 or count == len(communications) - 1):

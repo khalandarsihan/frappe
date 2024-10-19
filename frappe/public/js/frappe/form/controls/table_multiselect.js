@@ -28,7 +28,9 @@ frappe.ui.form.ControlTableMultiSelect = class ControlTableMultiSelect extends (
 
 			const value = decodeURIComponent($value.data().value);
 			const link_field = this.get_link_field();
-			this.rows = this.rows.filter((row) => row[link_field.fieldname] !== value);
+			this.rows = this.rows.filter(
+				(row) => row[link_field.fieldname] !== value,
+			);
 
 			this.parse_validate_and_set_in_model("");
 		});
@@ -42,7 +44,10 @@ frappe.ui.form.ControlTableMultiSelect = class ControlTableMultiSelect extends (
 		});
 		this.$input.on("keydown", (e) => {
 			// if backspace key pressed on empty input, delete last value
-			if (e.keyCode == frappe.ui.keyCode.BACKSPACE && e.target.value === "") {
+			if (
+				e.keyCode == frappe.ui.keyCode.BACKSPACE &&
+				e.target.value === ""
+			) {
 				this.rows = this.rows.slice(0, this.rows.length - 1);
 				this.parse_validate_and_set_in_model("");
 			}
@@ -63,7 +68,7 @@ frappe.ui.form.ControlTableMultiSelect = class ControlTableMultiSelect extends (
 				const new_row = frappe.model.add_child(
 					this.frm.doc,
 					this.df.options,
-					this.df.fieldname
+					this.df.fieldname,
 				);
 				new_row[link_field.fieldname] = value;
 				this.rows = this.frm.doc[this.df.fieldname];
@@ -106,18 +111,24 @@ frappe.ui.form.ControlTableMultiSelect = class ControlTableMultiSelect extends (
 		}
 
 		// duplicate value
-		if (all_rows_except_last.map((row) => row[link_field.fieldname]).includes(link_value)) {
+		if (
+			all_rows_except_last
+				.map((row) => row[link_field.fieldname])
+				.includes(link_value)
+		) {
 			return all_rows_except_last;
 		}
 
-		return this.validate_link_and_fetch(link_value).then((validated_value) => {
-			if (validated_value === link_value) {
-				return rows;
-			} else {
-				rows.pop();
-				return rows;
-			}
-		});
+		return this.validate_link_and_fetch(link_value).then(
+			(validated_value) => {
+				if (validated_value === link_value) {
+					return rows;
+				} else {
+					rows.pop();
+					return rows;
+				}
+			},
+		);
 	}
 	set_formatted_input(value) {
 		this.rows = value || [];
@@ -134,7 +145,8 @@ frappe.ui.form.ControlTableMultiSelect = class ControlTableMultiSelect extends (
 	get_pill_html(value) {
 		const link_field = this.get_link_field();
 		const encoded_value = encodeURIComponent(value);
-		const pill_name = frappe.utils.get_link_title(link_field.options, value) || value;
+		const pill_name =
+			frappe.utils.get_link_title(link_field.options, value) || value;
 		return `
 			<button class="data-pill btn tb-selected-value" data-value="${encoded_value}">
 				<span class="btn-link-to-form">${__(pill_name)}</span>
@@ -148,9 +160,13 @@ frappe.ui.form.ControlTableMultiSelect = class ControlTableMultiSelect extends (
 	get_link_field() {
 		if (!this._link_field) {
 			const meta = frappe.get_meta(this.df.options);
-			this._link_field = meta?.fields?.find((df) => df.fieldtype === "Link");
+			this._link_field = meta?.fields?.find(
+				(df) => df.fieldtype === "Link",
+			);
 			if (!this._link_field) {
-				throw new Error("Table MultiSelect requires a Table with atleast one Link field");
+				throw new Error(
+					"Table MultiSelect requires a Table with atleast one Link field",
+				);
 			}
 		}
 		return this._link_field;

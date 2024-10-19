@@ -171,9 +171,7 @@ def authorize_access(g_calendar, reauthorize=None):
 
 def get_authentication_url(client_id=None, redirect_uri=None):
 	return {
-		"url": "https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&response_type=code&prompt=consent&client_id={}&include_granted_scopes=true&scope={}&redirect_uri={}".format(
-			client_id, SCOPES, redirect_uri
-		)
+		"url": f"https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&response_type=code&prompt=consent&client_id={client_id}&include_granted_scopes=true&scope={SCOPES}&redirect_uri={redirect_uri}"
 	}
 
 

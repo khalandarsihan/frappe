@@ -10,7 +10,9 @@ const verify_attachment_visibility = (document, is_private) => {
 			action: "drag-drop",
 		});
 
-	cy.get_open_dialog().findByRole("checkbox", { name: "Private" }).should(assertion);
+	cy.get_open_dialog()
+		.findByRole("checkbox", { name: "Private" })
+		.should(assertion);
 };
 
 const attach_file = (file, no_of_files = 1) => {
@@ -23,7 +25,7 @@ const attach_file = (file, no_of_files = 1) => {
 			(el, idx) =>
 				"cypress/fixtures/sample_attachments/attachment-" +
 				(idx + 1) +
-				(idx == 0 ? ".jpg" : ".txt")
+				(idx == 0 ? ".jpg" : ".txt"),
 		);
 	}
 
@@ -43,7 +45,9 @@ context("Sidebar", () => {
 			.window()
 			.its("frappe")
 			.then((frappe) => {
-				return frappe.call("frappe.tests.ui_test_helpers.create_blog_post");
+				return frappe.call(
+					"frappe.tests.ui_test_helpers.create_blog_post",
+				);
 			});
 	});
 
@@ -53,13 +57,19 @@ context("Sidebar", () => {
 		}).then((todo) => {
 			verify_attachment_visibility(`todo/${todo.message.name}`, true);
 		});
-		verify_attachment_visibility("blog-post/test-blog-attachment-post", false);
+		verify_attachment_visibility(
+			"blog-post/test-blog-attachment-post",
+			false,
+		);
 	});
 
 	it("Verify attachment accessibility UX", () => {
-		cy.call("frappe.tests.ui_test_helpers.create_todo_with_attachment_limit", {
-			description: "Sidebar Attachment Access Test ToDo",
-		}).then((todo) => {
+		cy.call(
+			"frappe.tests.ui_test_helpers.create_todo_with_attachment_limit",
+			{
+				description: "Sidebar Attachment Access Test ToDo",
+			},
+		).then((todo) => {
 			cy.visit(`/app/todo/${todo.message.name}`);
 
 			attach_file("cypress/fixtures/sample_image.jpg");
@@ -71,7 +81,9 @@ context("Sidebar", () => {
 			cy.get(".show-all-btn").should("be.visible");
 
 			// attach 1 more image to reach attachment limit
-			attach_file("cypress/fixtures/sample_attachments/attachment-11.txt");
+			attach_file(
+				"cypress/fixtures/sample_attachments/attachment-11.txt",
+			);
 			cy.get(".add-attachment-btn").should("be.hidden");
 			cy.get(".explore-link").should("be.visible");
 
@@ -104,7 +116,7 @@ context("Sidebar", () => {
 
 			//To check if filter is added in "Assigned To" dropdown after assignment
 			cy.get(
-				".group-by-field.show > .dropdown-menu > .group-by-item > .dropdown-item"
+				".group-by-field.show > .dropdown-menu > .group-by-item > .dropdown-item",
 			).should("contain", "1");
 
 			//To check if there is no filter added to the listview
@@ -112,19 +124,20 @@ context("Sidebar", () => {
 
 			//To add a filter to display data into the listview
 			cy.get(
-				".group-by-field.show > .dropdown-menu > .group-by-item > .dropdown-item"
+				".group-by-field.show > .dropdown-menu > .group-by-item > .dropdown-item",
 			).click();
 
 			//To check if filter is applied
-			cy.click_filter_button().get(".filter-label").should("contain", "1");
-			cy.get(".fieldname-select-area > .awesomplete > .form-control").should(
-				"have.value",
-				"Assigned To"
-			);
+			cy.click_filter_button()
+				.get(".filter-label")
+				.should("contain", "1");
+			cy.get(
+				".fieldname-select-area > .awesomplete > .form-control",
+			).should("have.value", "Assigned To");
 			cy.get(".condition").should("have.value", "like");
 			cy.get(".filter-field > .form-group > .input-with-feedback").should(
 				"have.value",
-				`%${cy.config("testUser")}%`
+				`%${cy.config("testUser")}%`,
 			);
 			cy.click_filter_button();
 
@@ -133,7 +146,9 @@ context("Sidebar", () => {
 
 			//To remove the assignment
 			cy.visit(`/app/todo/${todo_name}`);
-			cy.get(".assignments > .avatar-group > .avatar > .avatar-frame").click();
+			cy.get(
+				".assignments > .avatar-group > .avatar > .avatar-frame",
+			).click();
 			cy.get(".remove-btn").click({ force: true });
 			cy.hide_dialog();
 			cy.visit("/app/todo");

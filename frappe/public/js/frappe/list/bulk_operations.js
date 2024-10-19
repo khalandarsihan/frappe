@@ -5,10 +5,17 @@ export default class BulkOperations {
 	}
 
 	print(docs) {
-		const print_settings = frappe.model.get_doc(":Print Settings", "Print Settings");
-		const allow_print_for_draft = cint(print_settings.allow_print_for_draft);
+		const print_settings = frappe.model.get_doc(
+			":Print Settings",
+			"Print Settings",
+		);
+		const allow_print_for_draft = cint(
+			print_settings.allow_print_for_draft,
+		);
 		const is_submittable = frappe.model.is_submittable(this.doctype);
-		const allow_print_for_cancelled = cint(print_settings.allow_print_for_cancelled);
+		const allow_print_for_cancelled = cint(
+			print_settings.allow_print_for_cancelled,
+		);
 		const letterheads = this.get_letterhead_options();
 		const MAX_PRINT_LIMIT = 500;
 		const BACKGROUND_PRINT_THRESHOLD = 25;
@@ -25,7 +32,9 @@ export default class BulkOperations {
 			})
 			.map((doc) => doc.name);
 
-		const invalid_docs = docs.filter((doc) => !valid_docs.includes(doc.name));
+		const invalid_docs = docs.filter(
+			(doc) => !valid_docs.includes(doc.name),
+		);
 
 		if (invalid_docs.length > 0) {
 			frappe.msgprint(__("You selected Draft or Cancelled documents"));
@@ -39,7 +48,9 @@ export default class BulkOperations {
 
 		if (valid_docs.length > MAX_PRINT_LIMIT) {
 			frappe.msgprint(
-				__("You can only print upto {0} documents at a time", [MAX_PRINT_LIMIT])
+				__("You can only print upto {0} documents at a time", [
+					MAX_PRINT_LIMIT,
+				]),
 			);
 			return;
 		}
@@ -94,9 +105,14 @@ export default class BulkOperations {
 
 		dialog.set_primary_action(__("Print"), (args) => {
 			if (!args) return;
-			const default_print_format = frappe.get_meta(this.doctype).default_print_format;
-			const with_letterhead = args.letter_sel == __("No Letterhead") ? 0 : 1;
-			const print_format = args.print_sel ? args.print_sel : default_print_format;
+			const default_print_format = frappe.get_meta(
+				this.doctype,
+			).default_print_format;
+			const with_letterhead =
+				args.letter_sel == __("No Letterhead") ? 0 : 1;
+			const print_format = args.print_sel
+				? args.print_sel
+				: default_print_format;
 			const json_string = JSON.stringify(valid_docs);
 			const letterhead = args.letter_sel;
 
@@ -115,30 +131,38 @@ export default class BulkOperations {
 
 			if (args.background_print) {
 				frappe
-					.call("frappe.utils.print_format.download_multi_pdf_async", {
-						doctype: this.doctype,
-						name: json_string,
-						format: print_format,
-						no_letterhead: with_letterhead ? "0" : "1",
-						letterhead: letterhead,
-						options: pdf_options,
-					})
+					.call(
+						"frappe.utils.print_format.download_multi_pdf_async",
+						{
+							doctype: this.doctype,
+							name: json_string,
+							format: print_format,
+							no_letterhead: with_letterhead ? "0" : "1",
+							letterhead: letterhead,
+							options: pdf_options,
+						},
+					)
 					.then((response) => {
 						let task_id = response.message.task_id;
 						frappe.realtime.task_subscribe(task_id);
-						frappe.realtime.on(`task_complete:${task_id}`, (data) => {
-							frappe.msgprint({
-								title: __("Bulk PDF Export"),
-								message: __("Your PDF is ready for download"),
-								primary_action: {
-									label: __("Download PDF"),
-									client_action: "window.open",
-									args: data.file_url,
-								},
-							});
-							frappe.realtime.task_unsubscribe(task_id);
-							frappe.realtime.off(`task_complete:${task_id}`);
-						});
+						frappe.realtime.on(
+							`task_complete:${task_id}`,
+							(data) => {
+								frappe.msgprint({
+									title: __("Bulk PDF Export"),
+									message: __(
+										"Your PDF is ready for download",
+									),
+									primary_action: {
+										label: __("Download PDF"),
+										client_action: "window.open",
+										args: data.file_url,
+									},
+								});
+								frappe.realtime.task_unsubscribe(task_id);
+								frappe.realtime.off(`task_complete:${task_id}`);
+							},
+						);
 					});
 			} else {
 				const w = window.open(
@@ -154,7 +178,7 @@ export default class BulkOperations {
 						"&letterhead=" +
 						encodeURIComponent(letterhead) +
 						"&options=" +
-						encodeURIComponent(pdf_options)
+						encodeURIComponent(pdf_options),
 				);
 
 				if (!w) {
@@ -212,7 +236,9 @@ export default class BulkOperations {
 
 				if (failed.length && !r._server_messages) {
 					frappe.throw(
-						__("Cannot delete {0}", [failed.map((f) => f.bold()).join(", ")])
+						__("Cannot delete {0}", [
+							failed.map((f) => f.bold()).join(", "),
+						]),
 					);
 				}
 				if (failed.length < docnames.length) {
@@ -264,10 +290,13 @@ export default class BulkOperations {
 	apply_assignment_rule(docnames, done) {
 		if (docnames.length > 0) {
 			frappe
-				.call("frappe.automation.doctype.assignment_rule.assignment_rule.bulk_apply", {
-					doctype: this.doctype,
-					docnames: docnames,
-				})
+				.call(
+					"frappe.automation.doctype.assignment_rule.assignment_rule.bulk_apply",
+					{
+						doctype: this.doctype,
+						docnames: docnames,
+					},
+				)
 				.then(() => done());
 		}
 	}
@@ -277,24 +306,41 @@ export default class BulkOperations {
 		const task_id = Math.random().toString(36).slice(-5);
 		frappe.realtime.task_subscribe(task_id);
 		return frappe
-			.xcall("frappe.desk.doctype.bulk_update.bulk_update.submit_cancel_or_update_docs", {
-				doctype: this.doctype,
-				action: action,
-				docnames: docnames,
-				task_id: task_id,
-			})
+			.xcall(
+				"frappe.desk.doctype.bulk_update.bulk_update.submit_cancel_or_update_docs",
+				{
+					doctype: this.doctype,
+					action: action,
+					docnames: docnames,
+					task_id: task_id,
+				},
+			)
 			.then((failed_docnames) => {
 				if (failed_docnames?.length) {
-					const comma_separated_records = frappe.utils.comma_and(failed_docnames);
+					const comma_separated_records =
+						frappe.utils.comma_and(failed_docnames);
 					switch (action) {
 						case "submit":
-							frappe.throw(__("Cannot submit {0}.", [comma_separated_records]));
+							frappe.throw(
+								__("Cannot submit {0}.", [
+									comma_separated_records,
+								]),
+							);
 							break;
 						case "cancel":
-							frappe.throw(__("Cannot cancel {0}.", [comma_separated_records]));
+							frappe.throw(
+								__("Cannot cancel {0}.", [
+									comma_separated_records,
+								]),
+							);
 							break;
 						default:
-							frappe.throw(__("Cannot {0} {1}.", [action, comma_separated_records]));
+							frappe.throw(
+								__("Cannot {0} {1}.", [
+									action,
+									comma_separated_records,
+								]),
+							);
 					}
 				}
 				if (failed_docnames?.length < docnames.length) {
@@ -310,12 +356,14 @@ export default class BulkOperations {
 	edit(docnames, field_mappings, done) {
 		let field_options = Object.keys(field_mappings).sort(function (a, b) {
 			return __(cstr(field_mappings[a].label)).localeCompare(
-				cstr(__(field_mappings[b].label))
+				cstr(__(field_mappings[b].label)),
 			);
 		});
 		const status_regex = /status/i;
 
-		const default_field = field_options.find((value) => status_regex.test(value));
+		const default_field = field_options.find((value) =>
+			status_regex.test(value),
+		);
 
 		const dialog = new frappe.ui.Dialog({
 			title: __("Bulk Edit"),
@@ -341,7 +389,8 @@ export default class BulkOperations {
 				},
 			],
 			primary_action: ({ value }) => {
-				const fieldname = field_mappings[dialog.get_value("field")].fieldname;
+				const fieldname =
+					field_mappings[dialog.get_value("field")].fieldname;
 				dialog.disable_primary_action();
 				frappe
 					.call({
@@ -363,8 +412,10 @@ export default class BulkOperations {
 							dialog.enable_primary_action();
 							frappe.throw(
 								__("Cannot update {0}", [
-									failed.map((f) => (f.bold ? f.bold() : f)).join(", "),
-								])
+									failed
+										.map((f) => (f.bold ? f.bold() : f))
+										.join(", "),
+								]),
 							);
 						}
 						done();
@@ -379,7 +430,10 @@ export default class BulkOperations {
 		show_help_text();
 
 		function set_value_field(dialogObj) {
-			const new_df = Object.assign({}, field_mappings[dialogObj.get_value("field")]);
+			const new_df = Object.assign(
+				{},
+				field_mappings[dialogObj.get_value("field")],
+			);
 			/* if the field label has status in it and
 			if it has select fieldtype with no default value then
 			set a default value from the available option. */
@@ -409,7 +463,9 @@ export default class BulkOperations {
 				dialog.set_df_property(
 					"value",
 					"description",
-					__("You have not entered a value. The field will be set to empty.")
+					__(
+						"You have not entered a value. The field will be set to empty.",
+					),
 				);
 			} else {
 				dialog.set_df_property("value", "description", "");
@@ -462,7 +518,7 @@ export default class BulkOperations {
 		frappe.require("data_import_tools.bundle.js", () => {
 			const data_exporter = new frappe.data_import.DataExporter(
 				doctype,
-				"Insert New Records"
+				"Insert New Records",
 			);
 			data_exporter.dialog.set_value("export_records", "by_filter");
 			data_exporter.filter_group.add_filters_to_filter_group([

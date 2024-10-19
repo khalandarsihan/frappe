@@ -30,7 +30,8 @@ frappe.urllib = {
 	get_base_url: function () {
 		// var url= (frappe.base_url || window.location.href).split('#')[0].split('?')[0].split('desk')[0];
 		var url = frappe.base_url || window.location.origin;
-		if (url.substr(url.length - 1, 1) == "/") url = url.substr(0, url.length - 1);
+		if (url.substr(url.length - 1, 1) == "/")
+			url = url.substr(0, url.length - 1);
 		return url;
 	},
 
@@ -47,7 +48,11 @@ frappe.urllib = {
 
 window.open_url_post = function open_url_post(URL, PARAMS, new_window) {
 	if (window.cordova) {
-		let url = URL + "api/method/" + PARAMS.cmd + frappe.utils.make_query_string(PARAMS, false);
+		let url =
+			URL +
+			"api/method/" +
+			PARAMS.cmd +
+			frappe.utils.make_query_string(PARAMS, false);
 		window.location.href = url;
 	} else {
 		// call a url as POST

@@ -8,7 +8,9 @@ frappe.provide("frappe.tools");
 frappe.tools.downloadify = function (data, roles, title) {
 	if (roles && roles.length && !has_common(roles, roles)) {
 		frappe.msgprint(
-			__("Export not allowed. You need {0} role to export.", [frappe.utils.comma_or(roles)])
+			__("Export not allowed. You need {0} role to export.", [
+				frappe.utils.comma_or(roles),
+			]),
 		);
 		return;
 	}
@@ -19,7 +21,9 @@ frappe.tools.downloadify = function (data, roles, title) {
 
 	if ("download" in a) {
 		// Used Blob object, because it can handle large files
-		var blob_object = new Blob([csv_data], { type: "text/csv;charset=UTF-8" });
+		var blob_object = new Blob([csv_data], {
+			type: "text/csv;charset=UTF-8",
+		});
 		a.href = URL.createObjectURL(blob_object);
 		a.download = filename;
 	} else {

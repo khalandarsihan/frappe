@@ -4,7 +4,9 @@
 frappe.ui.form.AssignTo = class AssignTo {
 	constructor(opts) {
 		$.extend(this, opts);
-		this.btn = this.parent.find(".add-assignment-btn").on("click", () => this.add());
+		this.btn = this.parent
+			.find(".add-assignment-btn")
+			.on("click", () => this.add());
 		this.btn_wrapper = this.btn.parent();
 
 		this.refresh();
@@ -68,7 +70,9 @@ frappe.ui.form.AssignTo = class AssignTo {
 	}
 	remove(owner) {
 		if (this.frm.is_new()) {
-			frappe.throw(__("Please save the document before removing assignment"));
+			frappe.throw(
+				__("Please save the document before removing assignment"),
+			);
 			return;
 		}
 
@@ -153,7 +157,9 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 					fields: ["user"],
 				})
 				.then((response) => {
-					user_group_members = response.map((group_member) => group_member.user);
+					user_group_members = response.map(
+						(group_member) => group_member.user,
+					);
 					me.dialog.set_value("assign_to", user_group_members);
 				});
 		}
@@ -162,7 +168,10 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 		let me = this;
 
 		if (me.frm && me.frm.meta.title_field) {
-			me.dialog.set_value("description", me.frm.doc[me.frm.meta.title_field]);
+			me.dialog.set_value(
+				"description",
+				me.frm.doc[me.frm.meta.title_field],
+			);
 		}
 	}
 	get_fields() {
@@ -226,7 +235,9 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 				],
 				// Pick up priority from the source document, if it exists and is available in ToDo
 				default: ["Low", "Medium", "High"].includes(
-					me.frm && me.frm.doc.priority ? me.frm.doc.priority : "Medium"
+					me.frm && me.frm.doc.priority
+						? me.frm.doc.priority
+						: "Medium",
 				),
 			},
 			{
@@ -264,14 +275,26 @@ frappe.ui.form.AssignmentDialog = class {
 						if (value && !this.assigning) {
 							this.assigning = true;
 							this.dialog.set_df_property("user", "read_only", 1);
-							this.dialog.set_df_property("user", "description", __("Assigning..."));
+							this.dialog.set_df_property(
+								"user",
+								"description",
+								__("Assigning..."),
+							);
 							this.add_assignment(value)
 								.then(() => {
 									this.dialog.set_value("user", null);
 								})
 								.finally(() => {
-									this.dialog.set_df_property("user", "description", null);
-									this.dialog.set_df_property("user", "read_only", 0);
+									this.dialog.set_df_property(
+										"user",
+										"description",
+										null,
+									);
+									this.dialog.set_df_property(
+										"user",
+										"read_only",
+										0,
+									);
 									this.assigning = false;
 								});
 						}
@@ -284,7 +307,9 @@ frappe.ui.form.AssignmentDialog = class {
 			],
 		});
 
-		this.assignment_list = $(this.dialog.get_field("assignment_list").wrapper);
+		this.assignment_list = $(
+			this.dialog.get_field("assignment_list").wrapper,
+		);
 		this.assignment_list.removeClass("frappe-control");
 
 		this.assignments.forEach((assignment) => {
@@ -322,7 +347,9 @@ frappe.ui.form.AssignmentDialog = class {
 		});
 	}
 	update_assignment(assignment) {
-		const in_the_list = this.assignment_list.find(`[data-user="${assignment}"]`).length;
+		const in_the_list = this.assignment_list.find(
+			`[data-user="${assignment}"]`,
+		).length;
 		if (!in_the_list) {
 			this.assignment_list.append(this.get_assignment_row(assignment));
 		}

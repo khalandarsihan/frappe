@@ -27,7 +27,11 @@ frappe.form.formatters = {
 			const std_df =
 				frappe.meta.docfield_map[df.parent] &&
 				frappe.meta.docfield_map[df.parent][df.fieldname];
-			if (std_df && std_df.formatter && typeof std_df.formatter === "function") {
+			if (
+				std_df &&
+				std_df.formatter &&
+				typeof std_df.formatter === "function"
+			) {
 				value = std_df.formatter(value, df);
 			}
 		}
@@ -56,12 +60,20 @@ frappe.form.formatters = {
 		// don't allow 0 precision for Floats, hence or'ing with null
 		var precision =
 			docfield.precision ||
-			cint(frappe.boot.sysdefaults && frappe.boot.sysdefaults.float_precision) ||
+			cint(
+				frappe.boot.sysdefaults &&
+					frappe.boot.sysdefaults.float_precision,
+			) ||
 			null;
 		if (docfield.options && docfield.options.trim()) {
 			// options points to a currency field, but expects precision of float!
 			docfield.precision = precision;
-			return frappe.form.formatters.Currency(value, docfield, options, doc);
+			return frappe.form.formatters.Currency(
+				value,
+				docfield,
+				options,
+				doc,
+			);
 		} else {
 			// show 1.000000 as 1
 			if (!(options || {}).always_show_decimals && !is_null(value)) {
@@ -73,7 +85,10 @@ frappe.form.formatters = {
 
 			value = value == null || value === "" ? "" : value;
 
-			return frappe.form.formatters._right(format_number(value, null, precision), options);
+			return frappe.form.formatters._right(
+				format_number(value, null, precision),
+				options,
+			);
 		}
 	},
 	Int: function (value, docfield, options) {
@@ -84,7 +99,10 @@ frappe.form.formatters = {
 		if (cstr(docfield.options).trim() === "File Size") {
 			return frappe.form.formatters.FileSize(value);
 		}
-		return frappe.form.formatters._right(value == null ? "" : cint(value), options);
+		return frappe.form.formatters._right(
+			value == null ? "" : cint(value),
+			options,
+		);
 	},
 	Percent: function (value, docfield, options) {
 		if (value === null) {
@@ -93,17 +111,24 @@ frappe.form.formatters = {
 
 		const precision =
 			docfield.precision ||
-			cint(frappe.boot.sysdefaults && frappe.boot.sysdefaults.float_precision) ||
+			cint(
+				frappe.boot.sysdefaults &&
+					frappe.boot.sysdefaults.float_precision,
+			) ||
 			2;
-		return frappe.form.formatters._right(flt(value, precision) + "%", options);
+		return frappe.form.formatters._right(
+			flt(value, precision) + "%",
+			options,
+		);
 	},
 	Rating: function (value, docfield) {
 		let rating_html = "";
 		let number_of_stars = docfield.options || 5;
 		value = value * number_of_stars;
 		value = Math.round(value * 2) / 2; // roundoff number to nearest 0.5
-		Array.from({ length: cint(number_of_stars) }, (_, i) => i + 1).forEach((i) => {
-			rating_html += `<svg class="icon icon-md" data-rating=${i} viewBox="0 0 24 24" fill="none">
+		Array.from({ length: cint(number_of_stars) }, (_, i) => i + 1).forEach(
+			(i) => {
+				rating_html += `<svg class="icon icon-md" data-rating=${i} viewBox="0 0 24 24" fill="none">
 				<path class="right-half ${
 					i <= (value || 0) ? "star-click" : ""
 				}" d="M11.9987 3.00011C12.177 3.00011 12.3554 3.09303 12.4471 3.27888L14.8213 8.09112C14.8941 8.23872 15.0349 8.34102 15.1978 8.3647L20.5069 9.13641C20.917 9.19602 21.0807 9.69992 20.7841 9.9892L16.9421 13.7354C16.8243 13.8503 16.7706 14.0157 16.7984 14.1779L17.7053 19.4674C17.7753 19.8759 17.3466 20.1874 16.9798 19.9945L12.2314 17.4973C12.1586 17.459 12.0786 17.4398 11.9987 17.4398V3.00011Z" fill="var(--star-fill)" stroke="var(--star-fill)"/>
@@ -111,7 +136,8 @@ frappe.form.formatters = {
 					i <= (value || 0) || i - 0.5 == value ? "star-click" : ""
 				}" d="M11.9987 3.00011C11.8207 3.00011 11.6428 3.09261 11.5509 3.27762L9.15562 8.09836C9.08253 8.24546 8.94185 8.34728 8.77927 8.37075L3.42887 9.14298C3.01771 9.20233 2.85405 9.70811 3.1525 9.99707L7.01978 13.7414C7.13858 13.8564 7.19283 14.0228 7.16469 14.1857L6.25116 19.4762C6.18071 19.8842 6.6083 20.1961 6.97531 20.0045L11.7672 17.5022C11.8397 17.4643 11.9192 17.4454 11.9987 17.4454V3.00011Z" fill="var(--star-fill)" stroke="var(--star-fill)"/>
 			</svg>`;
-		});
+			},
+		);
 		return `<div class="rating">
 			${rating_html}
 		</div>`;
@@ -128,7 +154,9 @@ frappe.form.formatters = {
 			precision = docfield.precision;
 		} else {
 			precision = cint(
-				docfield.precision || frappe.boot.sysdefaults.currency_precision || 2
+				docfield.precision ||
+					frappe.boot.sysdefaults.currency_precision ||
+					2,
 			);
 		}
 
@@ -139,7 +167,11 @@ frappe.form.formatters = {
 
 			if (decimals.length < 3 || decimals.length < precision) {
 				const fraction =
-					frappe.model.get_value(":Currency", currency, "fraction_units") || 100; // if not set, minimum 2.
+					frappe.model.get_value(
+						":Currency",
+						currency,
+						"fraction_units",
+					) || 100; // if not set, minimum 2.
 
 				if (decimals.length < cstr(fraction).length) {
 					precision = cstr(fraction).length - 1;
@@ -180,7 +212,11 @@ frappe.form.formatters = {
 		if (frappe.form.link_formatters[doctype]) {
 			// don't apply formatters in case of composite (parent field of same type)
 			if (doc && doctype !== doc.doctype) {
-				value = frappe.form.link_formatters[doctype](value, doc, docfield);
+				value = frappe.form.link_formatters[doctype](
+					value,
+					doc,
+					docfield,
+				);
 			}
 		}
 
@@ -192,19 +228,23 @@ frappe.form.formatters = {
 		}
 		if (docfield && docfield.link_onclick) {
 			return repl('<a onclick="%(onclick)s" href="#">%(value)s</a>', {
-				onclick: docfield.link_onclick.replace(/"/g, "&quot;") + "; return false;",
+				onclick:
+					docfield.link_onclick.replace(/"/g, "&quot;") +
+					"; return false;",
 				value: value,
 			});
 		} else if (docfield && doctype) {
 			if (frappe.model.can_read(doctype)) {
 				const a = document.createElement("a");
 				a.href = `/app/${encodeURIComponent(
-					frappe.router.slug(doctype)
+					frappe.router.slug(doctype),
 				)}/${encodeURIComponent(original_value)}`;
 				a.dataset.doctype = doctype;
 				a.dataset.name = original_value;
 				a.dataset.value = original_value;
-				a.innerText = __((options && options.label) || link_title || value);
+				a.innerText = __(
+					(options && options.label) || link_title || value,
+				);
 				return a.outerHTML;
 			} else {
 				return link_title || value;
@@ -242,7 +282,7 @@ frappe.form.formatters = {
 			return moment(frappe.datetime.convert_to_user_tz(value)).format(
 				frappe.boot.sysdefaults.date_format.toUpperCase() +
 					" " +
-					(frappe.boot.sysdefaults.time_format || "HH:mm:ss")
+					(frappe.boot.sysdefaults.time_format || "HH:mm:ss"),
 			);
 		} else {
 			return "";
@@ -277,7 +317,10 @@ frappe.form.formatters = {
 	Duration: function (value, docfield) {
 		if (value) {
 			let duration_options = frappe.utils.get_duration_options(docfield);
-			value = frappe.utils.get_formatted_duration(value, duration_options);
+			value = frappe.utils.get_formatted_duration(
+				value,
+				duration_options,
+			);
 		}
 
 		return value || "0s";
@@ -339,7 +382,11 @@ frappe.form.formatters = {
 		return formatted_value;
 	},
 	Code: function (value) {
-		return "<pre>" + (value == null ? "" : $("<div>").text(value).html()) + "</pre>";
+		return (
+			"<pre>" +
+			(value == null ? "" : $("<div>").text(value).html()) +
+			"</pre>"
+		);
 	},
 	WorkflowState: function (value) {
 		var workflow_state = frappe.get_doc("Workflow State", value);
@@ -353,7 +400,7 @@ frappe.form.formatters = {
 					value: value,
 					style: workflow_state.style.toLowerCase(),
 					icon: workflow_state.icon,
-				}
+				},
 			);
 		} else {
 			return "<span class='label'>" + value + "</span>";
@@ -409,7 +456,10 @@ function format_attachment_url(url) {
 
 frappe.form.get_formatter = function (fieldtype) {
 	if (!fieldtype) fieldtype = "Data";
-	return frappe.form.formatters[fieldtype.replace(/ /g, "")] || frappe.form.formatters.Data;
+	return (
+		frappe.form.formatters[fieldtype.replace(/ /g, "")] ||
+		frappe.form.formatters.Data
+	);
 };
 
 frappe.format = function (value, df, options, doc) {
@@ -427,7 +477,8 @@ frappe.format = function (value, df, options, doc) {
 
 	var formatted = formatter(value, df, options, doc);
 
-	if (typeof formatted == "string") formatted = frappe.dom.remove_script_and_style(formatted);
+	if (typeof formatted == "string")
+		formatted = frappe.dom.remove_script_and_style(formatted);
 
 	return formatted;
 };
@@ -447,6 +498,8 @@ frappe.get_format_helper = function (doc) {
 };
 
 frappe.form.link_formatters["User"] = function (value, doc, docfield) {
-	let full_name = doc && (doc.full_name || (docfield && doc[`${docfield.fieldname}_full_name`]));
+	let full_name =
+		doc &&
+		(doc.full_name || (docfield && doc[`${docfield.fieldname}_full_name`]));
 	return full_name || value;
 };

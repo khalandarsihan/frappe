@@ -30,7 +30,7 @@ frappe.dashboard_utils = {
 						<a class="dropdown-item" data-fieldname="${
 							filter.fieldnames[i]
 						}" data-option="${encodeURIComponent(option)}">${__(option)}</a>
-					</li>`
+					</li>`,
 					)
 					.join("");
 			} else {
@@ -38,14 +38,15 @@ frappe.dashboard_utils = {
 					.map(
 						(option) =>
 							`<li><a class="dropdown-item" data-option="${encodeURIComponent(
-								option
-							)}">${__(option)}</a></li>`
+								option,
+							)}">${__(option)}</a></li>`,
 					)
 					.join("");
 			}
 
 			let dropdown_html =
-				chart_filter_html + `<ul class="dropdown-menu">${options_html}</ul></div>`;
+				chart_filter_html +
+				`<ul class="dropdown-menu">${options_html}</ul></div>`;
 			let $chart_filter = $(dropdown_html);
 
 			if (append) {
@@ -60,7 +61,9 @@ frappe.dashboard_utils = {
 				}
 
 				let selected_item = decodeURIComponent($el.data("option"));
-				$el.parents(`.${button_class}`).find(".filter-label").html(__(selected_item));
+				$el.parents(`.${button_class}`)
+					.find(".filter-label")
+					.html(__(selected_item));
 				filter.action(selected_item, fieldname);
 			});
 		});
@@ -70,14 +73,19 @@ frappe.dashboard_utils = {
 		if (chart.chart_type === "Custom" && chart.source) {
 			const method =
 				"frappe.desk.doctype.dashboard_chart_source.dashboard_chart_source.get_config";
-			return frappe.xcall(method, { name: chart.source }).then((config) => {
-				frappe.dom.eval(config);
-				return frappe.dashboards.chart_sources[chart.source].filters;
-			});
+			return frappe
+				.xcall(method, { name: chart.source })
+				.then((config) => {
+					frappe.dom.eval(config);
+					return frappe.dashboards.chart_sources[chart.source]
+						.filters;
+				});
 		} else if (chart.chart_type === "Report" && chart.report_name) {
-			return frappe.report_utils.get_report_filters(chart.report_name).then((filters) => {
-				return filters;
-			});
+			return frappe.report_utils
+				.get_report_filters(chart.report_name)
+				.then((filters) => {
+					return filters;
+				});
 		} else {
 			return Promise.resolve();
 		}
@@ -108,7 +116,7 @@ frappe.dashboard_utils = {
 				"frappe.desk.doctype.dashboard_settings.dashboard_settings.create_dashboard_settings",
 				{
 					user: frappe.session.user,
-				}
+				},
 			)
 			.then((settings) => {
 				return settings;
@@ -154,7 +162,11 @@ frappe.dashboard_utils = {
 		return static_filters;
 	},
 
-	get_fields_for_dynamic_filter_dialog(is_document_type, filters, dynamic_filters) {
+	get_fields_for_dynamic_filter_dialog(
+		is_document_type,
+		filters,
+		dynamic_filters,
+	) {
 		let fields = [
 			{
 				fieldtype: "HTML",
@@ -216,7 +228,12 @@ frappe.dashboard_utils = {
 				try {
 					f[3] = eval(f[3]);
 				} catch (e) {
-					frappe.throw(__("Invalid expression set in filter {0} ({1})", [f[1], f[0]]));
+					frappe.throw(
+						__("Invalid expression set in filter {0} ({1})", [
+							f[1],
+							f[0],
+						]),
+					);
 				}
 			});
 			filters = [...filters, ...dynamic_filters];
@@ -226,7 +243,9 @@ frappe.dashboard_utils = {
 					const val = eval(dynamic_filters[key]);
 					dynamic_filters[key] = val;
 				} catch (e) {
-					frappe.throw(__("Invalid expression set in filter {0}", [key]));
+					frappe.throw(
+						__("Invalid expression set in filter {0}", [key]),
+					);
 				}
 			}
 			Object.assign(filters, dynamic_filters);

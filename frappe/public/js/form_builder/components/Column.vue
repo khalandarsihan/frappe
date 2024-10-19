@@ -32,7 +32,9 @@
 				<Field
 					:column="column"
 					:field="element"
-					:data-is-user-generated="store.is_user_generated_field(element)"
+					:data-is-user-generated="
+						store.is_user_generated_field(element)
+					"
 				/>
 			</template>
 		</draggable>
@@ -40,7 +42,10 @@
 			<AddFieldButton :column="column" />
 		</div>
 		<div v-if="column.fields.length" class="add-new-field-btn">
-			<AddFieldButton :field="column.fields[column.fields.length - 1]" :column="column" />
+			<AddFieldButton
+				:field="column.fields[column.fields.length - 1]"
+				:column="column"
+			/>
 		</div>
 	</div>
 </template>

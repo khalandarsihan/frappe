@@ -8,7 +8,12 @@ frappe.ui.form.on("Calendar View", {
 	refresh: function (frm) {
 		if (!frm.is_new()) {
 			frm.add_custom_button(__("Show Calendar"), () =>
-				frappe.set_route("List", frm.doc.reference_doctype, "Calendar", frm.doc.name)
+				frappe.set_route(
+					"List",
+					frm.doc.reference_doctype,
+					"Calendar",
+					frm.doc.name,
+				),
 			);
 		}
 	},
@@ -20,7 +25,9 @@ frappe.ui.form.on("Calendar View", {
 			const meta = frappe.get_meta(reference_doctype);
 
 			const subject_options = meta.fields
-				.filter((df) => !frappe.model.no_value_type.includes(df.fieldtype))
+				.filter(
+					(df) => !frappe.model.no_value_type.includes(df.fieldtype),
+				)
 				.map((df) => df.fieldname);
 
 			const date_options = meta.fields

@@ -99,6 +99,9 @@ frappe.ui.DiffView = class DiffView {
 	}
 
 	set_empty_state() {
-		this.dialog.set_value("diff", __("Select two versions to view the diff."));
+		this.dialog.set_value(
+			"diff",
+			__("Select two versions to view the diff."),
+		);
 	}
 };

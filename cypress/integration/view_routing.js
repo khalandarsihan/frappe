@@ -103,7 +103,9 @@ context("View", () => {
 	});
 
 	it("Route to File View", () => {
-		cy.intercept("POST", "/api/method/frappe.desk.reportview.get").as("list_loaded");
+		cy.intercept("POST", "/api/method/frappe.desk.reportview.get").as(
+			"list_loaded",
+		);
 		cy.visit("app/file");
 		cy.wait("@list_loaded");
 		cy.window()
@@ -124,7 +126,9 @@ context("View", () => {
 	});
 
 	it("Re-route to default view", () => {
-		cy.call("frappe.tests.ui_test_helpers.setup_default_view", { view: "Report" }).then(() => {
+		cy.call("frappe.tests.ui_test_helpers.setup_default_view", {
+			view: "Report",
+		}).then(() => {
 			cy.visit("app/event");
 			cy.wait(500);
 			cy.window()
@@ -136,7 +140,9 @@ context("View", () => {
 	});
 
 	it("Route to default view from app/{doctype}", () => {
-		cy.call("frappe.tests.ui_test_helpers.setup_default_view", { view: "Report" }).then(() => {
+		cy.call("frappe.tests.ui_test_helpers.setup_default_view", {
+			view: "Report",
+		}).then(() => {
 			cy.visit("/app/event");
 			cy.wait(500);
 			cy.window()
@@ -148,7 +154,9 @@ context("View", () => {
 	});
 
 	it("Route to default view from app/{doctype}/view", () => {
-		cy.call("frappe.tests.ui_test_helpers.setup_default_view", { view: "Report" }).then(() => {
+		cy.call("frappe.tests.ui_test_helpers.setup_default_view", {
+			view: "Report",
+		}).then(() => {
 			cy.visit("/app/event/view");
 			cy.wait(500);
 			cy.window()
@@ -205,7 +213,9 @@ context("View", () => {
 	});
 
 	it("Validate Route History for Default View", () => {
-		cy.call("frappe.tests.ui_test_helpers.setup_default_view", { view: "Report" }).then(() => {
+		cy.call("frappe.tests.ui_test_helpers.setup_default_view", {
+			view: "Report",
+		}).then(() => {
 			cy.visit("/app/event");
 			cy.visit("/app/event/view/list");
 			cy.location("pathname").should("eq", "/app/event/view/list");

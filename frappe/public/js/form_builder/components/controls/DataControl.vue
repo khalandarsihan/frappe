@@ -29,14 +29,18 @@ if (props.df.fieldtype === "Icon") {
 			<slot name="label" />
 			<slot name="actions" />
 		</div>
-		<div v-else class="control-label label" :class="{ reqd: df.reqd }">{{ __(df.label) }}</div>
+		<div v-else class="control-label label" :class="{ reqd: df.reqd }">
+			{{ __(df.label) }}
+		</div>
 
 		<!-- data input -->
 		<input
 			v-if="slots.label"
 			class="form-control"
 			type="text"
-			:style="{ height: df.fieldtype == 'Table MultiSelect' ? '42px' : '' }"
+			:style="{
+				height: df.fieldtype == 'Table MultiSelect' ? '42px' : '',
+			}"
 			:placeholder="placeholder"
 			readonly
 		/>
@@ -57,7 +61,11 @@ if (props.df.fieldtype === "Icon") {
 		/>
 
 		<!-- description -->
-		<div v-if="df.description" class="mt-2 description" v-html="df.description" />
+		<div
+			v-if="df.description"
+			class="mt-2 description"
+			v-html="df.description"
+		/>
 
 		<!-- timezone for datetime field -->
 		<div

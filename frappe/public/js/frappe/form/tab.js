@@ -27,8 +27,11 @@ export default class Tab {
 			</li>
 		`).appendTo(this.tab_link_container);
 
-		this.wrapper = $(`<div class="tab-pane fade show ${this.df.active ? "active" : ""}"
-			id="${id}" role="tabpanel" aria-labelledby="${id}-tab">`).appendTo(this.tabs_content);
+		this.wrapper =
+			$(`<div class="tab-pane fade show ${this.df.active ? "active" : ""}"
+			id="${id}" role="tabpanel" aria-labelledby="${id}-tab">`).appendTo(
+				this.tabs_content,
+			);
 	}
 
 	refresh() {
@@ -38,7 +41,11 @@ export default class Tab {
 		let hide = this.df.hidden || this.df.hidden_due_to_dependency;
 
 		// hide if no read permission
-		if (!hide && this.frm && !this.frm.get_perm(this.df.permlevel || 0, "read")) {
+		if (
+			!hide &&
+			this.frm &&
+			!this.frm.get_perm(this.df.permlevel || 0, "read")
+		) {
 			hide = true;
 		}
 
@@ -47,7 +54,7 @@ export default class Tab {
 			hide = true;
 			if (
 				this.wrapper.find(
-					".form-section:not(.hide-control, .empty-section), .form-dashboard-section:not(.hide-control, .empty-section)"
+					".form-section:not(.hide-control, .empty-section), .form-dashboard-section:not(.hide-control, .empty-section)",
 				).length
 			) {
 				hide = false;

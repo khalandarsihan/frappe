@@ -21,8 +21,14 @@ context("Control Autocomplete", () => {
 
 	it("should set the valid value", () => {
 		const fieldname = "autocomplete_1";
-		get_dialog_with_autocomplete(fieldname, ["Option 1", "Option 2", "Option 3"]).as("dialog");
-		cy.get(`.control-input > .awesomplete > input[data-fieldname=${fieldname}]`).as("input");
+		get_dialog_with_autocomplete(fieldname, [
+			"Option 1",
+			"Option 2",
+			"Option 3",
+		]).as("dialog");
+		cy.get(
+			`.control-input > .awesomplete > input[data-fieldname=${fieldname}]`,
+		).as("input");
 		cy.wait(500);
 		cy.get("@input").type("2{enter}", { delay: 300 });
 		cy.get("@dialog").then((dialog) => {
@@ -40,7 +46,9 @@ context("Control Autocomplete", () => {
 			{ label: "Option 2", value: "option_2" },
 		]).as("dialog");
 
-		cy.get(`.control-input > .awesomplete > input[data-fieldname=${fieldname}]`).as("input");
+		cy.get(
+			`.control-input > .awesomplete > input[data-fieldname=${fieldname}]`,
+		).as("input");
 		cy.wait(500);
 		cy.get("@input").type("2{enter}", { delay: 300 });
 		cy.get("@dialog").then((dialog) => {

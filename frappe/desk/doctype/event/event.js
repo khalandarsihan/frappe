@@ -25,9 +25,13 @@ frappe.ui.form.on("Event", {
 				frm.add_custom_button(
 					__(value.reference_docname),
 					function () {
-						frappe.set_route("Form", value.reference_doctype, value.reference_docname);
+						frappe.set_route(
+							"Form",
+							value.reference_doctype,
+							value.reference_docname,
+						);
 					},
-					__("Participants")
+					__("Participants"),
 				);
 			});
 		}
@@ -39,7 +43,7 @@ frappe.ui.form.on("Event", {
 			function () {
 				new frappe.desk.eventParticipants(frm, "Contact");
 			},
-			__("Add Participants")
+			__("Add Participants"),
 		);
 
 		const [ends_on_date] = frm.doc.ends_on
@@ -54,17 +58,23 @@ frappe.ui.form.on("Event", {
 			frm.dashboard.set_headline(
 				__("Join video conference with {0}", [
 					`<a target='_blank' href='${frm.doc.google_meet_link}'>Google Meet</a>`,
-				])
+				]),
 			);
 		}
 	},
 	repeat_on: function (frm) {
 		if (frm.doc.repeat_on === "Every Day") {
-			["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"].map(
-				function (v) {
-					frm.set_value(v, 1);
-				}
-			);
+			[
+				"monday",
+				"tuesday",
+				"wednesday",
+				"thursday",
+				"friday",
+				"saturday",
+				"sunday",
+			].map(function (v) {
+				frm.set_value(v, 1);
+			});
 		}
 	},
 });

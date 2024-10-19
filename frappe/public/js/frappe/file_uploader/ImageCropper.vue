@@ -52,7 +52,9 @@ const props = defineProps({
 let emit = defineEmits(["toggle_image_cropper"]);
 
 // variables
-let aspect_ratio = ref(props.fixed_aspect_ratio != null ? props.fixed_aspect_ratio : NaN);
+let aspect_ratio = ref(
+	props.fixed_aspect_ratio != null ? props.fixed_aspect_ratio : NaN,
+);
 let src = ref(null);
 let cropper = ref(null);
 let image = ref(null);
@@ -123,7 +125,7 @@ watch(
 			cropper.value.setAspectRatio(value);
 		}
 	},
-	{ deep: true }
+	{ deep: true },
 );
 </script>
 

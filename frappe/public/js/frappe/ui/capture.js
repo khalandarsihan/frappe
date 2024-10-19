@@ -156,21 +156,23 @@ frappe.ui.Capture = class {
 			},
 		};
 
-		return navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-			me.stream = stream;
-			me.dialog.custom_actions.empty();
-			me.dialog.get_primary_btn().off("click");
-			me.setup_take_photo_action();
-			me.setup_preview_action();
-			me.setup_toggle_camera();
+		return navigator.mediaDevices
+			.getUserMedia(constraints)
+			.then((stream) => {
+				me.stream = stream;
+				me.dialog.custom_actions.empty();
+				me.dialog.get_primary_btn().off("click");
+				me.setup_take_photo_action();
+				me.setup_preview_action();
+				me.setup_toggle_camera();
 
-			me.$template.find(".fc-stream-container").show();
-			me.$template.find(".fc-preview-container").hide();
-			me.video = me.$template.find("video")[0];
-			me.video.srcObject = me.stream;
-			me.video.load();
-			me.video.play();
-		});
+				me.$template.find(".fc-stream-container").show();
+				me.$template.find(".fc-preview-container").hide();
+				me.video = me.$template.find("video")[0];
+				me.video.srcObject = me.stream;
+				me.video.load();
+				me.video.play();
+			});
 	}
 
 	render_preview() {
@@ -196,7 +198,7 @@ frappe.ui.Capture = class {
 		$(this.$template.find(".fc-preview-container")).html(
 			`<div class="row">
 				${images}
-			</div>`
+			</div>`,
 		);
 
 		this.setup_capture_action();
@@ -234,7 +236,9 @@ frappe.ui.Capture = class {
 
 	setup_remove_action() {
 		let me = this;
-		let elements = Array.from(this.$template[0].getElementsByClassName("capture-remove-btn"));
+		let elements = Array.from(
+			this.$template[0].getElementsByClassName("capture-remove-btn"),
+		);
 
 		elements.forEach((el) => {
 			el.onclick = () => {
@@ -267,7 +271,8 @@ frappe.ui.Capture = class {
 		this.dialog.add_custom_action(
 			__("Switch Camera"),
 			() => {
-				me.facing_mode = me.facing_mode == "environment" ? "user" : "environment";
+				me.facing_mode =
+					me.facing_mode == "environment" ? "user" : "environment";
 
 				frappe.show_alert({
 					message: __("Switching Camera"),
@@ -276,7 +281,7 @@ frappe.ui.Capture = class {
 				me.stop_media_stream();
 				me.render_stream();
 			},
-			"btn-switch"
+			"btn-switch",
 		);
 	}
 

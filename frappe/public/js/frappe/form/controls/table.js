@@ -1,6 +1,8 @@
 import Grid from "../grid";
 
-frappe.ui.form.ControlTable = class ControlTable extends frappe.ui.form.Control {
+frappe.ui.form.ControlTable = class ControlTable extends (
+	frappe.ui.form.Control
+) {
 	make() {
 		super.make();
 
@@ -46,7 +48,10 @@ frappe.ui.form.ControlTable = class ControlTable extends frappe.ui.form.Control 
 			if (this.get_field(data[0][0])) {
 				data[0].forEach((column) => {
 					fieldnames.push(this.get_field(column));
-					const df = frappe.meta.get_docfield(doctype, this.get_field(column));
+					const df = frappe.meta.get_docfield(
+						doctype,
+						this.get_field(column),
+					);
 					fieldtypes.push(df ? df.fieldtype : "");
 				});
 				data.shift();
@@ -61,7 +66,10 @@ frappe.ui.form.ControlTable = class ControlTable extends frappe.ui.form.Control 
 						column.fieldname === $(e.target).data("fieldname")
 					) {
 						fieldnames.push(column.fieldname);
-						const df = frappe.meta.get_docfield(doctype, column.fieldname);
+						const df = frappe.meta.get_docfield(
+							doctype,
+							column.fieldname,
+						);
 						fieldtypes.push(df ? df.fieldtype : "");
 						target_column_matched = true;
 					}
@@ -78,22 +86,31 @@ frappe.ui.form.ControlTable = class ControlTable extends frappe.ui.form.Control 
 							this.grid.add_new_row();
 						}
 
-						if (row_idx > 1 && (row_idx - 1) % grid_pagination.page_length === 0) {
-							grid_pagination.go_to_page(grid_pagination.page_index + 1);
+						if (
+							row_idx > 1 &&
+							(row_idx - 1) % grid_pagination.page_length === 0
+						) {
+							grid_pagination.go_to_page(
+								grid_pagination.page_index + 1,
+							);
 						}
 
 						const row_name = grid_rows[row_idx - 1].doc.name;
 						row.forEach((value, data_index) => {
 							if (fieldnames[data_index]) {
 								// format value before setting
-								value = value_formatter_map[fieldtypes[data_index]]
-									? value_formatter_map[fieldtypes[data_index]](value)
+								value = value_formatter_map[
+									fieldtypes[data_index]
+								]
+									? value_formatter_map[
+											fieldtypes[data_index]
+										](value)
 									: value;
 								frappe.model.set_value(
 									doctype,
 									row_name,
 									fieldnames[data_index],
-									value
+									value,
 								);
 							}
 						});
@@ -105,7 +122,7 @@ frappe.ui.form.ControlTable = class ControlTable extends frappe.ui.form.Control 
 								progress,
 								data_length,
 								null,
-								true
+								true,
 							);
 						}
 					}
@@ -126,7 +143,9 @@ frappe.ui.form.ControlTable = class ControlTable extends frappe.ui.form.Control 
 				return (
 					field.fieldname.toLowerCase() === field_name ||
 					(field.label || "").toLowerCase() === field_name ||
-					(__(field.label, null, field.parent) || "").toLowerCase() === field_name
+					(
+						__(field.label, null, field.parent) || ""
+					).toLowerCase() === field_name
 				);
 			};
 

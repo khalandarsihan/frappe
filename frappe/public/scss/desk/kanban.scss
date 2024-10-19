@@ -156,7 +156,10 @@
 					@include flex(flex, space-between, null, column);
 					margin-top: var(--margin-sm);
 					min-height: 100px;
-					@include card($padding: 0, $background-color: var(--kanban-card-bg));
+					@include card(
+						$padding: 0,
+						$background-color: var(--kanban-card-bg)
+					);
 					box-shadow: none;
 					border: 1px solid var(--border-color);
 
@@ -164,7 +167,8 @@
 						height: 125px;
 
 						img {
-							border-radius: var(--border-radius) var(--border-radius) 0 0;
+							border-radius: var(--border-radius)
+								var(--border-radius) 0 0;
 							object-position: top;
 							object-fit: cover;
 							margin: 0 auto;

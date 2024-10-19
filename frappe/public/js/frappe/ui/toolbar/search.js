@@ -12,7 +12,9 @@ frappe.search.SearchDialog = class {
 			size: "large",
 		});
 		this.set_header();
-		this.$wrapper = $(this.search_dialog.$wrapper).addClass("search-dialog");
+		this.$wrapper = $(this.search_dialog.$wrapper).addClass(
+			"search-dialog",
+		);
 		this.$body = $(this.search_dialog.body);
 		this.$input = this.$wrapper.find(".search-input");
 		this.setup();
@@ -28,7 +30,7 @@ frappe.search.SearchDialog = class {
 				</div>
 				<span class="search-icon">
 					${frappe.utils.icon("search")}
-				</span>`
+				</span>`,
 			);
 	}
 
@@ -53,22 +55,26 @@ frappe.search.SearchDialog = class {
 					let start = 0,
 						limit = 100;
 					let results = frappe.search.utils.get_nav_results(keywords);
-					frappe.search.utils.get_global_results(keywords, start, limit).then(
-						(global_results) => {
-							results = results.concat(global_results);
-							callback(results, keywords);
-						},
-						(err) => {
-							console.error(err);
-						}
-					);
+					frappe.search.utils
+						.get_global_results(keywords, start, limit)
+						.then(
+							(global_results) => {
+								results = results.concat(global_results);
+								callback(results, keywords);
+							},
+							(err) => {
+								console.error(err);
+							},
+						);
 				},
 			},
 			tags: {
 				input_placeholder: __("Search"),
 				empty_state_text: __("Search for anything"),
 				no_results_status: (keyword) =>
-					"<div>" + __("No documents found tagged with {0}", [keyword]) + "</div>",
+					"<div>" +
+					__("No documents found tagged with {0}", [keyword]) +
+					"</div>",
 				get_results: (keywords, callback) => {
 					var results = frappe.search.utils.get_nav_results(keywords);
 					frappe.tags.utils.get_tag_results(keywords).then(
@@ -78,7 +84,7 @@ frappe.search.SearchDialog = class {
 						},
 						(err) => {
 							console.error(err);
-						}
+						},
 					);
 				},
 			},
@@ -127,7 +133,7 @@ frappe.search.SearchDialog = class {
 						this.current_keyword = "";
 						this.put_placeholder(this.search.empty_state_text);
 					}
-				}, 300)
+				}, 300),
 			);
 		});
 	}
@@ -136,10 +142,16 @@ frappe.search.SearchDialog = class {
 		// Sidebar
 		this.$body.on("click", ".list-link", (e) => {
 			const $link = $(e.currentTarget);
-			this.$body.find(".search-sidebar").find(".list-link").removeClass("active selected");
+			this.$body
+				.find(".search-sidebar")
+				.find(".list-link")
+				.removeClass("active selected");
 			$link.addClass("active selected");
 			const type = $link.attr("data-category");
-			this.$body.find(".results-area").empty().html(this.full_lists[type]);
+			this.$body
+				.find(".results-area")
+				.empty()
+				.html(this.full_lists[type]);
 			this.$body.find(".module-section-link").first().focus();
 		});
 
@@ -169,14 +181,20 @@ frappe.search.SearchDialog = class {
 			var current_count = this.$body.find(".result").length;
 			if (fetch_type === "Global") {
 				frappe.search.utils
-					.get_global_results(this.current_keyword, current_count, this.more_count, type)
+					.get_global_results(
+						this.current_keyword,
+						current_count,
+						this.more_count,
+						type,
+					)
 					.then(
 						(doctype_results) => {
-							doctype_results.length && this.add_more_results(doctype_results);
+							doctype_results.length &&
+								this.add_more_results(doctype_results);
 						},
 						(err) => {
 							console.error(err);
-						}
+						},
 					);
 			} else {
 				let results = this.nav_lists[type].slice(0, this.more_count);
@@ -233,7 +251,9 @@ frappe.search.SearchDialog = class {
 	}
 
 	render_data(result_sets) {
-		let $search_results = $(frappe.render_template("search")).addClass("hide");
+		let $search_results = $(frappe.render_template("search")).addClass(
+			"hide",
+		);
 		let $sidebar = $search_results.find(".search-sidebar").empty();
 		let sidebar_item_html =
 			'<li class="search-sidebar-item standard-sidebar-item list-link" data-category="{0}">' +
@@ -246,17 +266,21 @@ frappe.search.SearchDialog = class {
 		this.nav_lists = {};
 
 		result_sets.forEach((set) => {
-			$sidebar.append($(__(sidebar_item_html, [set.title, __(set.title)])));
+			$sidebar.append(
+				$(__(sidebar_item_html, [set.title, __(set.title)])),
+			);
 			this.add_section_to_summary(set.title, set.results);
 			this.full_lists[set.title] = this.render_full_list(
 				set.title,
 				set.results,
-				set.fetch_type
+				set.fetch_type,
 			);
 		});
 
 		if (result_sets.length > 1) {
-			$sidebar.prepend($(__(sidebar_item_html, ["All Results", __("All Results")])));
+			$sidebar.prepend(
+				$(__(sidebar_item_html, ["All Results", __("All Results")])),
+			);
 		}
 
 		this.update($search_results.clone());
@@ -275,7 +299,9 @@ frappe.search.SearchDialog = class {
 		</div>`);
 
 		results.slice(0, max_length).forEach((result) => {
-			$results_list.find(".result-body").append(this.render_result(type, result));
+			$results_list
+				.find(".result-body")
+				.append(this.render_result(type, result));
 		});
 
 		if (results.length > 0) {
@@ -302,7 +328,8 @@ frappe.search.SearchDialog = class {
 			</div>`;
 		}
 
-		let $result_section = $(`<div class="col-sm-12 result-section" data-type="${type}">
+		let $result_section =
+			$(`<div class="col-sm-12 result-section" data-type="${type}">
 			<div class="result-title">${__(type)}</div>
 			<div class="result-body">
 				${more_html}
@@ -327,7 +354,11 @@ frappe.search.SearchDialog = class {
 	render_result(type, result) {
 		let image_html = "";
 		if (result.image !== undefined) {
-			let avatar_html = frappe.get_avatar("avatar-medium", result.label, result.image);
+			let avatar_html = frappe.get_avatar(
+				"avatar-medium",
+				result.label,
+				result.image,
+			);
 			image_html = `<a ${this.get_link(result)}>
 				<div class="result-image">
 					${avatar_html}
@@ -382,7 +413,9 @@ frappe.search.SearchDialog = class {
 		let more_results = $('<div class="more-results last"></div>');
 		if (results_set[0].results) {
 			results_set[0].results.forEach((result) => {
-				more_results.append(this.render_result(results_set[0].title, result));
+				more_results.append(
+					this.render_result(results_set[0].title, result),
+				);
 			});
 		}
 		this.$body.find(".list-more").before(more_results);
@@ -392,7 +425,9 @@ frappe.search.SearchDialog = class {
 			this.$body.find(".list-more").hide();
 			let no_of_results = this.$body.find(".result").length;
 			let no_of_results_cue = $(
-				'<div class="results-status">' + no_of_results + " results found</div>"
+				'<div class="results-status">' +
+					no_of_results +
+					" results found</div>",
 			);
 			this.$body.find(".more-results:last").append(no_of_results_cue);
 		}

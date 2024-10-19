@@ -34,7 +34,9 @@ frappe.search.AwesomeBar = class AwesomeBar {
 				var html = "<span>" + name + "</span>";
 				if (d.description && d.value !== d.description) {
 					html +=
-						'<br><span class="text-muted ellipsis">' + __(d.description) + "</span>";
+						'<br><span class="text-muted ellipsis">' +
+						__(d.description) +
+						"</span>";
 				}
 				return $("<li></li>")
 					.data("item.autocomplete", d)
@@ -63,21 +65,28 @@ frappe.search.AwesomeBar = class AwesomeBar {
 
 				if (txt && txt.length > 1) {
 					if (last_space !== -1) {
-						me.set_specifics(txt.slice(0, last_space), txt.slice(last_space + 1));
+						me.set_specifics(
+							txt.slice(0, last_space),
+							txt.slice(last_space + 1),
+						);
 					}
 					me.add_defaults(txt);
 					me.options = me.options.concat(me.build_options(txt));
 					me.options = me.options.concat(me.global_results);
 				} else {
 					me.options = me.options.concat(
-						me.deduplicate(frappe.search.utils.get_recent_pages(txt || ""))
+						me.deduplicate(
+							frappe.search.utils.get_recent_pages(txt || ""),
+						),
 					);
-					me.options = me.options.concat(frappe.search.utils.get_frequent_links());
+					me.options = me.options.concat(
+						frappe.search.utils.get_frequent_links(),
+					);
 				}
 				me.add_help();
 
 				awesomplete.list = me.deduplicate(me.options);
-			}, 100)
+			}, 100),
 		);
 
 		var open_recent = function () {
@@ -181,7 +190,10 @@ frappe.search.AwesomeBar = class AwesomeBar {
 		var me = this;
 		var results = this.build_options(txt);
 		results.forEach(function (r) {
-			if (r.type && r.type.toLowerCase().indexOf(end_txt.toLowerCase()) === 0) {
+			if (
+				r.type &&
+				r.type.toLowerCase().indexOf(end_txt.toLowerCase()) === 0
+			) {
 				me.options.push(r);
 			}
 		});
@@ -206,7 +218,7 @@ frappe.search.AwesomeBar = class AwesomeBar {
 				frappe.search.utils.get_dashboards(txt),
 				frappe.search.utils.get_recent_pages(txt || ""),
 				frappe.search.utils.get_executables(txt),
-				frappe.search.utils.get_marketplace_apps(txt)
+				frappe.search.utils.get_marketplace_apps(txt),
 			);
 		if (txt.charAt(0) === "#") {
 			options = frappe.tags.utils.get_tags(txt);
@@ -231,7 +243,9 @@ frappe.search.AwesomeBar = class AwesomeBar {
 				}
 
 				var str_route =
-					typeof option.route === "string" ? option.route : option.route.join("/");
+					typeof option.route === "string"
+						? option.route
+						: option.route.join("/");
 				if (routes.indexOf(str_route) === -1) {
 					out.push(option);
 					routes.push(str_route);

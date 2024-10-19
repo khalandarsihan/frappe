@@ -1,4 +1,6 @@
-frappe.ui.form.ControlTime = class ControlTime extends frappe.ui.form.ControlDate {
+frappe.ui.form.ControlTime = class ControlTime extends (
+	frappe.ui.form.ControlDate
+) {
 	set_formatted_input(value) {
 		super.set_formatted_input(value);
 	}
@@ -15,7 +17,9 @@ frappe.ui.form.ControlTime = class ControlTime extends frappe.ui.form.ControlDat
 		let sysdefaults = frappe.boot.sysdefaults;
 
 		let time_format =
-			sysdefaults && sysdefaults.time_format ? sysdefaults.time_format : "HH:mm:ss";
+			sysdefaults && sysdefaults.time_format
+				? sysdefaults.time_format
+				: "HH:mm:ss";
 
 		this.time_format = frappe.defaultTimeFormat;
 		this.datepicker_options = {
@@ -53,7 +57,9 @@ frappe.ui.form.ControlTime = class ControlTime extends frappe.ui.form.ControlDat
 				!this.datepicker.selectedDates.length)
 		) {
 			let time_format = frappe.sys_defaults.time_format || "HH:mm:ss";
-			var date_obj = frappe.datetime.moment_to_date_obj(moment(value, time_format));
+			var date_obj = frappe.datetime.moment_to_date_obj(
+				moment(value, time_format),
+			);
 			this.datepicker.selectDate(date_obj);
 		}
 	}
@@ -103,8 +109,12 @@ frappe.ui.form.ControlTime = class ControlTime extends frappe.ui.form.ControlDat
 		if (value && !frappe.datetime.validate(value)) {
 			let sysdefaults = frappe.sys_defaults;
 			let time_format =
-				sysdefaults && sysdefaults.time_format ? sysdefaults.time_format : "HH:mm:ss";
-			frappe.msgprint(__("Time {0} must be in format: {1}", [value, time_format]));
+				sysdefaults && sysdefaults.time_format
+					? sysdefaults.time_format
+					: "HH:mm:ss";
+			frappe.msgprint(
+				__("Time {0} must be in format: {1}", [value, time_format]),
+			);
 			return "";
 		}
 		return value;

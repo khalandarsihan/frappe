@@ -27,7 +27,7 @@ watch(
 	() => findNode(props.node.id)?.selected,
 	(val) => {
 		if (val) store.workflow.selected = props.node;
-	}
+	},
 );
 
 let label = computed(() => findNode(props.node.id)?.data?.state);
@@ -37,14 +37,16 @@ watch(
 	() => {
 		store.ref_history.commit();
 	},
-	{ deep: true }
+	{ deep: true },
 );
 </script>
 
 <template>
 	<div class="node" tabindex="0" @click.stop>
 		<div v-if="label" class="node-label">{{ __(label) }}</div>
-		<div v-else class="node-placeholder text-muted">{{ __("No Label") }}</div>
+		<div v-else class="node-placeholder text-muted">
+			{{ __("No Label") }}
+		</div>
 		<Handle
 			v-for="handle in ['top', 'right', 'bottom', 'left']"
 			class="handle"

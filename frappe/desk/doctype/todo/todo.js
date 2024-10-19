@@ -13,7 +13,11 @@ frappe.ui.form.on("ToDo", {
 	refresh: function (frm) {
 		if (frm.doc.reference_type && frm.doc.reference_name) {
 			frm.add_custom_button(__(frm.doc.reference_name), function () {
-				frappe.set_route("Form", frm.doc.reference_type, frm.doc.reference_name);
+				frappe.set_route(
+					"Form",
+					frm.doc.reference_type,
+					frm.doc.reference_name,
+				);
 			});
 		}
 
@@ -29,7 +33,7 @@ frappe.ui.form.on("ToDo", {
 						});
 					},
 					"fa fa-check",
-					"btn-success"
+					"btn-success",
 				);
 			} else {
 				frm.add_custom_button(
@@ -39,7 +43,7 @@ frappe.ui.form.on("ToDo", {
 						frm.save();
 					},
 					null,
-					"btn-default"
+					"btn-default",
 				);
 			}
 			frm.add_custom_button(
@@ -48,7 +52,7 @@ frappe.ui.form.on("ToDo", {
 					frappe.new_doc("ToDo");
 				},
 				null,
-				"btn-default"
+				"btn-default",
 			);
 		}
 	},

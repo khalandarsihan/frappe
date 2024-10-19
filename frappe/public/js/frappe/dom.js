@@ -33,7 +33,15 @@ frappe.dom = {
 		document.getElementsByTagName("head")[0].appendChild(el);
 	},
 	remove_script_and_style: function (txt) {
-		const evil_tags = ["script", "style", "noscript", "title", "meta", "base", "head"];
+		const evil_tags = [
+			"script",
+			"style",
+			"noscript",
+			"title",
+			"meta",
+			"base",
+			"head",
+		];
 		const parser = new DOMParser();
 		const doc = parser.parseFromString(txt, "text/html");
 		const body = doc.body;
@@ -124,14 +132,23 @@ frappe.dom = {
 		}
 		return ele;
 	},
-	activate: function ($parent, $child, common_class, active_class = "active") {
-		$parent.find(`.${common_class}.${active_class}`).removeClass(active_class);
+	activate: function (
+		$parent,
+		$child,
+		common_class,
+		active_class = "active",
+	) {
+		$parent
+			.find(`.${common_class}.${active_class}`)
+			.removeClass(active_class);
 		$child.addClass(active_class);
 	},
 	freeze: function (msg, css_class) {
 		// blur
 		if (!$("#freeze").length) {
-			var freeze = $('<div id="freeze" class="modal-backdrop fade"></div>')
+			var freeze = $(
+				'<div id="freeze" class="modal-backdrop fade"></div>',
+			)
 				.on("click", function () {
 					if (cur_frm && cur_frm.cur_grid) {
 						cur_frm.cur_grid.toggle_view();
@@ -143,8 +160,8 @@ frappe.dom = {
 			freeze.html(
 				repl(
 					'<div class="freeze-message-container"><div class="freeze-message"><p class="lead">%(msg)s</p></div></div>',
-					{ msg: msg || "" }
-				)
+					{ msg: msg || "" },
+				),
 			);
 
 			setTimeout(function () {
@@ -234,7 +251,7 @@ frappe.dom = {
 	},
 	pixel_to_inches(pixels) {
 		const div = $(
-			'<div id="dpi" style="height: 1in; width: 1in; left: 100%; position: fixed; top: 100%;"></div>'
+			'<div id="dpi" style="height: 1in; width: 1in; left: 100%; position: fixed; top: 100%;"></div>',
 		);
 		div.appendTo(document.body);
 
@@ -295,7 +312,7 @@ frappe.get_data_pill = (
 	target_id = null,
 	remove_action = null,
 	image = null,
-	colored = false
+	colored = false,
 ) => {
 	let color = "",
 		style = "";

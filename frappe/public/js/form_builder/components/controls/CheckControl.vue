@@ -6,7 +6,10 @@ let slots = useSlots();
 </script>
 
 <template>
-	<div class="control frappe-control checkbox" :class="{ editable: slots.label }">
+	<div
+		class="control frappe-control checkbox"
+		:class="{ editable: slots.label }"
+	>
 		<!-- checkbox -->
 		<label v-if="slots.label" class="field-controls">
 			<div class="checkbox">
@@ -20,13 +23,21 @@ let slots = useSlots();
 				type="checkbox"
 				:checked="value"
 				:disabled="read_only"
-				@change="(event) => $emit('update:modelValue', event.target.checked)"
+				@change="
+					(event) => $emit('update:modelValue', event.target.checked)
+				"
 			/>
-			<span class="label-area" :class="{ reqd: df.reqd }">{{ __(df.label) }}</span>
+			<span class="label-area" :class="{ reqd: df.reqd }">{{
+				__(df.label)
+			}}</span>
 		</label>
 
 		<!-- description -->
-		<div v-if="df.description" class="mt-2 description" v-html="df.description"></div>
+		<div
+			v-if="df.description"
+			class="mt-2 description"
+			v-html="df.description"
+		></div>
 	</div>
 </template>
 

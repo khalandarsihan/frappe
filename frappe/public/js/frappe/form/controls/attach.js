@@ -1,4 +1,6 @@
-frappe.ui.form.ControlAttach = class ControlAttach extends frappe.ui.form.ControlData {
+frappe.ui.form.ControlAttach = class ControlAttach extends (
+	frappe.ui.form.ControlData
+) {
 	make_input() {
 		let me = this;
 		this.$input = $('<button class="btn btn-default btn-sm btn-attach">')
@@ -22,7 +24,7 @@ frappe.ui.form.ControlAttach = class ControlAttach extends frappe.ui.form.Contro
 					<a class="btn btn-xs btn-default" data-action="reload_attachment">${__("Reload File")}</a>
 					<a class="btn btn-xs btn-default" data-action="clear_attachment">${__("Clear")}</a>
 				</div>
-			</div>`
+			</div>`,
 		)
 			.prependTo(me.input_area)
 			.toggle(false);
@@ -38,11 +40,16 @@ frappe.ui.form.ControlAttach = class ControlAttach extends frappe.ui.form.Contro
 		if (this.frm) {
 			me.parse_validate_and_set_in_model(null);
 			me.refresh();
-			me.frm.attachments.remove_attachment_by_filename(me.value, async () => {
-				await me.parse_validate_and_set_in_model(null);
-				me.refresh();
-				me.frm.doc.docstatus == 1 ? me.frm.save("Update") : me.frm.save();
-			});
+			me.frm.attachments.remove_attachment_by_filename(
+				me.value,
+				async () => {
+					await me.parse_validate_and_set_in_model(null);
+					me.refresh();
+					me.frm.doc.docstatus == 1
+						? me.frm.save("Update")
+						: me.frm.save();
+				},
+			);
 		} else {
 			this.dataurl = null;
 			this.fileobj = null;
@@ -79,7 +86,8 @@ frappe.ui.form.ControlAttach = class ControlAttach extends frappe.ui.form.Contro
 			options.doctype = this.frm.doctype;
 			options.docname = this.frm.docname;
 			options.fieldname = this.df.fieldname;
-			options.make_attachments_public = this.frm.meta.make_attachments_public;
+			options.make_attachments_public =
+				this.frm.meta.make_attachments_public;
 		}
 
 		if (this.df.options) {
@@ -120,7 +128,9 @@ frappe.ui.form.ControlAttach = class ControlAttach extends frappe.ui.form.Contro
 		if (this.frm) {
 			await this.parse_validate_and_set_in_model(attachment.file_url);
 			this.frm.attachments.update_attachment(attachment);
-			this.frm.doc.docstatus == 1 ? this.frm.save("Update") : this.frm.save();
+			this.frm.doc.docstatus == 1
+				? this.frm.save("Update")
+				: this.frm.save();
 		}
 		this.set_value(attachment.file_url);
 	}
@@ -128,6 +138,9 @@ frappe.ui.form.ControlAttach = class ControlAttach extends frappe.ui.form.Contro
 	toggle_reload_button() {
 		this.$value
 			.find('[data-action="reload_attachment"]')
-			.toggle(this.file_uploader && this.file_uploader.uploader.files.length > 0);
+			.toggle(
+				this.file_uploader &&
+					this.file_uploader.uploader.files.length > 0,
+			);
 	}
 };

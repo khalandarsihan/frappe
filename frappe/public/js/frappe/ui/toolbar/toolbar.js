@@ -10,7 +10,7 @@ frappe.ui.toolbar.Toolbar = class {
 			frappe.render_template("navbar", {
 				avatar: frappe.avatar(frappe.session.user, "avatar-medium"),
 				navbar_settings: frappe.boot.navbar_settings,
-			})
+			}),
 		);
 		$(".dropdown-toggle").dropdown();
 		$("#toolbar-user a[href]").click(function () {
@@ -48,12 +48,15 @@ frappe.ui.toolbar.Toolbar = class {
 	}
 
 	setup_announcement_widget() {
-		let current_announcement = frappe.boot.navbar_settings.announcement_widget;
+		let current_announcement =
+			frappe.boot.navbar_settings.announcement_widget;
 
 		if (!current_announcement) return;
 
 		// If an unseen announcement is added, overlook dismiss flag
-		if (current_announcement != localStorage.getItem("announcement_widget")) {
+		if (
+			current_announcement != localStorage.getItem("announcement_widget")
+		) {
 			localStorage.removeItem("dismissed_announcement_widget");
 			localStorage.setItem("announcement_widget", current_announcement);
 		}
@@ -65,8 +68,10 @@ frappe.ui.toolbar.Toolbar = class {
 			close_message.on(
 				"click",
 				() =>
-					localStorage.setItem("dismissed_announcement_widget", true) ||
-					announcement_widget.addClass("hidden")
+					localStorage.setItem(
+						"dismissed_announcement_widget",
+						true,
+					) || announcement_widget.addClass("hidden"),
 			);
 		}
 	}
@@ -89,9 +94,13 @@ frappe.ui.toolbar.Toolbar = class {
 			$(".dropdown-help input").focus();
 		});
 
-		$(".dropdown-help .dropdown-menu").on("click", "input, button", function (e) {
-			e.stopPropagation();
-		});
+		$(".dropdown-help .dropdown-menu").on(
+			"click",
+			"input, button",
+			function (e) {
+				e.stopPropagation();
+			},
+		);
 
 		$("#input-help").on("keydown", function (e) {
 			if (e.which == 13) {
@@ -159,7 +168,7 @@ frappe.ui.toolbar.Toolbar = class {
 
 			frappe.search.utils.make_function_searchable(
 				frappe.utils.generate_tracking_url,
-				__("Generate Tracking URL")
+				__("Generate Tracking URL"),
 			);
 
 			if (frappe.model.can_read("RQ Job")) {
@@ -171,7 +180,10 @@ frappe.ui.toolbar.Toolbar = class {
 	}
 
 	setup_notifications() {
-		if (frappe.boot.desk_settings.notifications && frappe.session.user !== "Guest") {
+		if (
+			frappe.boot.desk_settings.notifications &&
+			frappe.session.user !== "Guest"
+		) {
 			this.notifications = new frappe.ui.Notifications();
 		}
 	}
@@ -180,12 +192,19 @@ frappe.ui.toolbar.Toolbar = class {
 $.extend(frappe.ui.toolbar, {
 	add_dropdown_button: function (parent, label, click, icon) {
 		var menu = frappe.ui.toolbar.get_menu(parent);
-		if (menu.find("li:not(.custom-menu)").length && !menu.find(".divider").length) {
+		if (
+			menu.find("li:not(.custom-menu)").length &&
+			!menu.find(".divider").length
+		) {
 			frappe.ui.toolbar.add_menu_divider(menu);
 		}
 
 		return $(
-			'<li class="custom-menu"><a><i class="fa-fw ' + icon + '"></i> ' + label + "</a></li>"
+			'<li class="custom-menu"><a><i class="fa-fw ' +
+				icon +
+				'"></i> ' +
+				label +
+				"</a></li>",
 		)
 			.insertBefore(menu.find(".divider"))
 			.find("a")
@@ -197,7 +216,8 @@ $.extend(frappe.ui.toolbar, {
 		return $("#navbar-" + label.toLowerCase());
 	},
 	add_menu_divider: function (menu) {
-		menu = typeof menu == "string" ? frappe.ui.toolbar.get_menu(menu) : menu;
+		menu =
+			typeof menu == "string" ? frappe.ui.toolbar.get_menu(menu) : menu;
 
 		$('<li class="divider custom-menu"></li>').prependTo(menu);
 	},
@@ -205,16 +225,19 @@ $.extend(frappe.ui.toolbar, {
 		let parent_element = $(".navbar-right").get(0);
 		let new_element = $(`<li class="${class_name}">
 			<a class="btn" href="${route}" title="${frappe.utils.to_title_case(
-			class_name,
-			true
-		)}" aria-haspopup="true" aria-expanded="true">
+				class_name,
+				true,
+			)}" aria-haspopup="true" aria-expanded="true">
 				<div>
 					<i class="octicon ${icon}"></i>
 				</div>
 			</a>
 		</li>`).get(0);
 
-		parent_element.insertBefore(new_element, parent_element.children[index]);
+		parent_element.insertBefore(
+			new_element,
+			parent_element.children[index],
+		);
 	},
 	toggle_full_width() {
 		let fullwidth = JSON.parse(localStorage.container_fullwidth || "false");
@@ -272,7 +295,10 @@ frappe.ui.toolbar.setup_session_defaults = function () {
 			fields = JSON.parse(data.message);
 			let perms = frappe.perm.get_perm("Session Default Settings");
 			//add settings button only if user is a System Manager or has permission on 'Session Default Settings'
-			if (frappe.user_roles.includes("System Manager") || perms[0].read == 1) {
+			if (
+				frappe.user_roles.includes("System Manager") ||
+				perms[0].read == 1
+			) {
 				fields[fields.length] = {
 					fieldname: "settings",
 					fieldtype: "Button",
@@ -281,7 +307,7 @@ frappe.ui.toolbar.setup_session_defaults = function () {
 						frappe.set_route(
 							"Form",
 							"Session Default Settings",
-							"Session Default Settings"
+							"Session Default Settings",
 						);
 					},
 				};
@@ -310,7 +336,7 @@ frappe.ui.toolbar.setup_session_defaults = function () {
 							} else {
 								frappe.show_alert({
 									message: __(
-										"An error occurred while setting Session Defaults"
+										"An error occurred while setting Session Defaults",
 									),
 									indicator: "red",
 								});
@@ -319,7 +345,7 @@ frappe.ui.toolbar.setup_session_defaults = function () {
 					});
 				},
 				__("Session Defaults"),
-				__("Save")
+				__("Save"),
 			);
 		},
 	});

@@ -120,10 +120,23 @@ $.extend(frappe.model, {
 
 	std_fields: [
 		{ fieldname: "name", fieldtype: "Link", label: __("ID") },
-		{ fieldname: "owner", fieldtype: "Link", label: __("Created By"), options: "User" },
+		{
+			fieldname: "owner",
+			fieldtype: "Link",
+			label: __("Created By"),
+			options: "User",
+		},
 		{ fieldname: "idx", fieldtype: "Int", label: __("Index") },
-		{ fieldname: "creation", fieldtype: "Datetime", label: __("Created On") },
-		{ fieldname: "modified", fieldtype: "Datetime", label: __("Last Updated On") },
+		{
+			fieldname: "creation",
+			fieldtype: "Datetime",
+			label: __("Created On"),
+		},
+		{
+			fieldname: "modified",
+			fieldtype: "Datetime",
+			label: __("Last Updated On"),
+		},
 		{
 			fieldname: "modified_by",
 			fieldtype: "Link",
@@ -134,12 +147,18 @@ $.extend(frappe.model, {
 		{ fieldname: "_liked_by", fieldtype: "Data", label: __("Liked By") },
 		{ fieldname: "_comments", fieldtype: "Text", label: __("Comments") },
 		{ fieldname: "_assign", fieldtype: "Text", label: __("Assigned To") },
-		{ fieldname: "docstatus", fieldtype: "Int", label: __("Document Status") },
+		{
+			fieldname: "docstatus",
+			fieldtype: "Int",
+			label: __("Document Status"),
+		},
 	],
 
 	numeric_fieldtypes: ["Int", "Float", "Currency", "Percent", "Duration"],
 
-	std_fields_table: [{ fieldname: "parent", fieldtype: "Data", label: __("Parent") }],
+	std_fields_table: [
+		{ fieldname: "parent", fieldtype: "Data", label: __("Parent") },
+	],
 
 	table_fields: ["Table", "Table MultiSelect"],
 
@@ -159,7 +178,10 @@ $.extend(frappe.model, {
 					cur_frm.doc.doctype === doc.doctype &&
 					cur_frm.doc.name === doc.name
 				) {
-					if (data.modified !== cur_frm.doc.modified && !frappe.ui.form.is_saving) {
+					if (
+						data.modified !== cur_frm.doc.modified &&
+						!frappe.ui.form.is_saving
+					) {
 						if (!cur_frm.is_dirty()) {
 							cur_frm.debounced_reload_doc();
 						} else {
@@ -189,17 +211,20 @@ $.extend(frappe.model, {
 	},
 
 	is_non_std_field: function (fieldname) {
-		return ![...frappe.model.std_fields_list, ...frappe.model.child_table_field_list].includes(
-			fieldname
-		);
+		return ![
+			...frappe.model.std_fields_list,
+			...frappe.model.child_table_field_list,
+		].includes(fieldname);
 	},
 
 	get_std_field: function (fieldname, ignore = false) {
 		var docfield = $.map(
-			[].concat(frappe.model.std_fields).concat(frappe.model.std_fields_table),
+			[]
+				.concat(frappe.model.std_fields)
+				.concat(frappe.model.std_fields_table),
 			function (d) {
 				if (d.fieldname == fieldname) return d;
-			}
+			},
 		);
 		if (!docfield.length) {
 			//Standard fields are ignored in case of adding columns as a result of groupby
@@ -248,7 +273,9 @@ $.extend(frappe.model, {
 			let cached_docs = frappe.model.get_from_localstorage(doctype);
 
 			if (cached_docs) {
-				cached_doc = cached_docs.filter((doc) => doc.name === doctype)[0];
+				cached_doc = cached_docs.filter(
+					(doc) => doc.name === doctype,
+				)[0];
 				if (cached_doc) {
 					cached_timestamp = cached_doc.modified;
 				}
@@ -265,7 +292,9 @@ $.extend(frappe.model, {
 				async: async,
 				callback: function (r) {
 					if (r.exc) {
-						frappe.msgprint(__("Unable to load: {0}", [__(doctype)]));
+						frappe.msgprint(
+							__("Unable to load: {0}", [__(doctype)]),
+						);
 						throw "No doctype";
 					}
 					if (r.message == "use_cache") {
@@ -277,8 +306,11 @@ $.extend(frappe.model, {
 
 					if (r.user_settings) {
 						// remember filters and other settings from last view
-						frappe.model.user_settings[doctype] = JSON.parse(r.user_settings);
-						frappe.model.user_settings[doctype].updated_on = moment().toString();
+						frappe.model.user_settings[doctype] = JSON.parse(
+							r.user_settings,
+						);
+						frappe.model.user_settings[doctype].updated_on =
+							moment().toString();
 					}
 					callback && callback(r);
 				},
@@ -333,11 +365,18 @@ $.extend(frappe.model, {
 	},
 
 	get_docinfo: function (doctype, name) {
-		return (frappe.model.docinfo[doctype] && frappe.model.docinfo[doctype][name]) || null;
+		return (
+			(frappe.model.docinfo[doctype] &&
+				frappe.model.docinfo[doctype][name]) ||
+			null
+		);
 	},
 
 	set_docinfo: function (doctype, name, key, value) {
-		if (frappe.model.docinfo[doctype] && frappe.model.docinfo[doctype][name]) {
+		if (
+			frappe.model.docinfo[doctype] &&
+			frappe.model.docinfo[doctype][name]
+		) {
 			frappe.model.docinfo[doctype][name][key] = value;
 		}
 	},
@@ -358,9 +397,14 @@ $.extend(frappe.model, {
 	},
 
 	unscrub: function (txt) {
-		return (txt || "").replace(/-|_/g, " ").replace(/\w*/g, function (keywords) {
-			return keywords.charAt(0).toUpperCase() + keywords.substr(1).toLowerCase();
-		});
+		return (txt || "")
+			.replace(/-|_/g, " ")
+			.replace(/\w*/g, function (keywords) {
+				return (
+					keywords.charAt(0).toUpperCase() +
+					keywords.substr(1).toLowerCase()
+				);
+			});
 	},
 
 	can_create: function (doctype) {
@@ -403,12 +447,17 @@ $.extend(frappe.model, {
 	},
 
 	has_workflow: function (doctype) {
-		return frappe.get_list("Workflow", { document_type: doctype, is_active: 1 }).length;
+		return frappe.get_list("Workflow", {
+			document_type: doctype,
+			is_active: 1,
+		}).length;
 	},
 
 	is_submittable: function (doctype) {
 		if (!doctype) return false;
-		return locals.DocType[doctype] && locals.DocType[doctype].is_submittable;
+		return (
+			locals.DocType[doctype] && locals.DocType[doctype].is_submittable
+		);
 	},
 
 	is_table: function (doctype) {
@@ -428,7 +477,9 @@ $.extend(frappe.model, {
 
 	is_fresh(doc) {
 		// returns true if document has been recently loaded (5 seconds ago)
-		return doc && doc.__last_sync_on && new Date() - doc.__last_sync_on < 5000;
+		return (
+			doc && doc.__last_sync_on && new Date() - doc.__last_sync_on < 5000
+		);
 	},
 
 	can_import: function (doctype, frm, meta = null) {
@@ -460,7 +511,9 @@ $.extend(frappe.model, {
 	},
 
 	can_share: function (doctype, frm) {
-		let disable_sharing = cint(frappe.sys_defaults.disable_document_sharing);
+		let disable_sharing = cint(
+			frappe.sys_defaults.disable_document_sharing,
+		);
 
 		if (disable_sharing && frappe.session.user !== "Administrator") {
 			return false;
@@ -481,7 +534,11 @@ $.extend(frappe.model, {
 		if (frappe.model.table_fields.includes(df.fieldtype)) {
 			ret = false;
 			$.each(locals[df.options] || {}, function (k, d) {
-				if (d.parent == dn && d.parenttype == dt && d.parentfield == df.fieldname) {
+				if (
+					d.parent == dn &&
+					d.parenttype == dt &&
+					d.parentfield == df.fieldname
+				) {
 					ret = true;
 					return false;
 				}
@@ -533,7 +590,7 @@ $.extend(frappe.model, {
 		fieldname,
 		value,
 		fieldtype,
-		skip_dirty_trigger = false
+		skip_dirty_trigger = false,
 	) {
 		/* help: Set a value locally (if changed) and execute triggers */
 
@@ -562,11 +619,20 @@ $.extend(frappe.model, {
 				}
 
 				doc[key] = value;
-				tasks.push(() => frappe.model.trigger(key, value, doc, skip_dirty_trigger));
+				tasks.push(() =>
+					frappe.model.trigger(key, value, doc, skip_dirty_trigger),
+				);
 			} else {
 				// execute link triggers (want to reselect to execute triggers)
 				if (["Link", "Dynamic Link"].includes(fieldtype) && doc) {
-					tasks.push(() => frappe.model.trigger(key, value, doc, skip_dirty_trigger));
+					tasks.push(() =>
+						frappe.model.trigger(
+							key,
+							value,
+							doc,
+							skip_dirty_trigger,
+						),
+					);
 				}
 			}
 		});
@@ -601,7 +667,12 @@ $.extend(frappe.model, {
 				if (!fn) continue;
 
 				tasks.push(() => {
-					const return_value = fn(fieldname, value, doc, skip_dirty_trigger);
+					const return_value = fn(
+						fieldname,
+						value,
+						doc,
+						skip_dirty_trigger,
+					);
 
 					// if the trigger returns a promise, return it,
 					// or use the default promise frappe.after_ajax
@@ -690,7 +761,12 @@ $.extend(frappe.model, {
 	},
 
 	get_no_copy_list: function (doctype) {
-		var no_copy_list = ["name", "amended_from", "amendment_date", "cancel_reason"];
+		var no_copy_list = [
+			"name",
+			"amended_from",
+			"amendment_date",
+			"cancel_reason",
+		];
 
 		var docfields = frappe.get_doc("DocType", doctype).fields || [];
 		for (var i = 0, j = docfields.length; i < j; i++) {
@@ -710,24 +786,27 @@ $.extend(frappe.model, {
 				title = `${value} (${docname})`;
 			}
 		}
-		frappe.confirm(__("Permanently delete {0}?", [title.bold()]), function () {
-			return frappe.call({
-				method: "frappe.client.delete",
-				args: {
-					doctype: doctype,
-					name: docname,
-				},
-				freeze: true,
-				freeze_message: __("Deleting {0}...", [title]),
-				callback: function (r, rt) {
-					if (!r.exc) {
-						frappe.utils.play_sound("delete");
-						frappe.model.clear_doc(doctype, docname);
-						if (callback) callback(r, rt);
-					}
-				},
-			});
-		});
+		frappe.confirm(
+			__("Permanently delete {0}?", [title.bold()]),
+			function () {
+				return frappe.call({
+					method: "frappe.client.delete",
+					args: {
+						doctype: doctype,
+						name: docname,
+					},
+					freeze: true,
+					freeze_message: __("Deleting {0}...", [title]),
+					callback: function (r, rt) {
+						if (!r.exc) {
+							frappe.utils.play_sound("delete");
+							frappe.model.clear_doc(doctype, docname);
+							if (callback) callback(r, rt);
+						}
+					},
+				});
+			},
+		);
 	},
 
 	rename_doc: function (doctype, docname, callback) {
@@ -802,7 +881,13 @@ $.extend(frappe.model, {
 			frappe.throw(
 				__("Please specify") +
 					": " +
-					__(frappe.meta.get_label(doc.doctype, fieldname, doc.parent || doc.name))
+					__(
+						frappe.meta.get_label(
+							doc.doctype,
+							fieldname,
+							doc.parent || doc.name,
+						),
+					),
 			);
 		}
 	},
@@ -851,7 +936,10 @@ $.extend(frappe.model, {
 				default_views.push("Image");
 			}
 
-			if (doctype === "Communication" && frappe.boot.email_accounts.length) {
+			if (
+				doctype === "Communication" &&
+				frappe.boot.email_accounts.length
+			) {
 				default_views.push("Inbox");
 			}
 
@@ -859,7 +947,9 @@ $.extend(frappe.model, {
 				(frm.doc.fields?.find((i) => i.fieldname === "latitude") &&
 					frm.doc.fields?.find((i) => i.fieldname === "longitude")) ||
 				frm.doc.fields?.find(
-					(i) => i.fieldname === "location" && i.fieldtype == "Geolocation"
+					(i) =>
+						i.fieldname === "location" &&
+						i.fieldtype == "Geolocation",
 				)
 			) {
 				default_views.push("Map");

@@ -9,9 +9,12 @@ const save_routes = frappe.utils.debounce(() => {
 	frappe.route_history_queue = [];
 
 	frappe
-		.xcall("frappe.desk.doctype.route_history.route_history.deferred_insert", {
-			routes: routes,
-		})
+		.xcall(
+			"frappe.desk.doctype.route_history.route_history.deferred_insert",
+			{
+				routes: routes,
+			},
+		)
 		.catch(() => {
 			frappe.route_history_queue.concat(routes);
 		});
@@ -32,7 +35,10 @@ frappe.router.on("change", () => {
 function is_route_useful(route) {
 	if (!route[1]) {
 		return false;
-	} else if ((route[0] === "List" && !route[2]) || routes_to_skip.includes(route[0])) {
+	} else if (
+		(route[0] === "List" && !route[2]) ||
+		routes_to_skip.includes(route[0])
+	) {
 		return false;
 	} else {
 		return true;

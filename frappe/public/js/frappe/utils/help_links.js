@@ -20,8 +20,14 @@ frappe.help.help_links["modules/Setup"] = [
 		label: "Data Management",
 		url: "https://docs.erpnext.com/docs/user/manual/en/data",
 	},
-	{ label: "Email", url: "https://docs.erpnext.com/docs/user/manual/en/email" },
-	{ label: "Printing and Branding", url: "https://docs.erpnext.com/docs/user/manual/en/print" },
+	{
+		label: "Email",
+		url: "https://docs.erpnext.com/docs/user/manual/en/email",
+	},
+	{
+		label: "Printing and Branding",
+		url: "https://docs.erpnext.com/docs/user/manual/en/print",
+	},
 ];
 
 frappe.help.help_links["List/User"] = [

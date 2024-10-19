@@ -14,7 +14,12 @@ frappe.ui.form.on("Report", {
 				function () {
 					switch (doc.report_type) {
 						case "Report Builder":
-							frappe.set_route("List", doc.ref_doctype, "Report", doc.name);
+							frappe.set_route(
+								"List",
+								doc.ref_doctype,
+								"Report",
+								doc.name,
+							);
 							break;
 						case "Query Report":
 							frappe.set_route("query-report", doc.name);
@@ -27,7 +32,7 @@ frappe.ui.form.on("Report", {
 							break;
 					}
 				},
-				"fa fa-table"
+				"fa fa-table",
 			);
 		}
 
@@ -41,7 +46,7 @@ frappe.ui.form.on("Report", {
 						frm.reload_doc();
 					});
 				},
-				doc.disabled ? "fa fa-check" : "fa fa-off"
+				doc.disabled ? "fa fa-check" : "fa fa-off",
 			);
 		}
 

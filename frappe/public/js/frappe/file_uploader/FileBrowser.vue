@@ -1,7 +1,11 @@
 <template>
 	<div class="file-browser">
 		<div>
-			<a href="" class="text-muted text-medium" @click.prevent="emit('hide-browser')">
+			<a
+				href=""
+				class="text-muted text-medium"
+				@click.prevent="emit('hide-browser')"
+			>
 				{{ __("← Back to upload files") }}
 			</a>
 		</div>

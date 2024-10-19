@@ -19,13 +19,18 @@ frappe.tags.utils = {
 			if (level) {
 				out.push({
 					type: "Tag",
-					label: __("#{0}", [frappe.search.utils.bolden_match_part(__(tag), txt)]),
+					label: __("#{0}", [
+						frappe.search.utils.bolden_match_part(__(tag), txt),
+					]),
 					value: __("#{0}", [__(tag)]),
 					index: 1 + level,
 					match: tag,
 					onclick() {
 						// Use Global Search Dialog for tag search too.
-						frappe.searchdialog.search.init_search("#".concat(tag), "tags");
+						frappe.searchdialog.search.init_search(
+							"#".concat(tag),
+							"tags",
+						);
 					},
 				});
 			}

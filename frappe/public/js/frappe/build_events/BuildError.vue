@@ -31,7 +31,7 @@ function error_component(error, i) {
 	let location_string = `${location.file}:${location.line}:${location.column}`;
 	let template = error.replace(
 		" > " + location_string,
-		` &gt; <a class="file-link" @click="open">${location_string}</a>`
+		` &gt; <a class="file-link" @click="open">${location_string}</a>`,
 	);
 
 	return {
@@ -56,7 +56,8 @@ defineExpose({ show, hide });
 	z-index: 9999;
 	margin: 0;
 	background: rgba(0, 0, 0, 0.66);
-	--monospace: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+	--monospace: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier,
+		monospace;
 	--dim: var(--gray-400);
 }
 .window {
@@ -69,7 +70,9 @@ defineExpose({ show, hide });
 	position: relative;
 	background: #181818;
 	border-radius: 6px 6px 8px 8px;
-	box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+	box-shadow:
+		0 19px 38px rgba(0, 0, 0, 0.3),
+		0 15px 12px rgba(0, 0, 0, 0.22);
 	overflow: hidden;
 	border-top: 8px solid var(--red);
 }

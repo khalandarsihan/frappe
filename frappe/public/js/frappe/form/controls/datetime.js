@@ -1,4 +1,6 @@
-frappe.ui.form.ControlDatetime = class ControlDatetime extends frappe.ui.form.ControlDate {
+frappe.ui.form.ControlDatetime = class ControlDatetime extends (
+	frappe.ui.form.ControlDate
+) {
 	set_formatted_input(value) {
 		if (this.timepicker_only) return;
 		if (!this.datepicker) return;
@@ -16,7 +18,8 @@ frappe.ui.form.ControlDatetime = class ControlDatetime extends frappe.ui.form.Co
 	}
 
 	get_start_date() {
-		this.value = this.value == null || this.value == "" ? undefined : this.value;
+		this.value =
+			this.value == null || this.value == "" ? undefined : this.value;
 		let value = frappe.datetime.convert_to_user_tz(this.value);
 		return frappe.datetime.str_to_obj(value);
 	}
@@ -26,7 +29,9 @@ frappe.ui.form.ControlDatetime = class ControlDatetime extends frappe.ui.form.Co
 		let sysdefaults = frappe.boot.sysdefaults;
 		this.date_format = frappe.defaultDatetimeFormat;
 		let time_format =
-			sysdefaults && sysdefaults.time_format ? sysdefaults.time_format : "HH:mm:ss";
+			sysdefaults && sysdefaults.time_format
+				? sysdefaults.time_format
+				: "HH:mm:ss";
 		$.extend(this.datepicker_options, {
 			timepicker: true,
 			timeFormat: time_format.toLowerCase().replace("mm", "ii"),
@@ -70,7 +75,9 @@ frappe.ui.form.ControlDatetime = class ControlDatetime extends frappe.ui.form.Co
 		super.set_description();
 	}
 	get_user_time_zone() {
-		return frappe.boot.time_zone ? frappe.boot.time_zone.user : frappe.sys_defaults.time_zone;
+		return frappe.boot.time_zone
+			? frappe.boot.time_zone.user
+			: frappe.sys_defaults.time_zone;
 	}
 	set_datepicker() {
 		super.set_datepicker();

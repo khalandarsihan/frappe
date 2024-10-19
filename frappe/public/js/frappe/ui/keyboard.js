@@ -7,7 +7,11 @@ frappe.ui.keys.setup = function () {
 		var key = frappe.ui.keys.get_key(e);
 		if (frappe.ui.keys.handlers[key]) {
 			var out = null;
-			for (var i = 0, l = frappe.ui.keys.handlers[key].length; i < l; i++) {
+			for (
+				var i = 0, l = frappe.ui.keys.handlers[key].length;
+				i < l;
+				i++
+			) {
 				var handler = frappe.ui.keys.handlers[key][i];
 				var _out = handler.apply(this, [e]);
 				if (_out === false) {
@@ -42,7 +46,7 @@ frappe.ui.keys.add_shortcut = ({
 	let handler = (e) => {
 		let $focused_element = $(document.activeElement);
 		let is_input_focused = $focused_element.is(
-			"input, select, textarea, [contenteditable=true]"
+			"input, select, textarea, [contenteditable=true]",
 		);
 		if (is_input_focused && !ignore_inputs) return;
 		if (!condition()) return;
@@ -64,7 +68,9 @@ frappe.ui.keys.add_shortcut = ({
 	frappe.ui.keys.on(shortcut, handler);
 
 	// update standard shortcut list
-	let existing_shortcut_index = standard_shortcuts.findIndex((s) => s.shortcut === shortcut);
+	let existing_shortcut_index = standard_shortcuts.findIndex(
+		(s) => s.shortcut === shortcut,
+	);
 	let new_shortcut = { shortcut, action, description, page, condition };
 	if (existing_shortcut_index === -1) {
 		standard_shortcuts.push(new_shortcut);
@@ -76,13 +82,17 @@ frappe.ui.keys.add_shortcut = ({
 frappe.ui.keys.show_keyboard_shortcut_dialog = () => {
 	if (frappe.ui.keys.is_dialog_shown) return;
 
-	let global_shortcuts = standard_shortcuts.filter((shortcut) => !shortcut.page);
+	let global_shortcuts = standard_shortcuts.filter(
+		(shortcut) => !shortcut.page,
+	);
 	let current_page_shortcuts = standard_shortcuts.filter(
-		(shortcut) => shortcut.page && shortcut.page === window.cur_page.page.page
+		(shortcut) =>
+			shortcut.page && shortcut.page === window.cur_page.page.page,
 	);
 
 	let grid_shortcuts = standard_shortcuts.filter(
-		(shortcut) => shortcut.page && shortcut.page === window.cur_page.page.frm
+		(shortcut) =>
+			shortcut.page && shortcut.page === window.cur_page.page.frm,
 	);
 
 	function generate_shortcuts_html(shortcuts, heading) {
@@ -98,7 +108,9 @@ frappe.ui.keys.show_keyboard_shortcut_dialog = () => {
 					.map(frappe.utils.to_title_case)
 					.join("+");
 				if (frappe.utils.is_mac()) {
-					shortcut_label = shortcut_label.replace("Ctrl", "⌘").replace("Alt", "⌥");
+					shortcut_label = shortcut_label
+						.replace("Ctrl", "⌘")
+						.replace("Alt", "⌥");
 				}
 
 				shortcut_label = shortcut_label.replace("Shift", "⇧");
@@ -118,12 +130,18 @@ frappe.ui.keys.show_keyboard_shortcut_dialog = () => {
 		return html;
 	}
 
-	let global_shortcuts_html = generate_shortcuts_html(global_shortcuts, __("Global Shortcuts"));
+	let global_shortcuts_html = generate_shortcuts_html(
+		global_shortcuts,
+		__("Global Shortcuts"),
+	);
 	let current_page_shortcuts_html = generate_shortcuts_html(
 		current_page_shortcuts,
-		__("Page Shortcuts")
+		__("Page Shortcuts"),
 	);
-	let grid_shortcuts_html = generate_shortcuts_html(grid_shortcuts, __("Grid Shortcuts"));
+	let grid_shortcuts_html = generate_shortcuts_html(
+		grid_shortcuts,
+		__("Grid Shortcuts"),
+	);
 
 	let dialog = new frappe.ui.Dialog({
 		title: __("Keyboard Shortcuts"),

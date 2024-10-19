@@ -14,7 +14,7 @@ function open_web_template_values_editor(template, current_values = {}) {
 
 			d.sections.forEach((sect) => {
 				let fields_with_value = sect.fields_list.filter(
-					(field) => current_values[field.df.fieldname]
+					(field) => current_values[field.df.fieldname],
 				);
 
 				if (fields_with_value.length) {

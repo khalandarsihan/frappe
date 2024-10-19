@@ -3,7 +3,8 @@
 
 frappe.ui.form.on("User Type", {
 	refresh: function (frm) {
-		if (frm.is_new() && !frappe.boot.developer_mode) frm.set_value("is_standard", 1);
+		if (frm.is_new() && !frappe.boot.developer_mode)
+			frm.set_value("is_standard", 1);
 
 		frm.set_query("document_type", "user_doctypes", function () {
 			return {

@@ -20,7 +20,7 @@ class Leaderboard {
 		this.parent = parent;
 		this.page = this.parent.page;
 		this.page.sidebar.html(
-			`<ul class="standard-sidebar leaderboard-sidebar overlay-sidebar"></ul>`
+			`<ul class="standard-sidebar leaderboard-sidebar overlay-sidebar"></ul>`,
 		);
 		this.$sidebar_list = this.page.sidebar.find("ul");
 
@@ -33,19 +33,21 @@ class Leaderboard {
 		this.leaderboard_limit = 20;
 
 		frappe
-			.xcall("frappe.desk.page.leaderboard.leaderboard.get_leaderboard_config")
+			.xcall(
+				"frappe.desk.page.leaderboard.leaderboard.get_leaderboard_config",
+			)
 			.then((config) => {
 				this.leaderboard_config = config;
 				for (let doctype in this.leaderboard_config) {
 					this.doctypes.push(doctype);
-					this.filters[doctype] = this.leaderboard_config[doctype].fields.map(
-						(field) => {
-							if (typeof field === "object") {
-								return field.label || field.fieldname;
-							}
-							return field;
+					this.filters[doctype] = this.leaderboard_config[
+						doctype
+					].fields.map((field) => {
+						if (typeof field === "object") {
+							return field.label || field.fieldname;
 						}
-					);
+						return field;
+					});
 				}
 
 				// For translation. Do not remove this
@@ -66,7 +68,8 @@ class Leaderboard {
 				];
 
 				// for saving current selected filters
-				const _initial_doctype = frappe.get_route()[1] || this.doctypes[0];
+				const _initial_doctype =
+					frappe.get_route()[1] || this.doctypes[0];
 				const _initial_timespan = this.timespans[0];
 				const _initial_filter = this.filters[_initial_doctype];
 
@@ -123,7 +126,7 @@ class Leaderboard {
 			__("Timespan"),
 			this.timespans.map((d) => {
 				return { label: __(d), value: d };
-			})
+			}),
 		);
 		this.create_date_range_field();
 
@@ -131,7 +134,7 @@ class Leaderboard {
 			__("Field"),
 			this.options.selected_filter.map((d) => {
 				return { label: __(frappe.model.unscrub(d)), value: d };
-			})
+			}),
 		);
 
 		this.timespan_select.on("change", (e) => {
@@ -152,7 +155,7 @@ class Leaderboard {
 
 	create_date_range_field() {
 		let timespan_field = $(this.parent).find(
-			`.frappe-control[data-original-title="${__("Timespan")}"]`
+			`.frappe-control[data-original-title="${__("Timespan")}"]`,
 		);
 		this.date_range_field = $(`<div class="from-date-field"></div>`)
 			.insertAfter(timespan_field)
@@ -163,7 +166,10 @@ class Leaderboard {
 				fieldtype: "DateRange",
 				fieldname: "selected_date_range",
 				placeholder: __("Date Range"),
-				default: [frappe.datetime.month_start(), frappe.datetime.now_date()],
+				default: [
+					frappe.datetime.month_start(),
+					frappe.datetime.now_date(),
+				],
 				input_class: "input-xs",
 				reqd: 1,
 				change: () => {
@@ -182,7 +188,8 @@ class Leaderboard {
 			let doctype = $li.find(".doctype-text").attr("doctype-value");
 
 			this.company_select.set_value(
-				frappe.defaults.get_default("company") || this.company_select.get_value()
+				frappe.defaults.get_default("company") ||
+					this.company_select.get_value(),
 			);
 			this.options.selected_doctype = doctype;
 			this.options.selected_filter = this.filters[doctype];
@@ -191,9 +198,12 @@ class Leaderboard {
 			this.type_select.empty().add_options(
 				this.options.selected_filter.map((d) => {
 					return { label: __(frappe.model.unscrub(d)), value: d };
-				})
+				}),
 			);
-			if (this.leaderboard_config[this.options.selected_doctype].company_disabled) {
+			if (
+				this.leaderboard_config[this.options.selected_doctype]
+					.company_disabled
+			) {
 				$(this.parent).find("[data-original-title=Company]").hide();
 			} else {
 				$(this.parent).find("[data-original-title=Company]").show();
@@ -208,9 +218,10 @@ class Leaderboard {
 	}
 
 	render_search_box() {
-		this.$search_box = $(`<div class="leaderboard-search form-group col-md-3">
+		this.$search_box =
+			$(`<div class="leaderboard-search form-group col-md-3">
 				<input type="text" placeholder=${__(
-					"Search"
+					"Search",
 				)} data-element="search" class="form-control leaderboard-search-input input-xs">
 			</div>`);
 
@@ -222,7 +233,9 @@ class Leaderboard {
 			if (this.doctypes.includes(doctype)) {
 				this.options.selected_doctype = doctype;
 				this.$sidebar_list
-					.find(`[doctype-value = "${this.options.selected_doctype}"]`)
+					.find(
+						`[doctype-value = "${this.options.selected_doctype}"]`,
+					)
 					.trigger("click");
 			}
 
@@ -239,18 +252,25 @@ class Leaderboard {
 
 	get_leaderboard(notify) {
 		let company = this.company_select.get_value();
-		if (!company && !this.leaderboard_config[this.options.selected_doctype].company_disabled) {
+		if (
+			!company &&
+			!this.leaderboard_config[this.options.selected_doctype]
+				.company_disabled
+		) {
 			notify(this, null);
 			frappe.show_alert(__("Please select Company"));
 			return;
 		}
 		frappe
-			.call(this.leaderboard_config[this.options.selected_doctype].method, {
-				date_range: this.get_date_range(),
-				company: company,
-				field: this.options.selected_filter_item,
-				limit: this.leaderboard_limit,
-			})
+			.call(
+				this.leaderboard_config[this.options.selected_doctype].method,
+				{
+					date_range: this.get_date_range(),
+					company: company,
+					field: this.options.selected_filter_item,
+					limit: this.leaderboard_limit,
+				},
+			)
 			.then((r) => {
 				let results = r.message || [];
 
@@ -263,7 +283,8 @@ class Leaderboard {
 						datasets: [{ values: graph_items.map((d) => d.value) }],
 						labels: graph_items.map((d) => d.name),
 					},
-					format_tooltip_x: (d) => d[this.options.selected_filter_item],
+					format_tooltip_x: (d) =>
+						d[this.options.selected_filter_item],
 					height: 140,
 				};
 				frappe.utils.make_chart(".leaderboard-graph", custom_options);
@@ -275,8 +296,14 @@ class Leaderboard {
 	get_leaderboard_data(me, res) {
 		if (res && res.message.length) {
 			me.message = null;
-			me.$container.find(".leaderboard-list").html(me.render_list_view(res.message));
-			frappe.utils.setup_search($(me.parent), ".list-item-container", ".list-id");
+			me.$container
+				.find(".leaderboard-list")
+				.html(me.render_list_view(res.message));
+			frappe.utils.setup_search(
+				$(me.parent),
+				".list-item-container",
+				".list-id",
+			);
 		} else {
 			me.$graph_area.hide();
 			me.message = __("No Items Found");
@@ -300,7 +327,9 @@ class Leaderboard {
 	}
 
 	render_list_header() {
-		const _selected_filter = this.options.selected_filter.map((i) => frappe.model.unscrub(i));
+		const _selected_filter = this.options.selected_filter.map((i) =>
+			frappe.model.unscrub(i),
+		);
 		const fields = ["rank", "name", this.options.selected_filter_item];
 		const filters = fields
 			.map((filter) => {
@@ -324,7 +353,9 @@ class Leaderboard {
 		let _html = items
 			.map((item, index) => {
 				const $value = $(this.get_item_html(item, index + 1));
-				const $item_container = $(`<div class="list-item-container">`).append($value);
+				const $item_container = $(
+					`<div class="list-item-container">`,
+				).append($value);
 				return $item_container[0].outerHTML;
 			})
 			.join("");
@@ -350,13 +381,14 @@ class Leaderboard {
 	}
 
 	get_item_html(item, index) {
-		const fields = this.leaderboard_config[this.options.selected_doctype].fields;
+		const fields =
+			this.leaderboard_config[this.options.selected_doctype].fields;
 		const value = frappe.format(
 			item.value,
 			fields.find((field) => {
 				let fieldname = field.fieldname || field;
 				return fieldname === this.options.selected_filter_item;
-			})
+			}),
 		);
 
 		const link = `/app/${frappe.router.slug(this.options.selected_doctype)}/${item.name}`;
@@ -390,14 +422,38 @@ class Leaderboard {
 		let timespan = this.options.selected_timespan.toLowerCase();
 		let current_date = frappe.datetime.now_date();
 		let date_range_map = {
-			"this week": [frappe.datetime.week_start(), frappe.datetime.week_end()],
-			"this month": [frappe.datetime.month_start(), frappe.datetime.month_end()],
-			"this quarter": [frappe.datetime.quarter_start(), frappe.datetime.quarter_end()],
-			"this year": [frappe.datetime.year_start(), frappe.datetime.year_end()],
-			"last week": [frappe.datetime.add_days(current_date, -7), current_date],
-			"last month": [frappe.datetime.add_months(current_date, -1), current_date],
-			"last quarter": [frappe.datetime.add_months(current_date, -3), current_date],
-			"last year": [frappe.datetime.add_months(current_date, -12), current_date],
+			"this week": [
+				frappe.datetime.week_start(),
+				frappe.datetime.week_end(),
+			],
+			"this month": [
+				frappe.datetime.month_start(),
+				frappe.datetime.month_end(),
+			],
+			"this quarter": [
+				frappe.datetime.quarter_start(),
+				frappe.datetime.quarter_end(),
+			],
+			"this year": [
+				frappe.datetime.year_start(),
+				frappe.datetime.year_end(),
+			],
+			"last week": [
+				frappe.datetime.add_days(current_date, -7),
+				current_date,
+			],
+			"last month": [
+				frappe.datetime.add_months(current_date, -1),
+				current_date,
+			],
+			"last quarter": [
+				frappe.datetime.add_months(current_date, -3),
+				current_date,
+			],
+			"last year": [
+				frappe.datetime.add_months(current_date, -12),
+				current_date,
+			],
 			"all time": null,
 			"select date range": this.selected_date_range || [
 				frappe.datetime.month_start(),

@@ -8,7 +8,9 @@ frappe.views.ListGroupBy = class ListGroupBy {
 		this.user_settings = frappe.get_user_settings(this.doctype);
 		this.group_by_fields = ["assigned_to", "owner"];
 		if (this.user_settings.group_by_fields) {
-			this.group_by_fields = this.group_by_fields.concat(this.user_settings.group_by_fields);
+			this.group_by_fields = this.group_by_fields.concat(
+				this.user_settings.group_by_fields,
+			);
 		}
 		this.render_group_by_items();
 		this.make_group_by_fields_modal();
@@ -26,7 +28,7 @@ frappe.views.ListGroupBy = class ListGroupBy {
 			frappe.model.user_settings.save(
 				this.doctype,
 				"group_by_fields",
-				group_by_fields || null
+				group_by_fields || null,
 			);
 			this.group_by_fields = group_by_fields
 				? ["assigned_to", "owner", ...group_by_fields]
@@ -73,7 +75,10 @@ frappe.views.ListGroupBy = class ListGroupBy {
 				label = __("Created By");
 			} else {
 				label = frappe.meta.get_label(this.doctype, fieldname);
-				let docfield = frappe.meta.get_docfield(this.doctype, fieldname);
+				let docfield = frappe.meta.get_docfield(
+					this.doctype,
+					fieldname,
+				);
 				if (!docfield) {
 					return;
 				}
@@ -105,13 +110,13 @@ frappe.views.ListGroupBy = class ListGroupBy {
 			this.get_group_by_count(fieldname).then((field_count_list) => {
 				if (field_count_list.length) {
 					let applied_filter = this.list_view.get_filter_value(
-						fieldname == "assigned_to" ? "_assign" : fieldname
+						fieldname == "assigned_to" ? "_assign" : fieldname,
 					);
 					this.render_dropdown_items(
 						field_count_list,
 						fieldtype,
 						$dropdown,
-						applied_filter
+						applied_filter,
 					);
 					this.setup_search($dropdown);
 				} else {
@@ -133,18 +138,23 @@ frappe.views.ListGroupBy = class ListGroupBy {
 		$dropdown.html(
 			`<div class="empty-state group-by-empty">
 				${__("No filters found")}
-			</div>`
+			</div>`,
 		);
 	}
 
 	setup_search($dropdown) {
-		frappe.utils.setup_search($dropdown, ".group-by-item", ".group-by-value", "data-name");
+		frappe.utils.setup_search(
+			$dropdown,
+			".group-by-item",
+			".group-by-value",
+			"data-name",
+		);
 	}
 
 	get_group_by_dropdown_fields() {
 		let group_by_fields = [];
 		let fields = this.list_view.meta.fields.filter((f) =>
-			["Select", "Link", "Data", "Int", "Check"].includes(f.fieldtype)
+			["Select", "Link", "Data", "Int", "Check"].includes(f.fieldtype),
 		);
 		group_by_fields.push({
 			label: __(this.doctype),
@@ -165,7 +175,8 @@ frappe.views.ListGroupBy = class ListGroupBy {
 
 		// remove filter of the current field
 		current_filters = current_filters.filter(
-			(f_arr) => !f_arr.includes(field === "assigned_to" ? "_assign" : field)
+			(f_arr) =>
+				!f_arr.includes(field === "assigned_to" ? "_assign" : field),
 		);
 
 		let args = {
@@ -174,17 +185,26 @@ frappe.views.ListGroupBy = class ListGroupBy {
 			field: field,
 		};
 
-		return frappe.call("frappe.desk.listview.get_group_by_count", args).then((r) => {
-			let field_counts = r.message || [];
-			field_counts = field_counts.filter((f) => f.count !== 0);
-			let current_user = field_counts.find((f) => f.name === frappe.session.user);
-			field_counts = field_counts.filter(
-				(f) => !["Guest", "Administrator", frappe.session.user].includes(f.name)
-			);
-			// Set frappe.session.user on top of the list
-			if (current_user) field_counts.unshift(current_user);
-			return field_counts;
-		});
+		return frappe
+			.call("frappe.desk.listview.get_group_by_count", args)
+			.then((r) => {
+				let field_counts = r.message || [];
+				field_counts = field_counts.filter((f) => f.count !== 0);
+				let current_user = field_counts.find(
+					(f) => f.name === frappe.session.user,
+				);
+				field_counts = field_counts.filter(
+					(f) =>
+						![
+							"Guest",
+							"Administrator",
+							frappe.session.user,
+						].includes(f.name),
+				);
+				// Set frappe.session.user on top of the list
+				if (current_user) field_counts.unshift(current_user);
+				return field_counts;
+			});
 	}
 
 	render_dropdown_items(fields, fieldtype, $dropdown, applied_filter) {
@@ -202,13 +222,18 @@ frappe.views.ListGroupBy = class ListGroupBy {
 
 		fields.map((field) => {
 			if (field.name === applied_filter) {
-				applied_filter_html = this.get_dropdown_html(field, fieldtype, true);
+				applied_filter_html = this.get_dropdown_html(
+					field,
+					fieldtype,
+					true,
+				);
 			} else {
 				dropdown_items_html += this.get_dropdown_html(field, fieldtype);
 			}
 		});
 
-		let dropdown_html = standard_html + applied_filter_html + dropdown_items_html;
+		let dropdown_html =
+			standard_html + applied_filter_html + dropdown_items_html;
 		$dropdown.toggleClass("has-selected", Boolean(applied_filter_html));
 		$dropdown.html(dropdown_html);
 	}
@@ -242,7 +267,10 @@ frappe.views.ListGroupBy = class ListGroupBy {
 			let $target = $(e.currentTarget);
 			let is_selected = $target.hasClass("selected");
 
-			let fieldname = $target.parents(".group-by-field").find("a").data("fieldname");
+			let fieldname = $target
+				.parents(".group-by-field")
+				.find("a")
+				.data("fieldname");
 			let value =
 				typeof $target.data("value") === "string"
 					? decodeURIComponent($target.data("value").trim())
@@ -266,6 +294,11 @@ frappe.views.ListGroupBy = class ListGroupBy {
 			operator = "like";
 			value = `%${value}%`;
 		}
-		return this.list_view.filter_area.add(this.doctype, fieldname, operator, value);
+		return this.list_view.filter_area.add(
+			this.doctype,
+			fieldname,
+			operator,
+			value,
+		);
 	}
 };

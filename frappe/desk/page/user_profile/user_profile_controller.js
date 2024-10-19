@@ -32,7 +32,9 @@ class UserProfile {
 		this.user = frappe.user_info(this.user_id);
 		this.page.set_title(this.user.fullname);
 		this.setup_user_search();
-		this.main_section.empty().append(frappe.render_template("user_profile"));
+		this.main_section
+			.empty()
+			.append(frappe.render_template("user_profile"));
 		this.energy_points = 0;
 		this.review_points = 0;
 		this.rank = 0;
@@ -50,7 +52,7 @@ class UserProfile {
 		this.$user_search_button = this.page.set_secondary_action(
 			__("Change User"),
 			() => this.show_user_search_dialog(),
-			{ icon: "change", size: "sm" }
+			{ icon: "change", size: "sm" },
 		);
 	}
 
@@ -89,10 +91,13 @@ class UserProfile {
 
 	update_heatmap_data(date_from) {
 		frappe
-			.xcall("frappe.desk.page.user_profile.user_profile.get_energy_points_heatmap_data", {
-				user: this.user_id,
-				date: date_from || frappe.datetime.year_start(),
-			})
+			.xcall(
+				"frappe.desk.page.user_profile.user_profile.get_energy_points_heatmap_data",
+				{
+					user: this.user_id,
+					date: date_from || frappe.datetime.year_start(),
+				},
+			)
 			.then((r) => {
 				this.heatmap.update({ dataPoints: r });
 			});
@@ -133,7 +138,9 @@ class UserProfile {
 	}
 
 	update_line_chart_data() {
-		this.line_chart_config.filters_json = JSON.stringify(this.line_chart_filters);
+		this.line_chart_config.filters_json = JSON.stringify(
+			this.line_chart_filters,
+		);
 
 		frappe
 			.xcall("frappe.desk.doctype.dashboard_chart.dashboard_chart.get", {
@@ -152,34 +159,37 @@ class UserProfile {
 				{
 					user: this.user_id,
 					field: field,
-				}
+				},
 			)
 			.then((chart) => {
 				if (chart.labels.length) {
-					this.percentage_chart = new frappe.Chart(".performance-percentage-chart", {
-						type: "percentage",
-						data: {
-							labels: chart.labels,
-							datasets: chart.datasets,
+					this.percentage_chart = new frappe.Chart(
+						".performance-percentage-chart",
+						{
+							type: "percentage",
+							data: {
+								labels: chart.labels,
+								datasets: chart.datasets,
+							},
+							truncateLegends: 1,
+							barOptions: {
+								height: 11,
+								depth: 1,
+							},
+							height: 200,
+							maxSlices: 8,
+							colors: [
+								"purple",
+								"blue",
+								"cyan",
+								"teal",
+								"pink",
+								"red",
+								"orange",
+								"yellow",
+							],
 						},
-						truncateLegends: 1,
-						barOptions: {
-							height: 11,
-							depth: 1,
-						},
-						height: 200,
-						maxSlices: 8,
-						colors: [
-							"purple",
-							"blue",
-							"cyan",
-							"teal",
-							"pink",
-							"red",
-							"orange",
-							"yellow",
-						],
-					});
+					);
 				} else {
 					this.wrapper.find(".percentage-chart-container").hide();
 				}
@@ -194,7 +204,13 @@ class UserProfile {
 				action: (selected_item) => {
 					if (selected_item === "All") {
 						this.line_chart_filters = [
-							["Energy Point Log", "user", "=", this.user_id, false],
+							[
+								"Energy Point Log",
+								"user",
+								"=",
+								this.user_id,
+								false,
+							],
 							["Energy Point Log", "type", "!=", "Review", false],
 						];
 					} else {
@@ -211,7 +227,12 @@ class UserProfile {
 			},
 			{
 				label: "Last Month",
-				options: ["Last Week", "Last Month", "Last Quarter", "Last Year"],
+				options: [
+					"Last Week",
+					"Last Month",
+					"Last Quarter",
+					"Last Year",
+				],
 				action: (selected_item) => {
 					this.line_chart_config.timespan = selected_item;
 					this.update_line_chart_data();
@@ -230,7 +251,7 @@ class UserProfile {
 			filters,
 			"chart-filter",
 			".line-chart-options",
-			1
+			1,
 		);
 	}
 
@@ -249,23 +270,31 @@ class UserProfile {
 		frappe.dashboard_utils.render_chart_filters(
 			filters,
 			"chart-filter",
-			".percentage-chart-options"
+			".percentage-chart-options",
 		);
 	}
 
 	create_heatmap_chart_filters() {
 		let filters = [
 			{
-				label: frappe.dashboard_utils.get_year(frappe.datetime.now_date()),
+				label: frappe.dashboard_utils.get_year(
+					frappe.datetime.now_date(),
+				),
 				options: frappe.dashboard_utils.get_years_since_creation(
-					frappe.boot.user.creation
+					frappe.boot.user.creation,
 				),
 				action: (selected_item) => {
-					this.update_heatmap_data(frappe.datetime.obj_to_str(selected_item));
+					this.update_heatmap_data(
+						frappe.datetime.obj_to_str(selected_item),
+					);
 				},
 			},
 		];
-		frappe.dashboard_utils.render_chart_filters(filters, "chart-filter", ".heatmap-options");
+		frappe.dashboard_utils.render_chart_filters(
+			filters,
+			"chart-filter",
+			".heatmap-options",
+		);
 	}
 
 	edit_profile() {
@@ -303,9 +332,12 @@ class UserProfile {
 			primary_action: (values) => {
 				edit_profile_dialog.disable_primary_action();
 				frappe
-					.xcall("frappe.desk.page.user_profile.user_profile.update_profile_info", {
-						profile_info: values,
-					})
+					.xcall(
+						"frappe.desk.page.user_profile.user_profile.update_profile_info",
+						{
+							profile_info: values,
+						},
+					)
 					.then((user) => {
 						user.image = user.user_image;
 						this.user = Object.assign(values, user);
@@ -336,7 +368,7 @@ class UserProfile {
 				user_location: this.user.location,
 				user_interest: this.user.interest,
 				user_bio: this.user.bio,
-			})
+			}),
 		);
 
 		this.setup_user_profile_links();
@@ -373,7 +405,7 @@ class UserProfile {
 				"frappe.social.doctype.energy_point_log.energy_point_log.get_user_energy_and_review_points",
 				{
 					user: this.user_id,
-				}
+				},
 			)
 			.then((r) => {
 				if (r[this.user_id]) {
@@ -438,27 +470,38 @@ class UserProfileTimeline extends BaseTimeline {
 		return this.get_user_activity_data().then((activities) => {
 			if (!activities.length) {
 				this.show_more_button.hide();
-				this.timeline_wrapper.html(`<div>${__("No activities to show")}</div>`);
+				this.timeline_wrapper.html(
+					`<div>${__("No activities to show")}</div>`,
+				);
 				return;
 			}
-			this.show_more_button.toggle(activities.length === this.activity_limit);
+			this.show_more_button.toggle(
+				activities.length === this.activity_limit,
+			);
 			this.timeline_items = activities.map((activity) =>
-				this.get_activity_timeline_item(activity)
+				this.get_activity_timeline_item(activity),
 			);
 		});
 	}
 
 	get_user_activity_data() {
-		return frappe.xcall("frappe.desk.page.user_profile.user_profile.get_energy_points_list", {
-			start: this.activity_start,
-			limit: this.activity_limit,
-			user: this.user,
-		});
+		return frappe.xcall(
+			"frappe.desk.page.user_profile.user_profile.get_energy_points_list",
+			{
+				start: this.activity_start,
+				limit: this.activity_limit,
+				user: this.user,
+			},
+		);
 	}
 
 	get_activity_timeline_item(data) {
 		let icon =
-			data.type == "Appreciation" ? "clap" : data.type == "Criticism" ? "criticize" : null;
+			data.type == "Appreciation"
+				? "clap"
+				: data.type == "Criticism"
+					? "criticize"
+					: null;
 		return {
 			icon: icon,
 			creation: data.creation,
@@ -469,7 +512,7 @@ class UserProfileTimeline extends BaseTimeline {
 
 	setup_show_more_activity() {
 		this.show_more_button = $(
-			`<a class="show-more-activity-btn">${__("Show More Activity")}</a>`
+			`<a class="show-more-activity-btn">${__("Show More Activity")}</a>`,
 		);
 		this.show_more_button.hide();
 		this.footer.append(this.show_more_button);
@@ -483,7 +526,7 @@ class UserProfileTimeline extends BaseTimeline {
 				this.show_more_button.hide();
 			}
 			let timeline_items = activities.map((activity) =>
-				this.get_activity_timeline_item(activity)
+				this.get_activity_timeline_item(activity),
 			);
 			timeline_items.map((item) => this.add_timeline_item(item, true));
 		});

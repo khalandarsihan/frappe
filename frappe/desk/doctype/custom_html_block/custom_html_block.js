@@ -18,6 +18,11 @@ frappe.ui.form.on("Custom HTML Block", {
 		let wrapper = frm.fields_dict["preview"].wrapper;
 		wrapper.classList.add("mb-3");
 
-		frappe.create_shadow_element(wrapper, frm.doc.html, frm.doc.style, frm.doc.script);
+		frappe.create_shadow_element(
+			wrapper,
+			frm.doc.html,
+			frm.doc.style,
+			frm.doc.script,
+		);
 	},
 });

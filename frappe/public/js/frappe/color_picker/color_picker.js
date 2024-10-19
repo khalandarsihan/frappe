@@ -35,11 +35,16 @@ class Picker {
 		this.color_picker_wrapper =
 			color_picker_template.content.firstElementChild.cloneNode(true);
 		this.parent.appendChild(this.color_picker_wrapper);
-		this.color_map = this.color_picker_wrapper.getElementsByClassName("color-map")[0];
-		this.color_selector_circle = this.color_map.getElementsByClassName("color-selector")[0];
-		this.hue_map = this.color_picker_wrapper.getElementsByClassName("hue-map")[0];
-		this.swatches_wrapper = this.color_picker_wrapper.getElementsByClassName("swatches")[0];
-		this.hue_selector_circle = this.hue_map.getElementsByClassName("hue-selector")[0];
+		this.color_map =
+			this.color_picker_wrapper.getElementsByClassName("color-map")[0];
+		this.color_selector_circle =
+			this.color_map.getElementsByClassName("color-selector")[0];
+		this.hue_map =
+			this.color_picker_wrapper.getElementsByClassName("hue-map")[0];
+		this.swatches_wrapper =
+			this.color_picker_wrapper.getElementsByClassName("swatches")[0];
+		this.hue_selector_circle =
+			this.hue_map.getElementsByClassName("hue-selector")[0];
 		this.refresh();
 		this.setup_events();
 		this.setup_swatches();
@@ -54,7 +59,8 @@ class Picker {
 		let swatch_template = document.createElement("template");
 		swatch_template.innerHTML = '<div class="swatch" tabindex=0></div>';
 		this.swatches.forEach((color) => {
-			let swatch = swatch_template.content.firstElementChild.cloneNode(true);
+			let swatch =
+				swatch_template.content.firstElementChild.cloneNode(true);
 			this.swatches_wrapper.appendChild(swatch);
 			const set_values = () => {
 				this.set_color(color);
@@ -104,7 +110,7 @@ class Picker {
 		let color = utils.hsv_to_hex(
 			this.hue,
 			Math.round((x / w) * 100),
-			Math.round((1 - y / h) * 100)
+			Math.round((1 - y / h) * 100),
 		);
 		this.set_color(color);
 	}
@@ -145,8 +151,10 @@ class Picker {
 		let x = this.hue_selector_position.x - 1;
 		let y = this.hue_map.offsetHeight / 2 - 1;
 		// set color selector position and background
-		this.hue_selector_circle.style.top = y - this.hue_selector_circle.offsetHeight / 2 + "px";
-		this.hue_selector_circle.style.left = x - this.hue_selector_circle.offsetWidth / 2 + "px";
+		this.hue_selector_circle.style.top =
+			y - this.hue_selector_circle.offsetHeight / 2 + "px";
+		this.hue_selector_circle.style.left =
+			x - this.hue_selector_circle.offsetWidth / 2 + "px";
 		this.hue_map.style.color = `hsl(${this.hue}, 100%, 50%)`;
 	}
 
@@ -174,14 +182,29 @@ class Picker {
 			}
 		};
 
-		element.addEventListener("mousedown", () => (element.drag_enabled = true));
-		document.addEventListener("mouseup", () => (element.drag_enabled = false));
+		element.addEventListener(
+			"mousedown",
+			() => (element.drag_enabled = true),
+		);
+		document.addEventListener(
+			"mouseup",
+			() => (element.drag_enabled = false),
+		);
 		document.addEventListener("mousemove", on_drag);
 		element.addEventListener("click", (event) => on_drag(event, true));
 
-		element.addEventListener("touchstart", () => (element.drag_enabled = true));
-		element.addEventListener("touchend", () => (element.drag_enabled = false));
-		element.addEventListener("touchcancel", () => (element.drag_enabled = false));
+		element.addEventListener(
+			"touchstart",
+			() => (element.drag_enabled = true),
+		);
+		element.addEventListener(
+			"touchend",
+			() => (element.drag_enabled = false),
+		);
+		element.addEventListener(
+			"touchcancel",
+			() => (element.drag_enabled = false),
+		);
 		element.addEventListener("touchmove", (event) => {
 			if (event.touches.length == 1) {
 				on_drag(event);

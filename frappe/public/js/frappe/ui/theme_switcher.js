@@ -10,7 +10,9 @@ frappe.ui.ThemeSwitcher = class ThemeSwitcher {
 		this.dialog = new frappe.ui.Dialog({
 			title: __("Switch Theme"),
 		});
-		this.body = $(`<div class="theme-grid"></div>`).appendTo(this.dialog.$body);
+		this.body = $(`<div class="theme-grid"></div>`).appendTo(
+			this.dialog.$body,
+		);
 		this.bind_events();
 	}
 
@@ -45,7 +47,8 @@ frappe.ui.ThemeSwitcher = class ThemeSwitcher {
 	}
 
 	refresh() {
-		this.current_theme = document.documentElement.getAttribute("data-theme-mode") || "light";
+		this.current_theme =
+			document.documentElement.getAttribute("data-theme-mode") || "light";
 		this.fetch_themes().then(() => {
 			this.render();
 		});
@@ -67,7 +70,9 @@ frappe.ui.ThemeSwitcher = class ThemeSwitcher {
 				{
 					name: "automatic",
 					label: __("Automatic"),
-					info: __("Uses system's theme to switch between light and dark mode"),
+					info: __(
+						"Uses system's theme to switch between light and dark mode",
+					),
 				},
 			];
 
@@ -85,7 +90,8 @@ frappe.ui.ThemeSwitcher = class ThemeSwitcher {
 
 	get_preview_html(theme) {
 		const is_auto_theme = theme.name === "automatic";
-		const preview = $(`<div class="${this.current_theme == theme.name ? "selected" : ""}">
+		const preview =
+			$(`<div class="${this.current_theme == theme.name ? "selected" : ""}">
 			<div data-theme=${is_auto_theme ? "light" : theme.name}
 				data-is-auto-theme="${is_auto_theme}" title="${theme.info}">
 				<div class="background">
@@ -126,7 +132,10 @@ frappe.ui.ThemeSwitcher = class ThemeSwitcher {
 
 	toggle_theme(theme) {
 		this.current_theme = theme.toLowerCase();
-		document.documentElement.setAttribute("data-theme-mode", this.current_theme);
+		document.documentElement.setAttribute(
+			"data-theme-mode",
+			this.current_theme,
+		);
 		frappe.show_alert(__("Theme Changed"), 3);
 
 		frappe.xcall("frappe.core.doctype.user.user.switch_theme", {
@@ -149,7 +158,9 @@ frappe.ui.add_system_theme_switch_listener = () => {
 	});
 };
 
-frappe.ui.dark_theme_media_query = window.matchMedia("(prefers-color-scheme: dark)");
+frappe.ui.dark_theme_media_query = window.matchMedia(
+	"(prefers-color-scheme: dark)",
+);
 
 frappe.ui.set_theme = (theme) => {
 	const root = document.documentElement;

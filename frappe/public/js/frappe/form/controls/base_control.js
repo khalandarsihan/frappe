@@ -14,7 +14,9 @@ frappe.ui.form.Control = class BaseControl {
 		this.wrapper = this.$wrapper.get(0);
 		this.wrapper.fieldobj = this; // reference for event handlers
 
-		this.tooltip = $(`<span class="tooltip-content">${__(this.df.fieldname)}</span>`);
+		this.tooltip = $(
+			`<span class="tooltip-content">${__(this.df.fieldname)}</span>`,
+		);
 		this.$wrapper.append(this.tooltip);
 
 		this.tooltip.on("click", (e) => {
@@ -24,7 +26,9 @@ frappe.ui.form.Control = class BaseControl {
 	}
 
 	make_wrapper() {
-		this.$wrapper = $("<div class='frappe-control'></div>").appendTo(this.parent);
+		this.$wrapper = $("<div class='frappe-control'></div>").appendTo(
+			this.parent,
+		);
 
 		// alias
 		this.wrapper = this.$wrapper;
@@ -40,7 +44,9 @@ frappe.ui.form.Control = class BaseControl {
 	}
 
 	set perm(_perm) {
-		console.error("Setting perm on controls isn't supported, update form's perm instead");
+		console.error(
+			"Setting perm on controls isn't supported, update form's perm instead",
+		);
 	}
 
 	// returns "Read", "Write" or "None"
@@ -65,13 +71,19 @@ frappe.ui.form.Control = class BaseControl {
 				if (explain) console.log("By Hidden Dependency: None");
 				return "None";
 			} else if (
-				cint(this.df.read_only || this.df.is_virtual || this.df.fieldtype === "Read Only")
+				cint(
+					this.df.read_only ||
+						this.df.is_virtual ||
+						this.df.fieldtype === "Read Only",
+				)
 			) {
 				if (explain) console.log("By Read Only: Read");
 				status = "Read";
 			} else if (
 				(this.grid && this.grid.display_status == "Read") ||
-				(this.layout && this.layout.grid && this.layout.grid.display_status == "Read")
+				(this.layout &&
+					this.layout.grid &&
+					this.layout.grid.display_status == "Read")
 			) {
 				// parent grid is read
 				if (explain) console.log("By Parent Grid Read-only: Read");
@@ -95,13 +107,16 @@ frappe.ui.form.Control = class BaseControl {
 			this.df,
 			frappe.model.get_doc(this.doctype, this.docname),
 			this.perm || (this.frm && this.frm.perm),
-			explain
+			explain,
 		);
 
 		// Match parent grid controls read only status
 		if (
 			status === "Write" &&
-			(this.grid || (this.layout && this.layout.grid && !cint(this.df.allow_on_submit)))
+			(this.grid ||
+				(this.layout &&
+					this.layout.grid &&
+					!cint(this.df.allow_on_submit)))
 		) {
 			var grid = this.grid || this.layout.grid;
 			if (grid.display_status == "Read") {
@@ -110,7 +125,11 @@ frappe.ui.form.Control = class BaseControl {
 			}
 		}
 
-		let value = frappe.model.get_value(this.doctype, this.docname, this.df.fieldname);
+		let value = frappe.model.get_value(
+			this.doctype,
+			this.docname,
+			this.df.fieldname,
+		);
 
 		if (["Date", "Datetime"].includes(this.df.fieldtype) && value) {
 			value = frappe.datetime.str_to_user(value);
@@ -124,7 +143,9 @@ frappe.ui.form.Control = class BaseControl {
 			status === "Read" &&
 			!this.only_input &&
 			is_null(value) &&
-			!["HTML", "Image", "Button", "Geolocation"].includes(this.df.fieldtype)
+			!["HTML", "Image", "Button", "Geolocation"].includes(
+				this.df.fieldtype,
+			)
 		) {
 			if (explain) console.log("By Hide Read-only, null fields: None");
 			status = "None";
@@ -135,7 +156,10 @@ frappe.ui.form.Control = class BaseControl {
 	refresh() {
 		this.disp_status = this.get_status();
 		this.$wrapper &&
-			this.$wrapper.toggleClass("hide-control", this.disp_status == "None") &&
+			this.$wrapper.toggleClass(
+				"hide-control",
+				this.disp_status == "None",
+			) &&
 			this.refresh_input &&
 			this.refresh_input();
 
@@ -162,7 +186,7 @@ frappe.ui.form.Control = class BaseControl {
 		if (this.$wrapper.find(".clearfix .btn-translation").length) return;
 
 		const translation_btn = `<a class="btn-translation no-decoration text-muted" title="${__(
-			"Open Translation"
+			"Open Translation",
 		)}">
 				<i class="fa fa-globe"></i>
 			</a>`;
@@ -237,7 +261,9 @@ frappe.ui.form.Control = class BaseControl {
 
 					if (me.df.change || me.df.onchange) {
 						// onchange event specified in df
-						let set = (me.df.change || me.df.onchange).apply(me, [e]);
+						let set = (me.df.change || me.df.onchange).apply(me, [
+							e,
+						]);
 						me.set_invalid && me.set_invalid();
 						return set;
 					}
@@ -273,7 +299,7 @@ frappe.ui.form.Control = class BaseControl {
 				this.docname,
 				this.df.fieldname,
 				value,
-				this.df.fieldtype
+				this.df.fieldtype,
 			);
 		} else {
 			if (this.doc) {

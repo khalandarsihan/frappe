@@ -10,8 +10,8 @@ frappe.ui.form.on("Auto Email Report", {
 					frappe.urllib.get_full_url(
 						"/api/method/frappe.email.doctype.auto_email_report.auto_email_report.download?" +
 							"name=" +
-							encodeURIComponent(frm.doc.name)
-					)
+							encodeURIComponent(frm.doc.name),
+					),
 				);
 				if (!w) {
 					frappe.msgprint(__("Please enable pop-ups"));
@@ -78,7 +78,10 @@ frappe.ui.form.on("Auto Email Report", {
 		wrapper.empty();
 		let reference_report = frappe.query_reports[frm.doc.report];
 		if (!reference_report || !reference_report.filters) {
-			reference_report = await frappe.model.with_doc("Report", frm.doc.report);
+			reference_report = await frappe.model.with_doc(
+				"Report",
+				frm.doc.report,
+			);
 		}
 		if (
 			frm.doc.report_type === "Custom Report" ||
@@ -94,11 +97,13 @@ frappe.ui.form.on("Auto Email Report", {
 					"</th><th>" +
 					__("Value") +
 					"</th></tr>\
-				</thead><tbody></tbody></table>"
+				</thead><tbody></tbody></table>",
 			).appendTo(wrapper);
-			$('<p class="text-muted small">' + __("Click table to edit") + "</p>").appendTo(
-				wrapper
-			);
+			$(
+				'<p class="text-muted small">' +
+					__("Click table to edit") +
+					"</p>",
+			).appendTo(wrapper);
 
 			var filters = {};
 
@@ -112,14 +117,20 @@ frappe.ui.form.on("Auto Email Report", {
 				if (frm.doc.filters) {
 					filters = JSON.parse(frm.doc.filters);
 				} else {
-					frappe.db.get_value("Report", frm.doc.report, "json", (r) => {
-						if (r && r.json) {
-							filters = JSON.parse(r.json).filters || {};
-						}
-					});
+					frappe.db.get_value(
+						"Report",
+						frm.doc.report,
+						"json",
+						(r) => {
+							if (r && r.json) {
+								filters = JSON.parse(r.json).filters || {};
+							}
+						},
+					);
 				}
 
-				report_filters = frappe.query_reports[frm.doc.reference_report].filters;
+				report_filters =
+					frappe.query_reports[frm.doc.reference_report].filters;
 			} else {
 				filters = JSON.parse(frm.doc.filters || "{}");
 				report_filters = reference_report.filters;
@@ -177,7 +188,10 @@ frappe.ui.form.on("Auto Email Report", {
 				.map((df) => ({ label: df.label, value: df.fieldname }));
 			frm.set_df_property("from_date_field", "options", date_fields);
 			frm.set_df_property("to_date_field", "options", date_fields);
-			frm.toggle_display("dynamic_report_filters_section", date_fields.length > 0);
+			frm.toggle_display(
+				"dynamic_report_filters_section",
+				date_fields.length > 0,
+			);
 		}
 	},
 });

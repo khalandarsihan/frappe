@@ -119,7 +119,11 @@ export async function get_table_columns(df, child_doctype) {
 		1,
 	]);
 	for (let tf of table_fields) {
-		if (!frappe.model.layout_fields.includes(tf.fieldtype) && tf.in_list_view && tf.label) {
+		if (
+			!frappe.model.layout_fields.includes(tf.fieldtype) &&
+			tf.in_list_view &&
+			tf.label
+		) {
 			let colsize;
 
 			if (tf.columns) {
@@ -152,17 +156,28 @@ export async function get_table_columns(df, child_doctype) {
 
 	function adjust_column_size(total_colsize, increase) {
 		let passes = 0;
-		let start_condition = increase ? total_colsize < 11 : total_colsize >= 11;
+		let start_condition = increase
+			? total_colsize < 11
+			: total_colsize >= 11;
 
 		while (start_condition && passes < 11) {
 			for (var i in table_columns) {
 				var _df = table_columns[i][0];
 				var colsize = table_columns[i][1];
-				if (colsize > 1 && colsize < 11 && frappe.model.is_non_std_field(_df.fieldname)) {
+				if (
+					colsize > 1 &&
+					colsize < 11 &&
+					frappe.model.is_non_std_field(_df.fieldname)
+				) {
 					if (
 						passes < 3 &&
-						["Int", "Currency", "Float", "Check", "Percent"].indexOf(_df.fieldtype) !==
-							-1
+						[
+							"Int",
+							"Currency",
+							"Float",
+							"Check",
+							"Percent",
+						].indexOf(_df.fieldtype) !== -1
 					) {
 						// don't increase/decrease col size of these fields in first 3 passes
 						continue;
@@ -214,7 +229,11 @@ export function evaluate_depends_on_value(expression, doc) {
 	} else if (expression.substr(0, 5) == "eval:") {
 		try {
 			out = frappe.utils.eval(expression.substr(5), { doc, parent });
-			if (parent && parent.istable && expression.includes("is_submittable")) {
+			if (
+				parent &&
+				parent.istable &&
+				expression.includes("is_submittable")
+			) {
 				out = true;
 			}
 		} catch (e) {
@@ -246,7 +265,12 @@ export function section_boilerplate() {
 	};
 }
 
-export function move_children_to_parent(props, parent, child, current_container) {
+export function move_children_to_parent(
+	props,
+	parent,
+	child,
+	current_container,
+) {
 	let store = useStore();
 
 	let children = props[parent][child + "s"];
@@ -277,7 +301,10 @@ export function scrub_field_names(fields) {
 		if (d.fieldtype) {
 			if (!d.fieldname) {
 				if (d.label) {
-					d.fieldname = d.label.trim().toLowerCase().replaceAll(" ", "_");
+					d.fieldname = d.label
+						.trim()
+						.toLowerCase()
+						.replaceAll(" ", "_");
 					if (d.fieldname.endsWith("?")) {
 						d.fieldname = d.fieldname.slice(0, -1);
 					}
@@ -299,7 +326,9 @@ export function scrub_field_names(fields) {
 				}
 			} else {
 				if (frappe.model.restricted_fields.includes(d.fieldname)) {
-					frappe.throw(__("Fieldname {0} is restricted", [d.fieldname]));
+					frappe.throw(
+						__("Fieldname {0} is restricted", [d.fieldname]),
+					);
 				}
 			}
 			let regex = new RegExp(/['",./%@()<>{}]/g);
@@ -329,7 +358,7 @@ export function confirm_dialog(
 	primary_action,
 	primary_action_label,
 	secondary_action,
-	secondary_action_label
+	secondary_action_label,
 ) {
 	let d = new frappe.ui.Dialog({
 		title: title,

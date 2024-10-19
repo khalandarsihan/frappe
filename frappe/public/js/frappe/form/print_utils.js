@@ -1,11 +1,17 @@
-frappe.ui.get_print_settings = function (pdf, callback, letter_head, pick_columns) {
+frappe.ui.get_print_settings = function (
+	pdf,
+	callback,
+	letter_head,
+	pick_columns,
+) {
 	var print_settings = locals[":Print Settings"]["Print Settings"];
 
 	var company = frappe.defaults.get_default("company");
 	var default_letter_head = "";
 
 	if (locals[":Company"] && locals[":Company"][company]) {
-		default_letter_head = locals[":Company"][company]["default_letter_head"] || "";
+		default_letter_head =
+			locals[":Company"][company]["default_letter_head"] || "";
 	}
 
 	var columns = [
@@ -52,7 +58,7 @@ frappe.ui.get_print_settings = function (pdf, callback, letter_head, pick_column
 					label: __(df.label, null, df.parent),
 					value: df.fieldname,
 				})),
-			}
+			},
 		);
 	}
 
@@ -64,11 +70,12 @@ frappe.ui.get_print_settings = function (pdf, callback, letter_head, pick_column
 				data.letter_head = null;
 			}
 			if (data.letter_head) {
-				data.letter_head = frappe.boot.letter_heads[print_settings.letter_head];
+				data.letter_head =
+					frappe.boot.letter_heads[print_settings.letter_head];
 			}
 			callback(data);
 		},
-		__("Print Settings")
+		__("Print Settings"),
 	);
 };
 
@@ -100,14 +107,19 @@ frappe.ui.form.qz_connect = function () {
 						resolve();
 					},
 					function retry(err) {
-						if (err.message === "Unable to establish connection with QZ") {
+						if (
+							err.message ===
+							"Unable to establish connection with QZ"
+						) {
 							// if a connect was not successful, launch the mimetype, try 3 more times
 							frappe.show_alert(
 								{
-									message: __("Attempting to launch QZ Tray..."),
+									message: __(
+										"Attempting to launch QZ Tray...",
+									),
 									indicator: "blue",
 								},
-								14
+								14,
 							);
 							window.location.assign("qz:launch");
 							qz.websocket
@@ -118,7 +130,9 @@ frappe.ui.form.qz_connect = function () {
 								.then(
 									() => {
 										frappe.show_alert({
-											message: __("Connected to QZ Tray!"),
+											message: __(
+												"Connected to QZ Tray!",
+											),
 											indicator: "green",
 										});
 										resolve();
@@ -126,11 +140,11 @@ frappe.ui.form.qz_connect = function () {
 									() => {
 										frappe.throw(
 											__(
-												'Error connecting to QZ Tray Application...<br><br> You need to have QZ Tray application installed and running, to use the Raw Print feature.<br><br><a target="_blank" href="https://qz.io/download/">Click here to Download and install QZ Tray</a>.<br> <a target="_blank" href="https://erpnext.com/docs/user/manual/en/setting-up/print/raw-printing">Click here to learn more about Raw Printing</a>.'
-											)
+												'Error connecting to QZ Tray Application...<br><br> You need to have QZ Tray application installed and running, to use the Raw Print feature.<br><br><a target="_blank" href="https://qz.io/download/">Click here to Download and install QZ Tray</a>.<br> <a target="_blank" href="https://erpnext.com/docs/user/manual/en/setting-up/print/raw-printing">Click here to learn more about Raw Printing</a>.',
+											),
 										);
 										reject();
-									}
+									},
 								);
 						} else {
 							frappe.show_alert(
@@ -138,11 +152,11 @@ frappe.ui.form.qz_connect = function () {
 									message: "QZ Tray " + err.toString(),
 									indicator: "red",
 								},
-								14
+								14,
 							);
 							reject();
 						}
-					}
+					},
 				);
 			}
 		});
@@ -206,6 +220,6 @@ frappe.ui.form.qz_fail = function (e) {
 			message: __("QZ Tray Failed: ") + e.toString(),
 			indicator: "red",
 		},
-		20
+		20,
 	);
 };

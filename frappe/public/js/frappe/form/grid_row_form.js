@@ -1,13 +1,20 @@
 export default class GridRowForm {
 	constructor(opts) {
 		$.extend(this, opts);
-		this.wrapper = $('<div class="form-in-grid"></div>').appendTo(this.row.wrapper);
+		this.wrapper = $('<div class="form-in-grid"></div>').appendTo(
+			this.row.wrapper,
+		);
 	}
 	render() {
 		var me = this;
 		this.make_form();
 		this.form_area.empty();
-		frappe.utils.scroll_to(0, false, 0, this.wrapper.find(".grid-form-body"));
+		frappe.utils.scroll_to(
+			0,
+			false,
+			0,
+			this.wrapper.find(".grid-form-body"),
+		);
 
 		this.layout = new frappe.ui.form.Layout({
 			fields: this.row.docfields,
@@ -110,13 +117,17 @@ export default class GridRowForm {
 			me.row.grid.add_new_row(me.row.doc.idx + 1, null, true);
 			return false;
 		});
-		this.wrapper.find(".grid-form-heading, .grid-footer-toolbar").on("click", function () {
-			me.row.toggle_view();
-			return false;
-		});
+		this.wrapper
+			.find(".grid-form-heading, .grid-footer-toolbar")
+			.on("click", function () {
+				me.row.toggle_view();
+				return false;
+			});
 	}
 	toggle_add_delete_button_display($parent) {
-		$parent.find(".row-actions, .grid-append-row").toggle(this.row.grid.is_editable());
+		$parent
+			.find(".row-actions, .grid-append-row")
+			.toggle(this.row.grid.is_editable());
 	}
 	refresh_field(fieldname) {
 		const field = this.fields_dict[fieldname];
@@ -134,7 +145,9 @@ export default class GridRowForm {
 				var first = me.form_area.find("input:first");
 				if (
 					first.length &&
-					!["Date", "Datetime", "Time"].includes(first.attr("data-fieldtype"))
+					!["Date", "Datetime", "Time"].includes(
+						first.attr("data-fieldtype"),
+					)
 				) {
 					try {
 						first.get(0).focus();

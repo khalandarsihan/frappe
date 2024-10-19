@@ -32,7 +32,7 @@ export default class QuickListWidget extends Widget {
 			title="${__("Add New")} ${__(this.document_type)}
 			">
 				${frappe.utils.icon("add", "sm")}
-			</div>`
+			</div>`,
 		);
 
 		this.add_new_button.appendTo(this.action_area);
@@ -42,7 +42,7 @@ export default class QuickListWidget extends Widget {
 					type: "doctype",
 					name: this.document_type,
 					doc_view: "New",
-				})
+				}),
 			);
 		});
 	}
@@ -51,7 +51,7 @@ export default class QuickListWidget extends Widget {
 		this.refresh_list = $(
 			`<div class="refresh-list btn btn-xs pull-right" title="${__("Refresh List")}">
 				${frappe.utils.icon("es-line-reload", "sm")}
-			</div>`
+			</div>`,
 		);
 
 		this.refresh_list.appendTo(this.action_area);
@@ -65,7 +65,7 @@ export default class QuickListWidget extends Widget {
 		this.filter_list = $(
 			`<div class="filter-list btn btn-xs pull-right" title="${__("Add/Update Filter")}">
 				${frappe.utils.icon("filter", "sm")}
-			</div>`
+			</div>`,
 		);
 
 		this.filter_list.appendTo(this.action_area);
@@ -78,7 +78,9 @@ export default class QuickListWidget extends Widget {
 			delete this.filter_group;
 		}
 
-		this.filters = frappe.utils.process_filter_expression(this.quick_list_filter);
+		this.filters = frappe.utils.process_filter_expression(
+			this.quick_list_filter,
+		);
 
 		this.filter_group = new frappe.ui.FilterGroup({
 			parent: this.dialog.get_field("filter_area").$wrapper,
@@ -125,12 +127,16 @@ export default class QuickListWidget extends Widget {
 
 	render_loading_state() {
 		this.body.empty();
-		this.loading = $(`<div class="list-loading-state text-muted">${__("Loading...")}</div>`);
+		this.loading = $(
+			`<div class="list-loading-state text-muted">${__("Loading...")}</div>`,
+		);
 		this.loading.appendTo(this.body);
 	}
 
 	render_no_data_state() {
-		this.loading = $(`<div class="list-no-data-state text-muted">${__("No Data...")}</div>`);
+		this.loading = $(
+			`<div class="list-no-data-state text-muted">${__("No Data...")}</div>`,
+		);
 		this.loading.appendTo(this.body);
 	}
 
@@ -159,15 +165,17 @@ export default class QuickListWidget extends Widget {
 			`).appendTo($quick_list_item);
 		}
 
-		$(`<div class="right-arrow">${frappe.utils.icon("right", "xs")}</div>`).appendTo(
-			$quick_list_item
-		);
+		$(
+			`<div class="right-arrow">${frappe.utils.icon("right", "xs")}</div>`,
+		).appendTo($quick_list_item);
 
 		$quick_list_item.click((e) => {
 			if (e.ctrlKey || e.metaKey) {
 				frappe.open_in_new_tab = true;
 			}
-			frappe.set_route(`${frappe.utils.get_form_link(this.document_type, doc.name)}`);
+			frappe.set_route(
+				`${frappe.utils.get_form_link(this.document_type, doc.name)}`,
+			);
 		});
 
 		return $quick_list_item;
@@ -192,18 +200,25 @@ export default class QuickListWidget extends Widget {
 			}
 
 			// check doctype has status field
-			this.has_status_field = frappe.meta.has_field(this.document_type, "status");
+			this.has_status_field = frappe.meta.has_field(
+				this.document_type,
+				"status",
+			);
 
 			if (this.has_status_field) {
 				fields.push("status");
 				fields.push("docstatus");
 			}
 			// add workflow state field if workflow exist & is active
-			let workflow_fieldname = frappe.workflow.get_state_fieldname(this.document_type);
+			let workflow_fieldname = frappe.workflow.get_state_fieldname(
+				this.document_type,
+			);
 			workflow_fieldname && fields.push(workflow_fieldname);
 			fields.push("modified");
 
-			let quick_list_filter = frappe.utils.process_filter_expression(this.quick_list_filter);
+			let quick_list_filter = frappe.utils.process_filter_expression(
+				this.quick_list_filter,
+			);
 
 			let args = {
 				method: "frappe.desk.reportview.get",
@@ -222,16 +237,20 @@ export default class QuickListWidget extends Widget {
 				let data = r.message;
 
 				this.body.empty();
-				data = !Array.isArray(data) ? frappe.utils.dict(data.keys, data.values) : data;
+				data = !Array.isArray(data)
+					? frappe.utils.dict(data.keys, data.values)
+					: data;
 
 				if (!data.length) {
 					this.render_no_data_state();
 					return;
 				}
 
-				this.quick_list = data.map((doc) => this.setup_quick_list_item(doc));
+				this.quick_list = data.map((doc) =>
+					this.setup_quick_list_item(doc),
+				);
 				this.quick_list.forEach(($quick_list_item) =>
-					$quick_list_item.appendTo(this.body)
+					$quick_list_item.appendTo(this.body),
 				);
 			});
 		});
@@ -241,7 +260,10 @@ export default class QuickListWidget extends Widget {
 		this.footer.empty();
 
 		let filters = frappe.utils.get_filter_from_json(this.quick_list_filter);
-		let route = frappe.utils.generate_route({ type: "doctype", name: this.document_type });
+		let route = frappe.utils.generate_route({
+			type: "doctype",
+			name: this.document_type,
+		});
 		this.see_all_button = $(`
 			<div class="see-all btn btn-xs">${__("View List")}</div>
 		`).appendTo(this.footer);

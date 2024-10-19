@@ -40,7 +40,7 @@ export default class Section {
 				this.description_wrapper = $(
 					`<div class="col-sm-12 form-section-description">
 						${__(this.df.description)}
-					</div>`
+					</div>`,
 				);
 
 				this.wrapper.append(this.description_wrapper);
@@ -121,16 +121,24 @@ export default class Section {
 
 		this.set_icon(hide);
 
-		this.fields_list.forEach((f) => f.on_section_collapse && f.on_section_collapse(hide));
+		this.fields_list.forEach(
+			(f) => f.on_section_collapse && f.on_section_collapse(hide),
+		);
 
 		// save state for next reload ('' is falsy)
 		if (this.df.css_class)
-			localStorage.setItem(this.df.css_class + "-closed", hide ? "1" : "");
+			localStorage.setItem(
+				this.df.css_class + "-closed",
+				hide ? "1" : "",
+			);
 	}
 
 	set_icon(hide) {
 		let indicator_icon = hide ? "es-line-down" : "es-line-up";
-		this.indicator && this.indicator.html(frappe.utils.icon(indicator_icon, "sm", "mb-1"));
+		this.indicator &&
+			this.indicator.html(
+				frappe.utils.icon(indicator_icon, "sm", "mb-1"),
+			);
 	}
 
 	is_collapsed() {
@@ -141,7 +149,10 @@ export default class Section {
 		let missing_mandatory = false;
 		for (let j = 0, l = this.fields_list.length; j < l; j++) {
 			const section_df = this.fields_list[j].df;
-			if (section_df.reqd && this.layout.doc[section_df.fieldname] == null) {
+			if (
+				section_df.reqd &&
+				this.layout.doc[section_df.fieldname] == null
+			) {
 				missing_mandatory = true;
 				break;
 			}
