@@ -12,7 +12,7 @@ function format(str, args) {
 			if (key == +key) {
 				return args[key] !== undefined ? args[key] : match;
 			}
-		}.bind(this),
+		}.bind(this)
 	);
 }
 

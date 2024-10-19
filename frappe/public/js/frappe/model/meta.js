@@ -26,8 +26,7 @@ $.extend(frappe.meta, {
 		frappe.provide("frappe.meta.docfield_map." + df.parent);
 		frappe.meta.docfield_map[df.parent][df.fieldname || df.label] = df;
 
-		if (!frappe.meta.docfield_list[df.parent])
-			frappe.meta.docfield_list[df.parent] = [];
+		if (!frappe.meta.docfield_list[df.parent]) frappe.meta.docfield_list[df.parent] = [];
 
 		// check for repeat
 		for (var i in frappe.meta.docfield_list[df.parent]) {
@@ -42,8 +41,7 @@ $.extend(frappe.meta, {
 		if (!c[doctype]) c[doctype] = {};
 		if (!c[doctype][docname]) c[doctype][docname] = {};
 
-		docfield_list =
-			docfield_list || frappe.meta.docfield_list[doctype] || [];
+		docfield_list = docfield_list || frappe.meta.docfield_list[doctype] || [];
 		for (var i = 0, j = docfield_list.length; i < j; i++) {
 			var df = docfield_list[i];
 			c[doctype][docname][df.fieldname || df.label] = copy_dict(df);
@@ -73,27 +71,21 @@ $.extend(frappe.meta, {
 	},
 
 	set_formatter: function (doctype, fieldname, name, formatter) {
-		frappe.meta.get_docfield(doctype, fieldname, name).formatter =
-			formatter;
+		frappe.meta.get_docfield(doctype, fieldname, name).formatter = formatter;
 	},
 
-	set_indicator_formatter: function (
-		doctype,
-		fieldname,
-		name,
-		get_text,
-		get_color,
-	) {
-		frappe.meta.get_docfield(doctype, fieldname, name).formatter =
-			function (value, df, options, doc) {
-				return repl(
-					'<span class="indicator %(color)s">%(name)s</span>',
-					{
-						color: get_color(),
-						name: get_text(),
-					},
-				);
-			};
+	set_indicator_formatter: function (doctype, fieldname, name, get_text, get_color) {
+		frappe.meta.get_docfield(doctype, fieldname, name).formatter = function (
+			value,
+			df,
+			options,
+			doc
+		) {
+			return repl('<span class="indicator %(color)s">%(name)s</span>', {
+				color: get_color(),
+				name: get_text(),
+			});
+		};
 	},
 
 	get_docfields: function (doctype, name, filters) {
@@ -115,15 +107,9 @@ $.extend(frappe.meta, {
 	},
 
 	get_fields_to_check_permissions: function (doctype) {
-		var fields = $.map(
-			frappe.meta.get_docfields(doctype, name),
-			function (df) {
-				return df.fieldtype === "Link" &&
-					df.ignore_user_permissions !== 1
-					? df
-					: null;
-			},
-		);
+		var fields = $.map(frappe.meta.get_docfields(doctype, name), function (df) {
+			return df.fieldtype === "Link" && df.ignore_user_permissions !== 1 ? df : null;
+		});
 		fields = fields.concat({
 			label: "ID",
 			fieldname: name,
@@ -143,12 +129,7 @@ $.extend(frappe.meta, {
 	get_docfield_copy: function (doctype, name) {
 		if (!name) return frappe.meta.docfield_map[doctype];
 
-		if (
-			!(
-				frappe.meta.docfield_copy[doctype] &&
-				frappe.meta.docfield_copy[doctype][name]
-			)
-		) {
+		if (!(frappe.meta.docfield_copy[doctype] && frappe.meta.docfield_copy[doctype][name])) {
 			frappe.meta.make_docfield_copy_for(doctype, name);
 		}
 
@@ -157,13 +138,10 @@ $.extend(frappe.meta, {
 
 	get_fieldnames: function (doctype, name, filters) {
 		return $.map(
-			frappe.utils.filter_dict(
-				frappe.meta.docfield_map[doctype],
-				filters,
-			),
+			frappe.utils.filter_dict(frappe.meta.docfield_map[doctype], filters),
 			function (df) {
 				return df.fieldname;
-			},
+			}
 		);
 	},
 
@@ -200,10 +178,10 @@ $.extend(frappe.meta, {
 
 			if (!out) {
 				console.log(
-					__(
-						"Warning: Unable to find {0} in any table related to {1}",
-						[key, __(doctype)],
-					),
+					__("Warning: Unable to find {0} in any table related to {1}", [
+						key,
+						__(doctype),
+					])
 				);
 			}
 		}
@@ -212,12 +190,9 @@ $.extend(frappe.meta, {
 
 	get_parentfield: function (parent_dt, child_dt) {
 		var df = (frappe.get_doc("DocType", parent_dt).fields || []).filter(
-			(df) =>
-				frappe.model.table_fields.includes(df.fieldtype) &&
-				df.options === child_dt,
+			(df) => frappe.model.table_fields.includes(df.fieldtype) && df.options === child_dt
 		);
-		if (!df.length)
-			throw "parentfield not found for " + parent_dt + ", " + child_dt;
+		if (!df.length) throw "parentfield not found for " + parent_dt + ", " + child_dt;
 		return df[0].fieldname;
 	},
 
@@ -284,7 +259,7 @@ $.extend(frappe.meta, {
 		var default_print_format = locals.DocType[doctype].default_print_format;
 		let enable_raw_printing = frappe.model.get_doc(
 			":Print Settings",
-			"Print Settings",
+			"Print Settings"
 		).enable_raw_printing;
 		var print_formats = frappe
 			.get_list("Print Format", { doc_type: doctype })
@@ -336,16 +311,8 @@ $.extend(frappe.meta, {
 						docname = frappe.defaults.get_user_default(options[1]);
 					}
 					currency =
-						frappe.model.get_value(
-							options[0],
-							docname,
-							options[2],
-						) ||
-						frappe.model.get_value(
-							":" + options[0],
-							docname,
-							options[2],
-						) ||
+						frappe.model.get_value(options[0], docname, options[2]) ||
+						frappe.model.get_value(":" + options[0], docname, options[2]) ||
 						currency;
 				}
 			} else if (doc && doc[df.options]) {
@@ -369,8 +336,7 @@ $.extend(frappe.meta, {
 				precision = number_format_info.precision;
 			}
 		} else {
-			precision =
-				cint(frappe.defaults.get_default("float_precision")) || 3;
+			precision = cint(frappe.defaults.get_default("float_precision")) || 3;
 		}
 		return precision;
 	},

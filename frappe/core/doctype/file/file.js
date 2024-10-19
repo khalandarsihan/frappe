@@ -2,19 +2,13 @@ frappe.ui.form.on("File", {
 	refresh: function (frm) {
 		if (!frm.doc.is_folder) {
 			// add download button
-			frm.add_custom_button(
-				__("Download"),
-				() => frm.trigger("download"),
-				"fa fa-download",
-			);
+			frm.add_custom_button(__("Download"), () => frm.trigger("download"), "fa fa-download");
 		}
 
 		if (!frm.doc.is_private) {
 			frm.dashboard.set_headline(
-				__(
-					"This file is public. It can be accessed without authentication.",
-				),
-				"orange",
+				__("This file is public. It can be accessed without authentication."),
+				"orange"
 			);
 		}
 
@@ -23,23 +17,14 @@ frappe.ui.form.on("File", {
 		// preview different file types
 		frm.trigger("preview_file");
 
-		let is_raster_image = /\.(gif|jpg|jpeg|tiff|png)$/i.test(
-			frm.doc.file_url,
-		);
-		let is_optimizable =
-			!frm.doc.is_folder && is_raster_image && frm.doc.file_size > 0;
+		let is_raster_image = /\.(gif|jpg|jpeg|tiff|png)$/i.test(frm.doc.file_url);
+		let is_optimizable = !frm.doc.is_folder && is_raster_image && frm.doc.file_size > 0;
 
 		// add optimize button
-		is_optimizable &&
-			frm.add_custom_button(__("Optimize"), () =>
-				frm.trigger("optimize"),
-			);
+		is_optimizable && frm.add_custom_button(__("Optimize"), () => frm.trigger("optimize"));
 
 		// add unzip button
-		if (
-			frm.doc.file_name &&
-			frm.doc.file_name.split(".").splice(-1)[0] === "zip"
-		) {
+		if (frm.doc.file_name && frm.doc.file_name.split(".").splice(-1)[0] === "zip") {
 			frm.add_custom_button(__("Unzip"), () => frm.trigger("unzip"));
 		}
 		if (frm.doc.file_url) {

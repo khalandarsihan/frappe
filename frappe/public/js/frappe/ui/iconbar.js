@@ -8,9 +8,7 @@ frappe.ui.IconBar = class IconBar {
 		this.make(n_groups);
 	}
 	make(n_groups) {
-		this.$wrapper = $('<div class="iconbar-wrapper hide"></div>').appendTo(
-			this.parent,
-		);
+		this.$wrapper = $('<div class="iconbar-wrapper hide"></div>').appendTo(this.parent);
 		for (var i = 0; i < n_groups; i++) {
 			this.get_group(i + 1);
 		}
@@ -19,11 +17,7 @@ frappe.ui.IconBar = class IconBar {
 		var $ul = this.$wrapper.find(".iconbar-" + group + " ul");
 
 		if (!$ul.length)
-			$ul = $(
-				'<div class="iconbar iconbar-' +
-					group +
-					' hide"><ul></ul></div>',
-			)
+			$ul = $('<div class="iconbar iconbar-' + group + ' hide"><ul></ul></div>')
 				.appendTo(this.$wrapper)
 				.find("ul");
 
@@ -59,8 +53,7 @@ frappe.ui.IconBar = class IconBar {
 			this.$wrapper.find(".iconbar-" + group).removeClass("hide");
 			this.show();
 		} else {
-			if (this.$wrapper.hasClass("hide"))
-				this.$wrapper.removeClass("hide").trigger("shown");
+			if (this.$wrapper.hasClass("hide")) this.$wrapper.removeClass("hide").trigger("shown");
 		}
 	}
 	clear(group) {

@@ -3,10 +3,7 @@ frappe.provide("frappe.ui");
 export default class ListFilter {
 	constructor({ wrapper, doctype }) {
 		Object.assign(this, arguments[0]);
-		this.can_add_global = frappe.user.has_role([
-			"System Manager",
-			"Administrator",
-		]);
+		this.can_add_global = frappe.user.has_role(["System Manager", "Administrator"]);
 		this.filters = [];
 		this.make();
 		this.bind();
@@ -26,9 +23,7 @@ export default class ListFilter {
 		this.$input_area = this.wrapper.find(".input-area");
 		this.$list_filters = this.wrapper.find(".list-filters");
 		this.$saved_filters = this.wrapper.find(".saved-filters").hide();
-		this.$saved_filters_preview = this.wrapper.find(
-			".saved-filters-preview",
-		);
+		this.$saved_filters_preview = this.wrapper.find(".saved-filters-preview");
 		this.saved_filters_hidden = true;
 		this.toggle_saved_filters(true);
 
@@ -64,9 +59,7 @@ export default class ListFilter {
 			this.filters.length
 				? this.$saved_filters_preview.show()
 				: this.$saved_filters_preview.hide();
-			const html = this.filters.map((filter) =>
-				this.filter_template(filter),
-			);
+			const html = this.filters.map((filter) => this.filter_template(filter));
 			this.wrapper.find(".filter-pill").remove();
 			this.$saved_filters.append(html);
 		});
@@ -113,16 +106,14 @@ export default class ListFilter {
 			const filter_label = $li.text().trim();
 
 			frappe.confirm(
-				__("Are you sure you want to remove the {0} filter?", [
-					filter_label.bold(),
-				]),
+				__("Are you sure you want to remove the {0} filter?", [filter_label.bold()]),
 				() => {
 					const name = $li.attr("data-name");
 					const applied_filters = this.get_filters_values(name);
 					$li.remove();
 					this.remove_filter(name).then(() => this.refresh());
 					this.list_view.filter_area.remove_filters(applied_filters);
-				},
+				}
 			);
 		});
 	}
@@ -146,15 +137,13 @@ export default class ListFilter {
 						help_text = __("Duplicate Filter Name");
 					}
 
-					this.filter_input.set_description(
-						has_value ? help_text : "",
-					);
+					this.filter_input.set_description(has_value ? help_text : "");
 
 					if (this.can_add_global) {
 						this.is_global_input.toggle(has_value);
 					}
 				}
-			}, 300),
+			}, 300)
 		);
 	}
 
@@ -163,9 +152,7 @@ export default class ListFilter {
 			doctype: "List Filter",
 			reference_doctype: this.list_view.doctype,
 			filter_name,
-			for_user: this.is_global_input.get_value()
-				? ""
-				: frappe.session.user,
+			for_user: this.is_global_input.get_value() ? "" : frappe.session.user,
 			filters: JSON.stringify(this.get_current_filters()),
 		});
 	}

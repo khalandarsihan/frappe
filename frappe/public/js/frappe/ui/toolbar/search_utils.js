@@ -47,19 +47,14 @@ frappe.search.utils = {
 			if (route[0] === "Form") {
 				values.push([route[2], route]);
 			} else if (
-				["List", "Tree", "Workspaces", "query-report"].includes(
-					route[0],
-				) ||
+				["List", "Tree", "Workspaces", "query-report"].includes(route[0]) ||
 				route[2] === "Report"
 			) {
 				if (route[1]) {
 					values.push([route[1], route]);
 				}
 			} else if (route[0]) {
-				values.push([
-					frappe.route_titles[route.join("/")] || route[0],
-					route,
-				]);
+				values.push([frappe.route_titles[route.join("/")] || route[0], route]);
 			}
 		});
 
@@ -78,9 +73,7 @@ frappe.search.utils = {
 					out.value = __(doctype);
 				}
 			} else if (
-				["List", "Tree", "Workspaces", "query-report"].includes(
-					route[0],
-				) &&
+				["List", "Tree", "Workspaces", "query-report"].includes(route[0]) &&
 				route.length > 1
 			) {
 				const view_type = route[0];
@@ -148,10 +141,7 @@ frappe.search.utils = {
 								__(parts[0]),
 								search_result.marked_string,
 							]),
-							value: __("Find {0} in {1}", [
-								__(parts[0]),
-								__(item),
-							]),
+							value: __("Find {0} in {1}", [__(parts[0]), __(item)]),
 							route_options: {
 								name: ["like", "%" + parts[0] + "%"],
 							},
@@ -171,18 +161,12 @@ frappe.search.utils = {
 		var firstKeyword = keywords.split(" ")[0];
 		if (firstKeyword.toLowerCase() === __("new")) {
 			frappe.boot.user.can_create.forEach(function (item) {
-				const search_result = me.fuzzy_search(
-					keywords.substr(4),
-					item,
-					true,
-				);
+				const search_result = me.fuzzy_search(keywords.substr(4), item, true);
 				var level = search_result.score;
 				if (level) {
 					out.push({
 						type: "New",
-						label: __("New {0}", [
-							search_result.marked_string || __(item),
-						]),
+						label: __("New {0}", [search_result.marked_string || __(item)]),
 						value: __("New {0}", [__(item)]),
 						index: 1 + level,
 						match: item,
@@ -208,9 +192,7 @@ frappe.search.utils = {
 			if (skip_list) {
 				var label = marked_string || __(target);
 			} else {
-				label = __(`{0} ${skip_list ? "" : type}`, [
-					marked_string || __(target),
-				]);
+				label = __(`{0} ${skip_list ? "" : type}`, [marked_string || __(target)]);
 			}
 			return {
 				type: type,
@@ -234,9 +216,7 @@ frappe.search.utils = {
 						var match = item;
 						out.push({
 							type: "New",
-							label: __("New {0}", [
-								search_result.marked_string || __(item),
-							]),
+							label: __("New {0}", [search_result.marked_string || __(item)]),
 							value: __("New {0}", [__(item)]),
 							index: score + 0.015,
 							match: item,
@@ -248,9 +228,7 @@ frappe.search.utils = {
 
 					out.push(option("List", ["List", item], 0.05));
 					if (frappe.model.can_get_report(item)) {
-						out.push(
-							option("Report", ["List", item, "Report"], 0.04),
-						);
+						out.push(option("Report", ["List", item, "Report"], 0.04));
 					}
 				}
 			}
@@ -272,9 +250,7 @@ frappe.search.utils = {
 				else route = ["query-report", item];
 				out.push({
 					type: "Report",
-					label: __("Report {0}", [
-						search_result.marked_string || __(item),
-					]),
+					label: __("Report {0}", [search_result.marked_string || __(item)]),
 					value: __("Report {0}", [__(item)]),
 					index: level,
 					route: route,
@@ -300,9 +276,7 @@ frappe.search.utils = {
 				var page = me.pages[item];
 				out.push({
 					type: "Page",
-					label: __("Open {0}", [
-						search_result.marked_string || __(item),
-					]),
+					label: __("Open {0}", [search_result.marked_string || __(item)]),
 					value: __("Open {0}", [__(item)]),
 					match: item,
 					index: level,
@@ -351,9 +325,7 @@ frappe.search.utils = {
 			if (level > 0) {
 				var ret = {
 					type: "Workspace",
-					label: __("Open {0}", [
-						search_result.marked_string || __(item.name),
-					]),
+					label: __("Open {0}", [search_result.marked_string || __(item.name)]),
 					value: __("Open {0}", [__(item.name)]),
 					index: level,
 					route: [frappe.router.slug(item.name)],
@@ -374,9 +346,7 @@ frappe.search.utils = {
 			if (level > 0) {
 				var ret = {
 					type: "Dashboard",
-					label: __("{0} Dashboard", [
-						search_result.marked_string || __(item.name),
-					]),
+					label: __("{0} Dashboard", [search_result.marked_string || __(item.name)]),
 					value: __("{0} Dashboard", [__(item.name)]),
 					index: level,
 					route: ["dashboard-view", item.name],
@@ -428,38 +398,19 @@ frappe.search.utils = {
 							field_data +=
 								index < field_length / 2
 									? field_value.slice(0, index)
-									: "..." +
-										field_value.slice(
-											index - field_length / 2,
-											index,
-										);
-							field_data += field_value.slice(
-								index,
-								index + field_length / 2,
-							);
+									: "..." + field_value.slice(index - field_length / 2, index);
+							field_data += field_value.slice(index, index + field_length / 2);
 							field_data +=
-								index + field_length / 2 < field_value.length
-									? "..."
-									: "";
+								index + field_length / 2 < field_value.length ? "..." : "";
 							field_value = field_data;
 						}
 						var field_name = part.slice(0, colon_index);
 
 						// Find remaining result_length and add field length to result_current_length
-						var remaining_length =
-							result_max_length - result_current_length;
-						result_current_length +=
-							field_name.length + field_value.length + 2;
-						const search_result_name = me.fuzzy_search(
-							keywords,
-							field_name,
-							true,
-						);
-						const search_result_value = me.fuzzy_search(
-							keywords,
-							field_value,
-							true,
-						);
+						var remaining_length = result_max_length - result_current_length;
+						result_current_length += field_name.length + field_value.length + 2;
+						const search_result_name = me.fuzzy_search(keywords, field_name, true);
+						const search_result_value = me.fuzzy_search(keywords, field_value, true);
 						if (result_current_length < result_max_length) {
 							// We have room, push the entire field
 							field_text =
@@ -467,10 +418,7 @@ frappe.search.utils = {
 								search_result_name.marked_string +
 								": </span> " +
 								search_result_value.marked_string;
-							if (
-								fields.indexOf(field_text) === -1 &&
-								doc_name !== field_value
-							) {
+							if (fields.indexOf(field_text) === -1 && doc_name !== field_value) {
 								fields.push(field_text);
 							}
 						} else {
@@ -482,15 +430,9 @@ frappe.search.utils = {
 									'<span class="field-name text-muted">' +
 									search_result_name.marked_string +
 									": </span> ";
-								field_value = field_value.slice(
-									0,
-									remaining_length,
-								);
+								field_value = field_value.slice(0, remaining_length);
 								field_value =
-									field_value.slice(
-										0,
-										field_value.lastIndexOf(" "),
-									) + " ...";
+									field_value.slice(0, field_value.lastIndexOf(" ")) + " ...";
 								field_text += search_result_value.marked_string;
 								fields.push(field_text);
 							} else {
@@ -636,18 +578,10 @@ frappe.search.utils = {
 		];
 	},
 
-	fuzzy_search: function (
-		keywords = "",
-		_item = "",
-		return_marked_string = false,
-	) {
+	fuzzy_search: function (keywords = "", _item = "", return_marked_string = false) {
 		const item = __(_item);
 
-		const [, score, matches] = fuzzy_match(
-			keywords,
-			item,
-			return_marked_string,
-		);
+		const [, score, matches] = fuzzy_match(keywords, item, return_marked_string);
 
 		if (!return_marked_string) {
 			return score;
@@ -706,10 +640,7 @@ frappe.search.utils = {
 					if (str_char === str_char.toLowerCase()) {
 						rendered += "<mark>" + subseq.charAt(i) + "</mark>";
 					} else {
-						rendered +=
-							"<mark>" +
-							subseq.charAt(i).toUpperCase() +
-							"</mark>";
+						rendered += "<mark>" + subseq.charAt(i).toUpperCase() + "</mark>";
 					}
 					j++;
 					continue outer;
@@ -759,9 +690,7 @@ frappe.search.utils = {
 			const search_result = me.fuzzy_search(keywords, item.title, true);
 			if (search_result.score > 0) {
 				var ret = {
-					label: __("Install {0} from Marketplace", [
-						search_result.marked_string,
-					]),
+					label: __("Install {0} from Marketplace", [search_result.marked_string]),
 					value: __("Install {0} from Marketplace", [__(item.title)]),
 					index: search_result.score * 0.8,
 					route: [

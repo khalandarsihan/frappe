@@ -10,11 +10,7 @@
 		<Teleport to="#autocomplete-area">
 			<div class="dropdown" ref="dropdown_ref">
 				<div v-show="show" class="dropdown-options">
-					<div
-						v-for="group in groups"
-						:key="group.key"
-						class="groups"
-					>
+					<div v-for="group in groups" :key="group.key" class="groups">
 						<div v-if="group.group" class="group-title">
 							{{ group.group }}
 						</div>
@@ -24,10 +20,7 @@
 							:key="item.label"
 							:title="item.tooltip"
 						>
-							<button
-								class="dropdown-item"
-								@click.stop="action(item.onClick)"
-							>
+							<button class="dropdown-item" @click.stop="action(item.onClick)">
 								{{ item.label }}
 							</button>
 						</div>
@@ -65,9 +58,7 @@ onClickOutside(dropdown_btn_ref, () => (show.value = false), {
 });
 
 const groups = computed(() => {
-	let _groups = props.options[0]?.group
-		? props.options
-		: [{ group: "", items: props.options }];
+	let _groups = props.options[0]?.group ? props.options : [{ group: "", items: props.options }];
 
 	return _groups.map((group, i) => {
 		return {
@@ -80,21 +71,17 @@ const groups = computed(() => {
 
 function setupPopper() {
 	if (!popper.value) {
-		popper.value = createPopper(
-			dropdown_btn_ref.value,
-			dropdown_ref.value,
-			{
-				placement: props.placement,
-				modifiers: [
-					{
-						name: "offset",
-						options: {
-							offset: [0, 4],
-						},
+		popper.value = createPopper(dropdown_btn_ref.value, dropdown_ref.value, {
+			placement: props.placement,
+			modifiers: [
+				{
+					name: "offset",
+					options: {
+						offset: [0, 4],
 					},
-				],
-			},
-		);
+				},
+			],
+		});
 	} else {
 		popper.value.update();
 	}

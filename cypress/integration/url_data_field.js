@@ -29,16 +29,8 @@ context("URL Data Field Input", () => {
 
 		it("should have valid URL link with target _blank", () => {
 			cy.get_field("url").clear().type("https://frappe.io");
-			cy.get(".link-btn .btn-open").should(
-				"have.attr",
-				"href",
-				"https://frappe.io",
-			);
-			cy.get(".link-btn .btn-open").should(
-				"have.attr",
-				"target",
-				"_blank",
-			);
+			cy.get(".link-btn .btn-open").should("have.attr", "href", "https://frappe.io");
+			cy.get(".link-btn .btn-open").should("have.attr", "target", "_blank");
 		});
 
 		it("should inject anchor tag in read-only URL data field", () => {

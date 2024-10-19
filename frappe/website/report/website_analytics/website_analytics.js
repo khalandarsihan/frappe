@@ -7,10 +7,7 @@ frappe.query_reports["Website Analytics"] = {
 			fieldname: "from_date",
 			label: __("From Date"),
 			fieldtype: "Date",
-			default: frappe.datetime.add_days(
-				frappe.datetime.now_date(true),
-				-100,
-			),
+			default: frappe.datetime.add_days(frappe.datetime.now_date(true), -100),
 		},
 		{
 			fieldname: "to_date",
@@ -54,12 +51,7 @@ frappe.query_reports["Website Analytics"] = {
 				try {
 					let doctype = value.split(">")[0].trim();
 					let name = value.split(">")[1].trim();
-					return frappe.utils.get_form_link(
-						doctype,
-						name,
-						true,
-						value,
-					);
+					return frappe.utils.get_form_link(doctype, name, true, value);
 				} catch (e) {
 					// skip and return with default formatter
 				}

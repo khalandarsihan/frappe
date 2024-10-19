@@ -79,8 +79,7 @@ String.prototype.plural = function (revert) {
 		"(li|wi|kni)ves$": "$1fe",
 		"(shea|loa|lea|thie)ves$": "$1f",
 		"(^analy)ses$": "$1sis",
-		"((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$":
-			"$1$2sis",
+		"((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$": "$1$2sis",
 		"([ti])a$": "$1um",
 		"(n)ews$": "$1ews",
 		"(h|bl)ouses$": "$1ouse",
@@ -152,9 +151,7 @@ Object.assign(frappe.utils, {
 		var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 		for (var i = 0; i < len; i++)
-			text += possible.charAt(
-				Math.floor(Math.random() * possible.length),
-			);
+			text += possible.charAt(Math.floor(Math.random() * possible.length));
 
 		return text;
 	},
@@ -215,9 +212,7 @@ Object.assign(frappe.utils, {
 		return parsed_json;
 	},
 	strip_whitespace: function (html) {
-		return (html || "")
-			.replace(/<p>\s*<\/p>/g, "")
-			.replace(/<br>(\s*<br>\s*)+/g, "<br><br>");
+		return (html || "").replace(/<p>\s*<\/p>/g, "").replace(/<br>(\s*<br>\s*)+/g, "<br><br>");
 	},
 	encode_tags: function (html) {
 		var tagsToReplace = {
@@ -262,10 +257,7 @@ Object.assign(frappe.utils, {
 			"=": "&#x3D;",
 		};
 
-		return String(txt).replace(
-			/[&<>"'`=]/g,
-			(char) => escape_html_mapping[char] || char,
-		);
+		return String(txt).replace(/[&<>"'`=]/g, (char) => escape_html_mapping[char] || char);
 	},
 
 	unescape_html: function (txt) {
@@ -281,7 +273,7 @@ Object.assign(frappe.utils, {
 
 		return String(txt).replace(
 			/&amp;|&lt;|&gt;|&quot;|&#39;|&#x60;|&#x3D;/g,
-			(char) => unescape_html_mapping[char] || char,
+			(char) => unescape_html_mapping[char] || char
 		);
 	},
 
@@ -298,11 +290,9 @@ Object.assign(frappe.utils, {
 		);
 	},
 	to_title_case: function (string, with_space = false) {
-		let titlecased_string = string
-			.toLowerCase()
-			.replace(/(?:^|[\s-/])\w/g, function (match) {
-				return match.toUpperCase();
-			});
+		let titlecased_string = string.toLowerCase().replace(/(?:^|[\s-/])\w/g, function (match) {
+			return match.toUpperCase();
+		});
 
 		let replace_with = with_space ? " " : "";
 
@@ -319,7 +309,7 @@ Object.assign(frappe.utils, {
 			.before(
 				'<p><a class="text-muted btn btn-default toggle-blockquote" style="padding: 2px 7px 0px; line-height: 1;"> \
 					• • • \
-				</a></p>',
+				</a></p>'
 			);
 		return content.html();
 	},
@@ -329,7 +319,7 @@ Object.assign(frappe.utils, {
 		additional_offset,
 		element_to_be_scrolled,
 		callback,
-		highlight_element = false,
+		highlight_element = false
 	) {
 		if (frappe.flags.disable_auto_scroll) return;
 
@@ -356,7 +346,7 @@ Object.assign(frappe.utils, {
 					function () {
 						$(element).removeClass("highlight");
 					},
-					{ once: true },
+					{ once: true }
 				);
 			}
 		};
@@ -381,11 +371,8 @@ Object.assign(frappe.utils, {
 	},
 	get_scroll_position: function (element, additional_offset) {
 		let header_offset =
-			$(".navbar").height() + $(".page-head:visible").height() ||
-			$(".navbar").height();
-		return (
-			$(element).offset().top - header_offset - cint(additional_offset)
-		);
+			$(".navbar").height() + $(".page-head:visible").height() || $(".navbar").height();
+		return $(element).offset().top - header_offset - cint(additional_offset);
 	},
 	filter_dict: function (dict, filters) {
 		var ret = [];
@@ -429,11 +416,7 @@ Object.assign(frappe.utils, {
 			} else if (list.length == 1) {
 				return list[0];
 			} else {
-				return (
-					list.slice(0, list.length - 1).join(", ") +
-					sep +
-					list.slice(-1)[0]
-				);
+				return list.slice(0, list.length - 1).join(", ") + sep + list.slice(-1)[0];
 			}
 		} else {
 			return list;
@@ -441,9 +424,7 @@ Object.assign(frappe.utils, {
 	},
 	set_footnote: function (footnote_area, wrapper, txt) {
 		if (!footnote_area) {
-			footnote_area = $(
-				'<div class="text-muted footnote-area level">',
-			).appendTo(wrapper);
+			footnote_area = $('<div class="text-muted footnote-area level">').appendTo(wrapper);
 		}
 
 		if (txt) {
@@ -465,10 +446,7 @@ Object.assign(frappe.utils, {
 	get_url_from_dict: function (args) {
 		return (
 			$.map(args, function (val, key) {
-				if (val !== null)
-					return (
-						encodeURIComponent(key) + "=" + encodeURIComponent(val)
-					);
+				if (val !== null) return encodeURIComponent(key) + "=" + encodeURIComponent(val);
 				else return null;
 			}).join("&") || ""
 		);
@@ -517,16 +495,11 @@ Object.assign(frappe.utils, {
 		var colour = "gray";
 		if (text) {
 			text = cstr(text);
-			if (
-				has_words(["Pending", "Review", "Medium", "Not Approved"], text)
-			) {
+			if (has_words(["Pending", "Review", "Medium", "Not Approved"], text)) {
 				style = "warning";
 				colour = "orange";
 			} else if (
-				has_words(
-					["Open", "Urgent", "High", "Failed", "Rejected", "Error"],
-					text,
-				)
+				has_words(["Open", "Urgent", "High", "Failed", "Rejected", "Error"], text)
 			) {
 				style = "danger";
 				colour = "red";
@@ -546,7 +519,7 @@ Object.assign(frappe.utils, {
 						"Paid",
 						"Success",
 					],
-					text,
+					text
 				)
 			) {
 				style = "success";
@@ -598,9 +571,7 @@ Object.assign(frappe.utils, {
 			},
 		};
 
-		if (!compare_type)
-			compare_type =
-				typeof list[0][key] === "string" ? "string" : "number";
+		if (!compare_type) compare_type = typeof list[0][key] === "string" ? "string" : "number";
 
 		list.sort(sort_fn[compare_type]);
 
@@ -768,7 +739,7 @@ Object.assign(frappe.utils, {
 				'([^"\\' +
 				strDelimiter +
 				"\\r\\n]*))",
-			"gi",
+			"gi"
 		);
 
 		// Create an array to hold our data. Give the array
@@ -789,10 +760,7 @@ Object.assign(frappe.utils, {
 			// (is not the start of string) and if it matches
 			// field delimiter. If id does not, then we know
 			// that this delimiter is a row delimiter.
-			if (
-				strMatchedDelimiter.length &&
-				strMatchedDelimiter !== strDelimiter
-			) {
+			if (strMatchedDelimiter.length && strMatchedDelimiter !== strDelimiter) {
 				// Since we have reached a new row of data,
 				// add an empty row to our data array.
 				arrData.push([]);
@@ -806,10 +774,7 @@ Object.assign(frappe.utils, {
 			if (arrMatches[2]) {
 				// We found a quoted value. When we capture
 				// this value, unescape any double quotes.
-				strMatchedValue = arrMatches[2].replace(
-					new RegExp('""', "g"),
-					'"',
-				);
+				strMatchedValue = arrMatches[2].replace(new RegExp('""', "g"), '"');
 			} else {
 				// We found a non-quoted value.
 				strMatchedValue = arrMatches[3];
@@ -825,11 +790,7 @@ Object.assign(frappe.utils, {
 	},
 
 	warn_page_name_change: function () {
-		frappe.msgprint(
-			__(
-				"Note: Changing the Page Name will break previous URL to this page.",
-			),
-		);
+		frappe.msgprint(__("Note: Changing the Page Name will break previous URL to this page."));
 	},
 
 	set_title: function (title) {
@@ -957,7 +918,7 @@ Object.assign(frappe.utils, {
 		name,
 		html = false,
 		display_text = null,
-		query_params_obj = null,
+		query_params_obj = null
 	) {
 		display_text = display_text || name;
 		name = encodeURIComponent(name);
@@ -1133,10 +1094,7 @@ Object.assign(frappe.utils, {
 	get_browser() {
 		let ua = navigator.userAgent;
 		let tem;
-		let M =
-			ua.match(
-				/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i,
-			) || [];
+		let M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
 
 		if (/trident/i.test(M[1])) {
 			tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
@@ -1148,9 +1106,7 @@ Object.assign(frappe.utils, {
 				return { name: "Opera", version: tem[1] };
 			}
 		}
-		M = M[2]
-			? [M[1], M[2]]
-			: [navigator.appName, navigator.appVersion, "-?"];
+		M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, "-?"];
 		if ((tem = ua.match(/version\/(\d+)/i)) != null) {
 			M.splice(1, 1, tem[1]);
 		}
@@ -1169,33 +1125,22 @@ Object.assign(frappe.utils, {
 			};
 		}
 		if (value) {
-			let total_duration = frappe.utils.seconds_to_duration(
-				value,
-				duration_options,
-			);
+			let total_duration = frappe.utils.seconds_to_duration(value, duration_options);
 
 			if (total_duration.days) {
-				duration +=
-					total_duration.days +
-					__("d", null, "Days (Field: Duration)");
+				duration += total_duration.days + __("d", null, "Days (Field: Duration)");
 			}
 			if (total_duration.hours) {
 				duration += duration.length ? " " : "";
-				duration +=
-					total_duration.hours +
-					__("h", null, "Hours (Field: Duration)");
+				duration += total_duration.hours + __("h", null, "Hours (Field: Duration)");
 			}
 			if (total_duration.minutes) {
 				duration += duration.length ? " " : "";
-				duration +=
-					total_duration.minutes +
-					__("m", null, "Minutes (Field: Duration)");
+				duration += total_duration.minutes + __("m", null, "Minutes (Field: Duration)");
 			}
 			if (total_duration.seconds) {
 				duration += duration.length ? " " : "";
-				duration +=
-					total_duration.seconds +
-					__("s", null, "Seconds (Field: Duration)");
+				duration += total_duration.seconds + __("s", null, "Seconds (Field: Duration)");
 			}
 		}
 		return duration;
@@ -1263,19 +1208,11 @@ Object.assign(frappe.utils, {
 		image_path: "/assets/frappe/images/leaflet/",
 	},
 
-	icon(
-		icon_name,
-		size = "sm",
-		icon_class = "",
-		icon_style = "",
-		svg_class = "",
-	) {
+	icon(icon_name, size = "sm", icon_class = "", icon_style = "", svg_class = "") {
 		let size_class = "";
 		let is_espresso = icon_name.startsWith("es-");
 
-		icon_name = is_espresso
-			? `${"#" + icon_name}`
-			: `${"#icon-" + icon_name}`;
+		icon_name = is_espresso ? `${"#" + icon_name}` : `${"#icon-" + icon_name}`;
 		if (typeof size == "object") {
 			icon_style += ` width: ${size.width}; height: ${size.height}`;
 		} else {
@@ -1311,14 +1248,8 @@ Object.assign(frappe.utils, {
 		};
 
 		for (let key in custom_options) {
-			if (
-				typeof chart_args[key] === "object" &&
-				typeof custom_options[key] === "object"
-			) {
-				chart_args[key] = Object.assign(
-					chart_args[key],
-					custom_options[key],
-				);
+			if (typeof chart_args[key] === "object" && typeof custom_options[key] === "object") {
+				chart_args[key] = Object.assign(chart_args[key], custom_options[key]);
 			} else {
 				chart_args[key] = custom_options[key];
 			}
@@ -1329,11 +1260,7 @@ Object.assign(frappe.utils, {
 
 	format_chart_axis_number(label, country) {
 		const default_country = frappe.sys_defaults.country;
-		return frappe.utils.shorten_number(
-			label,
-			country || default_country,
-			3,
-		);
+		return frappe.utils.shorten_number(label, country || default_country, 3);
 	},
 
 	generate_route(item) {
@@ -1388,9 +1315,7 @@ Object.assign(frappe.utils, {
 					route = "query-report/" + item.name;
 				} else if (!item.is_query_report && item.report_ref_doctype) {
 					route =
-						frappe.router.slug(item.report_ref_doctype) +
-						"/view/report/" +
-						item.name;
+						frappe.router.slug(item.report_ref_doctype) + "/view/report/" + item.name;
 				} else {
 					route = "/report/" + item.name;
 				}
@@ -1407,11 +1332,7 @@ Object.assign(frappe.utils, {
 			route +=
 				"?" +
 				$.map(item.route_options, function (value, key) {
-					return (
-						encodeURIComponent(key) +
-						"=" +
-						encodeURIComponent(value)
-					);
+					return encodeURIComponent(key) + "=" + encodeURIComponent(value);
 				}).join("&");
 		}
 
@@ -1422,12 +1343,7 @@ Object.assign(frappe.utils, {
 		return `/app/${route}`;
 	},
 
-	shorten_number: function (
-		number,
-		country,
-		min_length = 4,
-		max_no_of_decimals = 2,
-	) {
+	shorten_number: function (number, country, min_length = 4, max_no_of_decimals = 2) {
 		/* returns the number as an abbreviated string
 		 * PARAMS
 		 *  number - number to be shortened
@@ -1479,8 +1395,8 @@ Object.assign(frappe.utils, {
 		if (summary.type == "separator") {
 			return $(`<div class="summary-separator">
 				<div class="summary-value ${summary.color ? summary.color.toLowerCase() : "text-muted"}">${
-					summary.value
-				}</div>
+				summary.value
+			}</div>
 			</div>`);
 		}
 		let df = { fieldtype: summary.datatype };
@@ -1494,8 +1410,8 @@ Object.assign(frappe.utils, {
 		let color = summary.indicator
 			? summary.indicator.toLowerCase()
 			: summary.color
-				? summary.color.toLowerCase()
-				: "";
+			? summary.color.toLowerCase()
+			: "";
 
 		return $(`<div class="summary-item">
 			<span class="summary-label">${__(summary.label)}</span>
@@ -1517,8 +1433,8 @@ Object.assign(frappe.utils, {
 					(letterhead ? "0" : "1") +
 					"&letterhead=" +
 					encodeURIComponent(letterhead) +
-					(lang_code ? "&_lang=" + lang_code : ""),
-			),
+					(lang_code ? "&_lang=" + lang_code : "")
+			)
 		);
 
 		if (!w) {
@@ -1530,24 +1446,14 @@ Object.assign(frappe.utils, {
 	get_clipboard_data(clipboard_paste_event) {
 		let e = clipboard_paste_event;
 		let clipboard_data =
-			e.clipboardData ||
-			window.clipboardData ||
-			e.originalEvent.clipboardData;
+			e.clipboardData || window.clipboardData || e.originalEvent.clipboardData;
 		return clipboard_data.getData("Text");
 	},
 
-	add_custom_button(
-		html,
-		action,
-		class_name = "",
-		title = "",
-		btn_type,
-		wrapper,
-		prepend,
-	) {
+	add_custom_button(html, action, class_name = "", title = "", btn_type, wrapper, prepend) {
 		if (!btn_type) btn_type = "btn-secondary";
 		let button = $(
-			`<button class="btn ${btn_type} btn-xs ${class_name}" title="${title}">${html}</button>`,
+			`<button class="btn ${btn_type} btn-xs ${class_name}" title="${title}">${html}</button>`
 		);
 		button.click((event) => {
 			event.stopPropagation();
@@ -1598,21 +1504,14 @@ Object.assign(frappe.utils, {
 				.appendTo($select_group_button.find(".dropdown-menu"))
 				.click((e) => {
 					selected_action = action;
-					$select_group_button
-						.find(".selected-button .label")
-						.text(action.label);
+					$select_group_button.find(".selected-button .label").text(action.label);
 
 					$(e.currentTarget).find(".tick-icon").addClass("selected");
-					$(e.currentTarget)
-						.siblings()
-						.find(".tick-icon")
-						.removeClass("selected");
+					$(e.currentTarget).siblings().find(".tick-icon").removeClass("selected");
 				});
 		});
 
-		$select_group_button
-			.find(".dropdown-menu li:first-child .tick-icon")
-			.addClass("selected");
+		$select_group_button.find(".dropdown-menu li:first-child .tick-icon").addClass("selected");
 
 		$select_group_button.find(".selected-button").click((event) => {
 			event.stopPropagation();
@@ -1796,9 +1695,7 @@ Object.assign(frappe.utils, {
 			if (!frappe.boot.developer_mode) {
 				return;
 			}
-			console.warn(
-				"Adding property watcher, make sure to remove it after debugging.",
-			);
+			console.warn("Adding property watcher, make sure to remove it after debugging.");
 
 			// Adapted from https://stackoverflow.com/a/11658693
 			// Reused under CC-BY-SA 4.0
@@ -1872,10 +1769,10 @@ Object.assign(frappe.utils, {
 					__("Tracking URL generated and copied to clipboard") +
 						": <br>" +
 						`<a href="${url}">${url.bold()}</a>`,
-					__("Here's your tracking URL"),
+					__("Here's your tracking URL")
 				);
 			},
-			__("Generate Tracking URL"),
+			__("Generate Tracking URL")
 		);
 	},
 });

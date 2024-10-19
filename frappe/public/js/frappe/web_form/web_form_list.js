@@ -35,21 +35,14 @@ export default class WebFormList {
 		let filter_area = $(".web-list-filters");
 
 		frappe
-			.call(
-				"frappe.website.doctype.web_form.web_form.get_web_form_filters",
-				{
-					web_form_name: this.web_form_name,
-				},
-			)
+			.call("frappe.website.doctype.web_form.web_form.get_web_form_filters", {
+				web_form_name: this.web_form_name,
+			})
 			.then((response) => {
 				let fields = response.message;
 				fields.length && filter_area.removeClass("hide");
 				fields.forEach((field) => {
-					if (
-						["Text Editor", "Text", "Small Text"].includes(
-							field.fieldtype,
-						)
-					) {
+					if (["Text Editor", "Text", "Small Text"].includes(field.fieldtype)) {
 						field.fieldtype = "Data";
 					}
 
@@ -66,11 +59,7 @@ export default class WebFormList {
 							only_select: true,
 							label: __(field.label, null, field.parent),
 							onchange: (event) => {
-								this.add_filter(
-									field.fieldname,
-									input.value,
-									field.fieldtype,
-								);
+								this.add_filter(field.fieldname, input.value, field.fieldtype);
 								this.refresh();
 							},
 						},
@@ -87,10 +76,7 @@ export default class WebFormList {
 							trigger: "hover",
 						});
 
-					input.$input.attr(
-						"placeholder",
-						__(field.label, null, field.parent),
-					);
+					input.$input.attr("placeholder", __(field.label, null, field.parent));
 					this.filter_input.push(input);
 				});
 				this.refresh();
@@ -124,10 +110,7 @@ export default class WebFormList {
 
 	fetch_data() {
 		if (this.condition_json && JSON.parse(this.condition_json)) {
-			let filter = frappe.utils.get_filter_from_json(
-				this.condition_json,
-				this.doctype,
-			);
+			let filter = frappe.utils.get_filter_from_json(this.condition_json, this.doctype);
 			filter = frappe.utils.get_filter_as_json(filter);
 			this.filters = Object.assign(this.filters, JSON.parse(filter));
 		}
@@ -299,13 +282,8 @@ export default class WebFormList {
 		const actions = $(".web-list-actions");
 
 		frappe.has_permission(this.doctype, "", "delete", () => {
-			this.add_button(
-				actions,
-				"delete-rows",
-				"danger",
-				true,
-				"Delete",
-				() => this.delete_rows(),
+			this.add_button(actions, "delete-rows", "danger", true, "Delete", () =>
+				this.delete_rows()
 			);
 		});
 	}
@@ -327,14 +305,7 @@ export default class WebFormList {
 	create_more() {
 		if (this.rows.length >= this.page_length) {
 			const footer = $(".web-list-footer");
-			this.add_button(
-				footer,
-				"more",
-				"secondary",
-				false,
-				"Load More",
-				() => this.more(),
-			);
+			this.add_button(footer, "more", "secondary", false, "Load More", () => this.more());
 		}
 	}
 
@@ -358,17 +329,13 @@ export default class WebFormList {
 	toggle_delete() {
 		if (!this.settings.allow_delete) return;
 		let btn = $(".delete-rows");
-		!this.get_selected().length
-			? btn.addClass("hide")
-			: btn.removeClass("hide");
+		!this.get_selected().length ? btn.addClass("hide") : btn.removeClass("hide");
 	}
 
 	toggle_new() {
 		if (!this.settings.allow_delete) return;
 		let btn = $(".button-new");
-		this.get_selected().length
-			? btn.addClass("hide")
-			: btn.removeClass("hide");
+		this.get_selected().length ? btn.addClass("hide") : btn.removeClass("hide");
 	}
 
 	delete_rows() {
@@ -409,9 +376,7 @@ frappe.ui.WebFormListRow = class WebFormListRow {
 		$cell.appendTo(this.row);
 
 		// Add Serial Number
-		let serialNo = $(
-			`<td class="list-col-serial">${__(this.serial_number)}</td>`,
-		);
+		let serialNo = $(`<td class="list-col-serial">${__(this.serial_number)}</td>`);
 		serialNo.appendTo(this.row);
 
 		this.columns.forEach((field) => {
@@ -419,12 +384,7 @@ frappe.ui.WebFormListRow = class WebFormListRow {
 			let value =
 				(this.doc[field.fieldname] &&
 					__(
-						formatter(
-							this.doc[field.fieldname],
-							field,
-							{ only_value: 1 },
-							this.doc,
-						),
+						formatter(this.doc[field.fieldname], field, { only_value: 1 }, this.doc)
 					)) ||
 				"";
 			let cell = $(`<td><p class="ellipsis">${value}</p></td>`);

@@ -24,5 +24,5 @@ sass.render(
 				console.error(err);
 			}
 		});
-	},
+	}
 );

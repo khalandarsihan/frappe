@@ -17,11 +17,7 @@ let doctype_df = computed(() => {
 	doctypes.value = store
 		.get_updated_fields()
 		.filter((df) => df.fieldtype == "Link")
-		.filter(
-			(df) =>
-				df.options &&
-				df.fieldname != store.form.selected_field.fieldname,
-		)
+		.filter((df) => df.options && df.fieldname != store.form.selected_field.fieldname)
 		.sort((a, b) => a.options.localeCompare(b.options))
 		.map((df) => ({
 			label: `${df.options} (${df.fieldname})`,
@@ -29,10 +25,7 @@ let doctype_df = computed(() => {
 			doctype_name: df.options,
 		}));
 
-	let options = [
-		{ label: __("Select DocType"), value: "" },
-		...doctypes.value,
-	];
+	let options = [{ label: __("Select DocType"), value: "" }, ...doctypes.value];
 	return { fieldtype: "Select", label: __("Fetch From"), options };
 });
 
@@ -40,9 +33,7 @@ let field_df = computedAsync(async () => {
 	let options = [{ label: __("Select Field"), value: "" }];
 	let df = { fieldtype: "Select", label: __("Fetch From"), options };
 	if (!doctype.value) return df;
-	let doctype_name = doctypes.value?.find(
-		(df) => df.value == doctype.value,
-	).doctype_name;
+	let doctype_name = doctypes.value?.find((df) => df.value == doctype.value).doctype_name;
 	if (!doctype_name) return df;
 
 	if (props.value.split(".")[0] != doctype.value) {
@@ -72,25 +63,21 @@ let field_df = computedAsync(async () => {
 watch(
 	() => props.value,
 	(value) => {
-		if (value)
-			[doctype.value, fieldname.value] = value.split(".") || ["", ""];
+		if (value) [doctype.value, fieldname.value] = value.split(".") || ["", ""];
 	},
-	{ immediate: true },
+	{ immediate: true }
 );
 
-watch(
-	[() => doctype.value, () => fieldname.value],
-	([doctype_value, fieldname_value]) => {
-		let [doctype_name, field_name] = props.value?.split(".") || ["", ""];
-		if (doctype_value != doctype_name || fieldname_value != field_name) {
-			let fetch_expression = "";
-			if (doctype_value && fieldname_value) {
-				fetch_expression = `${doctype_value}.${fieldname_value}`;
-			}
-			emit("update:modelValue", fetch_expression);
+watch([() => doctype.value, () => fieldname.value], ([doctype_value, fieldname_value]) => {
+	let [doctype_name, field_name] = props.value?.split(".") || ["", ""];
+	if (doctype_value != doctype_name || fieldname_value != field_name) {
+		let fetch_expression = "";
+		if (doctype_value && fieldname_value) {
+			fetch_expression = `${doctype_value}.${fieldname_value}`;
 		}
-	},
-);
+		emit("update:modelValue", fetch_expression);
+	}
+});
 </script>
 
 <template>

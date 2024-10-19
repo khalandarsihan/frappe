@@ -17,9 +17,7 @@ context("Grid Configuration", () => {
 		cy.findByRole("button", { name: "Add" }).click();
 		cy.wait(100);
 		cy.get('[data-fieldname="options"]').invoke("attr", "value", "1");
-		cy.get('.form-control.column-width[data-fieldname="options"]').trigger(
-			"change",
-		);
+		cy.get('.form-control.column-width[data-fieldname="options"]').trigger("change");
 		cy.findByRole("button", { name: "Update" }).click();
 		cy.wait(200);
 		cy.get('[title="Read Only"').should("be.visible");

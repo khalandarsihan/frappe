@@ -28,18 +28,14 @@ frappe.ui.form.on("Recorder", {
 		index_grid.toggle_checkboxes(true);
 		index_grid.df.cannot_delete_rows = true;
 		index_grid.add_custom_button(__("Add Indexes"), function () {
-			let indexes_to_add = index_grid
-				.get_selected_children()
-				.map((row) => {
-					return {
-						column: row.column,
-						table: row.table,
-					};
-				});
+			let indexes_to_add = index_grid.get_selected_children().map((row) => {
+				return {
+					column: row.column,
+					table: row.table,
+				};
+			});
 			if (!indexes_to_add.length) {
-				frappe.toast(
-					__("You need to select indexes you want to add first."),
-				);
+				frappe.toast(__("You need to select indexes you want to add first."));
 				return;
 			}
 			frappe.xcall("frappe.core.doctype.recorder.recorder.add_indexes", {
@@ -49,12 +45,7 @@ frappe.ui.form.on("Recorder", {
 	},
 
 	setup_sort: function (frm) {
-		const sortable_fields = [
-			"index",
-			"duration",
-			"exact_copies",
-			"normalized_copies",
-		];
+		const sortable_fields = ["index", "duration", "exact_copies", "normalized_copies"];
 		sortable_fields.forEach((field) => {
 			const field_header = $(`.col[data-fieldname='${field}']`)[0];
 			$(field_header).click(() => {
@@ -71,10 +62,7 @@ frappe.ui.form.on("Recorder", {
 
 	/// Format duration and copy cells
 	format_grid(frm) {
-		const max_duration = Math.max(
-			20,
-			...frm.doc.sql_queries.map((d) => d.duration),
-		);
+		const max_duration = Math.max(20, ...frm.doc.sql_queries.map((d) => d.duration));
 
 		const heatmap = (table, field, max) => {
 			frm.fields_dict[table].grid.grid_rows.forEach((row) => {
@@ -98,9 +86,7 @@ frappe.ui.form.on("Recorder Query", "form_render", function (frm, cdt, cdn) {
 
 	function render_html_field(parsed_json, fieldname, label) {
 		let html =
-			"<div class='clearfix'><label class='control-label'>" +
-			label +
-			"</label></div>";
+			"<div class='clearfix'><label class='control-label'>" + label + "</label></div>";
 		if (parsed_json.length == 0) {
 			html += "<label class='control-label'>None</label>";
 		} else {
@@ -108,8 +94,9 @@ frappe.ui.form.on("Recorder Query", "form_render", function (frm, cdt, cdn) {
 		}
 
 		let field_wrapper =
-			frm.fields_dict[row.parentfield].grid.grid_rows_by_docname[cdn]
-				.grid_form.fields_dict[fieldname].wrapper;
+			frm.fields_dict[row.parentfield].grid.grid_rows_by_docname[cdn].grid_form.fields_dict[
+				fieldname
+			].wrapper;
 		$(html).appendTo(field_wrapper);
 	}
 

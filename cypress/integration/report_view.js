@@ -15,14 +15,12 @@ context("Report View", () => {
 				enabled: 0,
 				docstatus: 1, // submit document
 			},
-			true,
+			true
 		);
 	});
 
 	it("Field with enabled allow_on_submit should be editable.", () => {
-		cy.intercept("POST", "api/method/frappe.client.set_value").as(
-			"value-update",
-		);
+		cy.intercept("POST", "api/method/frappe.client.set_value").as("value-update");
 		cy.visit(`/app/List/${doctype_name}/Report`);
 
 		// check status column added from docstatus
@@ -31,9 +29,7 @@ context("Report View", () => {
 
 		// select the cell
 		cell.dblclick();
-		cell.get(".dt-cell__edit--col-4")
-			.findByRole("checkbox")
-			.check({ force: true });
+		cell.get(".dt-cell__edit--col-4").findByRole("checkbox").check({ force: true });
 		cy.get(".dt-row-0 > .dt-cell--col-3").click(); // click outside
 
 		cy.wait("@value-update");

@@ -105,9 +105,7 @@ CustomColor.tagName = "font";
 
 Quill.register(CustomColor, true);
 
-frappe.ui.form.ControlTextEditor = class ControlTextEditor extends (
-	frappe.ui.form.ControlCode
-) {
+frappe.ui.form.ControlTextEditor = class ControlTextEditor extends frappe.ui.form.ControlCode {
 	make_wrapper() {
 		super.make_wrapper();
 	}
@@ -126,10 +124,7 @@ frappe.ui.form.ControlTextEditor = class ControlTextEditor extends (
 				overflow: "auto",
 			});
 		}
-		this.quill = new Quill(
-			this.quill_container[0],
-			this.get_quill_options(),
-		);
+		this.quill = new Quill(this.quill_container[0], this.get_quill_options());
 		this.bind_events();
 	}
 
@@ -141,7 +136,7 @@ frappe.ui.form.ControlTextEditor = class ControlTextEditor extends (
 
 				const input_value = this.get_input_value();
 				this.parse_validate_and_set_in_model(input_value);
-			}, 300),
+			}, 300)
 		);
 
 		$(this.quill.root).on("keydown", (e) => {
@@ -188,12 +183,8 @@ frappe.ui.form.ControlTextEditor = class ControlTextEditor extends (
 		});
 
 		// font size dropdown
-		let $font_size_label = this.$wrapper.find(
-			".ql-size .ql-picker-label:first",
-		);
-		let $default_font_size = this.$wrapper.find(
-			".ql-size .ql-picker-item:first",
-		);
+		let $font_size_label = this.$wrapper.find(".ql-size .ql-picker-label:first");
+		let $default_font_size = this.$wrapper.find(".ql-size .ql-picker-item:first");
 
 		if ($font_size_label.length) {
 			$font_size_label.attr("data-value", "---");
@@ -242,19 +233,14 @@ frappe.ui.form.ControlTextEditor = class ControlTextEditor extends (
 			allowedChars: /^[A-Za-z0-9_]*$/,
 			mentionDenotationChars: ["@"],
 			isolateCharacter: true,
-			source: frappe.utils.debounce(async function (
-				search_term,
-				renderList,
-			) {
+			source: frappe.utils.debounce(async function (search_term, renderList) {
 				let method =
-					me.mention_search_method ||
-					"frappe.desk.search.get_names_for_mentions";
+					me.mention_search_method || "frappe.desk.search.get_names_for_mentions";
 				let values = await frappe.xcall(method, {
 					search_term,
 				});
 
-				let sorted_values =
-					me.prioritize_involved_users_in_mention(values);
+				let sorted_values = me.prioritize_involved_users_in_mention(values);
 				renderList(sorted_values, search_term);
 			}, 300),
 			renderItem(item) {

@@ -31,8 +31,7 @@ frappe.ready(() => {
 		}
 		setTimeout(() => {
 			let element = $(".discussion-form:visible .discussions-comment");
-			if (!element.find(".ql-editor").length)
-				make_comment_editor(element);
+			if (!element.find(".ql-editor").length) make_comment_editor(element);
 		}, 0);
 	});
 
@@ -109,32 +108,23 @@ const enhance_template = (data) => {
 const insert_message = (data) => {
 	const topic = data.topic_info;
 	const first_topic = !$(".reply-card").length;
-	const doctype = decodeURIComponent(
-		$(".discussions-parent").attr("data-doctype"),
-	);
-	const docname = decodeURIComponent(
-		$(".discussions-parent").attr("data-docname"),
-	);
+	const doctype = decodeURIComponent($(".discussions-parent").attr("data-doctype"));
+	const docname = decodeURIComponent($(".discussions-parent").attr("data-docname"));
 	const document_match_found =
-		doctype == topic.reference_doctype &&
-		docname == topic.reference_docname;
+		doctype == topic.reference_doctype && docname == topic.reference_docname;
 
 	if ($(`.discussion-on-page[data-topic=${topic.name}]`).length) {
 		$(data.template).insertBefore(
-			`.discussion-on-page[data-topic=${topic.name}] .discussion-form`,
+			`.discussion-on-page[data-topic=${topic.name}] .discussion-form`
 		);
 	} else if (!first_topic && !this.single_thread && document_match_found) {
-		$(data.sidebar).insertBefore(
-			$(`.discussions-sidebar .sidebar-parent`).first(),
-		);
+		$(data.sidebar).insertBefore($(`.discussions-sidebar .sidebar-parent`).first());
 		$(`#discussion-group`).prepend(data.new_topic_template);
 		if (topic.owner == frappe.session.user) {
 			$(".discussion-on-page") && $(".discussion-on-page").collapse();
 			$(".sidebar-parent").first().click();
 			setTimeout(() => {
-				make_comment_editor(
-					$(".discussion-form:visible .discussions-comment"),
-				);
+				make_comment_editor($(".discussion-form:visible .discussions-comment"));
 			}, 1000);
 		}
 	} else if (this.single_thread && document_match_found) {
@@ -167,9 +157,7 @@ const post_message_cleanup = () => {
 };
 
 const update_reply_count = (topic) => {
-	let reply_count = $(`[data-target='#t${topic}']`)
-		.find(".reply-count")
-		.text();
+	let reply_count = $(`[data-target='#t${topic}']`).find(".reply-count").text();
 	reply_count = parseInt(reply_count) + 1;
 	$(`[data-target='#t${topic}']`).find(".reply-count").text(reply_count);
 };
@@ -227,20 +215,14 @@ const submit_discussion = (e) => {
 
 	const target = $(e.currentTarget);
 	const reply_name = target.closest(".reply-card").data("reply");
-	const title = $(".topic-title:visible").length
-		? $(".topic-title:visible").val().trim()
-		: "";
+	const title = $(".topic-title:visible").length ? $(".topic-title:visible").val().trim() : "";
 	let reply = this.comment_editor.get_value("comment_editor");
 
 	if (strip_html(reply).trim() != "" || reply.includes("img")) {
-		let doctype = target
-			.closest(".discussions-parent")
-			.attr("data-doctype");
+		let doctype = target.closest(".discussions-parent").attr("data-doctype");
 		doctype = doctype ? decodeURIComponent(doctype) : doctype;
 
-		let docname = target
-			.closest(".discussions-parent")
-			.attr("data-docname");
+		let docname = target.closest(".discussions-parent").attr("data-docname");
 		docname = docname ? decodeURIComponent(docname) : docname;
 
 		frappe.call({
@@ -250,9 +232,7 @@ const submit_discussion = (e) => {
 				docname: docname ? docname : "",
 				reply: reply,
 				title: title,
-				topic_name: target
-					.closest(".discussion-on-page")
-					.attr("data-topic"),
+				topic_name: target.closest(".discussion-on-page").attr("data-topic"),
 				reply_name: reply_name,
 			},
 		});
@@ -261,8 +241,7 @@ const submit_discussion = (e) => {
 
 const login_from_discussion = (e) => {
 	e.preventDefault();
-	const redirect =
-		$(e.currentTarget).attr("data-redirect") || window.location.href;
+	const redirect = $(e.currentTarget).attr("data-redirect") || window.location.href;
 	window.location.href = `/login?redirect-to=${redirect}`;
 };
 

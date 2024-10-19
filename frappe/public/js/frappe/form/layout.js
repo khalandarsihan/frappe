@@ -23,9 +23,7 @@ frappe.ui.form.Layout = class Layout {
 			this.parent = this.body;
 		}
 		this.wrapper = $('<div class="form-layout">').appendTo(this.parent);
-		this.message = $('<div class="form-message hidden"></div>').appendTo(
-			this.wrapper,
-		);
+		this.message = $('<div class="form-message hidden"></div>').appendTo(this.wrapper);
 		this.page = $('<div class="form-page"></div>').appendTo(this.wrapper);
 
 		if (!this.fields) {
@@ -48,9 +46,9 @@ frappe.ui.form.Layout = class Layout {
 			</div>
 		`).appendTo(this.page);
 		this.tab_link_container = this.page.find(".form-tabs");
-		this.tabs_content = $(
-			`<div class="form-tab-content tab-content"></div>`,
-		).appendTo(this.page);
+		this.tabs_content = $(`<div class="form-tab-content tab-content"></div>`).appendTo(
+			this.page
+		);
 		this.setup_events();
 	}
 
@@ -60,9 +58,7 @@ frappe.ui.form.Layout = class Layout {
 			fields = fields.concat(this.get_fields_from_layout());
 		} else {
 			fields = fields.concat(
-				frappe.meta.sort_docfields(
-					frappe.meta.docfield_map[this.doctype],
-				),
+				frappe.meta.sort_docfields(frappe.meta.docfield_map[this.doctype])
 			);
 		}
 
@@ -82,9 +78,7 @@ frappe.ui.form.Layout = class Layout {
 					field.frm &&
 					field.frm.is_new() &&
 					field.frm.meta.autoname &&
-					["prompt", "name"].includes(
-						field.frm.meta.autoname.toLowerCase(),
-					)
+					["prompt", "name"].includes(field.frm.meta.autoname.toLowerCase())
 				) {
 					return "Write";
 				}
@@ -96,9 +90,7 @@ frappe.ui.form.Layout = class Layout {
 	get_fields_from_layout() {
 		const fields = [];
 		for (let f of this.doctype_layout.fields) {
-			const docfield = copy_dict(
-				frappe.meta.docfield_map[this.doctype][f.fieldname],
-			);
+			const docfield = copy_dict(frappe.meta.docfield_map[this.doctype][f.fieldname]);
 			docfield.label = f.label;
 			fields.push(docfield);
 		}
@@ -110,14 +102,9 @@ frappe.ui.form.Layout = class Layout {
 			// remove previous color
 			this.message.removeClass(this.message_color);
 		}
-		let close_message = $(
-			`<div class="close-message">${frappe.utils.icon("close")}</div>`,
-		);
+		let close_message = $(`<div class="close-message">${frappe.utils.icon("close")}</div>`);
 		this.message_color =
-			color &&
-			["yellow", "blue", "red", "green", "orange"].includes(color)
-				? color
-				: "blue";
+			color && ["yellow", "blue", "red", "green", "orange"].includes(color) ? color : "blue";
 		if (html) {
 			if (html.substr(0, 1) !== "<") {
 				// wrap in a block
@@ -126,9 +113,7 @@ frappe.ui.form.Layout = class Layout {
 			this.message.removeClass("hidden").addClass(this.message_color);
 			$(html).appendTo(this.message);
 			close_message.appendTo(this.message);
-			close_message.on("click", () =>
-				this.message.empty().addClass("hidden"),
-			);
+			close_message.on("click", () => this.message.empty().addClass("hidden"));
 		} else {
 			this.message.empty().addClass("hidden");
 		}
@@ -152,25 +137,16 @@ frappe.ui.form.Layout = class Layout {
 				fieldname: "__details",
 			};
 
-			let first_field_visible = this.fields.find(
-				(element) => element.hidden == false,
-			);
+			let first_field_visible = this.fields.find((element) => element.hidden == false);
 			let first_tab =
-				first_field_visible?.fieldtype === "Tab Break"
-					? first_field_visible
-					: null;
+				first_field_visible?.fieldtype === "Tab Break" ? first_field_visible : null;
 
 			if (!first_tab) {
 				this.fields.splice(0, 0, default_tab);
 			} else {
 				// reshuffle __newname field to accomodate under 1st Tab Break
-				let newname_field = this.fields.find(
-					(df) => df.fieldname === "__newname",
-				);
-				if (
-					newname_field &&
-					newname_field.get_status(this) === "Write"
-				) {
+				let newname_field = this.fields.find((df) => df.fieldname === "__newname");
+				if (newname_field && newname_field.get_status(this) === "Write") {
 					this.fields.splice(0, 1);
 					this.fields.splice(1, 0, newname_field);
 				}
@@ -203,16 +179,12 @@ frappe.ui.form.Layout = class Layout {
 
 	no_opening_section() {
 		return (
-			(this.fields[0] && this.fields[0].fieldtype != "Section Break") ||
-			!this.fields.length
+			(this.fields[0] && this.fields[0].fieldtype != "Section Break") || !this.fields.length
 		);
 	}
 
 	no_opening_tab() {
-		return (
-			(this.fields[1] && this.fields[1].fieldtype != "Tab Break") ||
-			!this.fields.length
-		);
+		return (this.fields[1] && this.fields[1].fieldtype != "Tab Break") || !this.fields.length;
 	}
 
 	is_tabbed_layout() {
@@ -228,9 +200,7 @@ frappe.ui.form.Layout = class Layout {
 			const idx = this.fields_list.findIndex((e) => e == prev_fieldobj);
 			this.fields_list.splice(idx, 1, fieldobj);
 			this.fields_dict[fieldname] = fieldobj;
-			this.sections.forEach((section) =>
-				section.replace_field(fieldname, fieldobj),
-			);
+			this.sections.forEach((section) => section.replace_field(fieldname, fieldobj));
 			prev_fieldobj.tab?.replace_field(fieldobj);
 			this.refresh_fields([df]);
 		}
@@ -277,9 +247,7 @@ frappe.ui.form.Layout = class Layout {
 	}
 
 	make_page_break() {
-		this.page = $('<div class="form-page page-break"></div>').appendTo(
-			this.wrapper,
-		);
+		this.page = $('<div class="form-page page-break"></div>').appendTo(this.wrapper);
 	}
 
 	make_page(df) {
@@ -292,9 +260,7 @@ frappe.ui.form.Layout = class Layout {
 			</div>
 		`).appendTo(this.wrapper);
 
-		this.page = $(
-			'<div class="form-page second-page hide"></div>',
-		).appendTo(this.wrapper);
+		this.page = $('<div class="form-page second-page hide"></div>').appendTo(this.wrapper);
 
 		this.fold_btn = head.find(".btn-fold").on("click", function () {
 			let page = $(this).parent().next();
@@ -329,7 +295,7 @@ frappe.ui.form.Layout = class Layout {
 			this.current_tab ? this.current_tab.wrapper : this.page,
 			df,
 			this.card_layout,
-			this,
+			this
 		);
 		this.sections.push(this.section);
 		this.sections_dict[df.fieldname] = this.section;
@@ -358,13 +324,7 @@ frappe.ui.form.Layout = class Layout {
 
 	make_tab(df) {
 		this.section = null;
-		let tab = new Tab(
-			this,
-			df,
-			this.frm,
-			this.tab_link_container,
-			this.tabs_content,
-		);
+		let tab = new Tab(this, df, this.frm, this.tab_link_container, this.tabs_content);
 		this.current_tab = tab;
 		this.make_section({ fieldtype: "Section Break" });
 		this.tabs.push(tab);
@@ -397,10 +357,7 @@ frappe.ui.form.Layout = class Layout {
 		}
 
 		if (document.activeElement) {
-			if (
-				document.activeElement.tagName == "INPUT" &&
-				this.is_numeric_field_active()
-			) {
+			if (document.activeElement.tagName == "INPUT" && this.is_numeric_field_active()) {
 				document.activeElement.select();
 			}
 		}
@@ -415,9 +372,7 @@ frappe.ui.form.Layout = class Layout {
 	refresh_sections() {
 		// hide invisible sections
 		this.wrapper.find(".form-section:not(.hide-control)").each(function () {
-			const section = $(this).removeClass(
-				"empty-section visible-section",
-			);
+			const section = $(this).removeClass("empty-section visible-section");
 			if (section.find(".frappe-control:not(.hide-control)").length) {
 				section.addClass("visible-section");
 			} else if (
@@ -449,8 +404,7 @@ frappe.ui.form.Layout = class Layout {
 		for (let tab of this.tabs) {
 			if (
 				tab.label.toLowerCase() === label_or_fieldname.toLowerCase() ||
-				tab.df.fieldname?.toLowerCase() ===
-					label_or_fieldname.toLowerCase()
+				tab.df.fieldname?.toLowerCase() === label_or_fieldname.toLowerCase()
 			) {
 				tab.set_active();
 				return;
@@ -499,9 +453,7 @@ frappe.ui.form.Layout = class Layout {
 				let collapse = true;
 
 				if (df.collapsible_depends_on) {
-					collapse = !this.evaluate_depends_on_value(
-						df.collapsible_depends_on,
-					);
+					collapse = !this.evaluate_depends_on_value(df.collapsible_depends_on);
 				}
 
 				if (collapse && section.has_missing_mandatory()) {
@@ -522,11 +474,8 @@ frappe.ui.form.Layout = class Layout {
 				fieldobj.doctype = me.doc.doctype;
 				fieldobj.docname = me.doc.name;
 				fieldobj.df =
-					frappe.meta.get_docfield(
-						me.doc.doctype,
-						fieldobj.df.fieldname,
-						me.doc.name,
-					) || fieldobj.df;
+					frappe.meta.get_docfield(me.doc.doctype, fieldobj.df.fieldname, me.doc.name) ||
+					fieldobj.df;
 			}
 			refresh && fieldobj.df && fieldobj.refresh && fieldobj.refresh();
 		}
@@ -555,7 +504,7 @@ frappe.ui.form.Layout = class Layout {
 					tabs_list.addClass("form-tabs-sticky-down");
 				}
 				last_scroll = current_scroll;
-			}, 500),
+			}, 500)
 		);
 
 		this.tab_link_container.off("click").on("click", ".nav-link", (e) => {
@@ -650,7 +599,7 @@ frappe.ui.form.Layout = class Layout {
 					grid_row.toggle_view(false, function () {
 						grid_row.grid.frm.layout.handle_tab(
 							grid_row.grid.df.parent,
-							grid_row.grid.df.fieldname,
+							grid_row.grid.df.fieldname
 						);
 					});
 				} else {
@@ -673,9 +622,7 @@ frappe.ui.form.Layout = class Layout {
 			if (this.is_visible(field)) {
 				if (field.df.fieldtype === "Table") {
 					// open table grid
-					if (
-						!(field.grid.grid_rows && field.grid.grid_rows.length)
-					) {
+					if (!(field.grid.grid_rows && field.grid.grid_rows.length)) {
 						// empty grid, add a new row
 						field.grid.add_new_row();
 					}
@@ -695,10 +642,7 @@ frappe.ui.form.Layout = class Layout {
 
 	is_visible(field) {
 		return (
-			field.disp_status === "Write" &&
-			field.df &&
-			"hidden" in field.df &&
-			!field.df.hidden
+			field.disp_status === "Write" && field.df && "hidden" in field.df && !field.df.hidden
 		);
 	}
 
@@ -736,11 +680,7 @@ frappe.ui.form.Layout = class Layout {
 
 		for (let fkey in fields) {
 			let f = fields[fkey];
-			if (
-				f.df.depends_on ||
-				f.df.mandatory_depends_on ||
-				f.df.read_only_depends_on
-			) {
+			if (f.df.depends_on || f.df.mandatory_depends_on || f.df.read_only_depends_on) {
 				has_dep = true;
 				break;
 			}
@@ -755,9 +695,7 @@ frappe.ui.form.Layout = class Layout {
 			if (f.df.depends_on) {
 				// evaluate guardian
 
-				f.guardian_has_value = this.evaluate_depends_on_value(
-					f.df.depends_on,
-				);
+				f.guardian_has_value = this.evaluate_depends_on_value(f.df.depends_on);
 
 				// show / hide
 				if (f.guardian_has_value) {
@@ -774,18 +712,14 @@ frappe.ui.form.Layout = class Layout {
 			}
 
 			if (f.df.mandatory_depends_on) {
-				this.set_dependant_property(
-					f.df.mandatory_depends_on,
-					f.df.fieldname,
-					"reqd",
-				);
+				this.set_dependant_property(f.df.mandatory_depends_on, f.df.fieldname, "reqd");
 			}
 
 			if (f.df.read_only_depends_on) {
 				this.set_dependant_property(
 					f.df.read_only_depends_on,
 					f.df.fieldname,
-					"read_only",
+					"read_only"
 				);
 			}
 		}
@@ -812,12 +746,11 @@ frappe.ui.form.Layout = class Layout {
 					value,
 					this.doc.parent,
 					fieldname,
-					this.doc.name,
+					this.doc.name
 				);
 				form_obj.setting_dependency = false;
 				// refresh child fields
-				this.fields_dict[fieldname] &&
-					this.fields_dict[fieldname].refresh();
+				this.fields_dict[fieldname] && this.fields_dict[fieldname].refresh();
 			} else {
 				form_obj.set_df_property(fieldname, property, value);
 			}
@@ -845,11 +778,7 @@ frappe.ui.form.Layout = class Layout {
 		} else if (expression.substr(0, 5) == "eval:") {
 			try {
 				out = frappe.utils.eval(expression.substr(5), { doc, parent });
-				if (
-					parent &&
-					parent.istable &&
-					expression.includes("is_submittable")
-				) {
+				if (parent && parent.istable && expression.includes("is_submittable")) {
 					out = true;
 				}
 			} catch (e) {
@@ -859,7 +788,7 @@ frappe.ui.form.Layout = class Layout {
 			out = this.frm.script_manager.trigger(
 				expression.substr(3),
 				this.doctype,
-				this.docname,
+				this.docname
 			);
 		} else {
 			var value = doc[expression];

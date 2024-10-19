@@ -79,14 +79,14 @@ function get_shortcut_for_key(key) {
 
 	if ($current_dropdown && $current_dropdown.is(".open")) {
 		shortcut = shortcuts.find((shortcut) =>
-			$.contains($current_dropdown[0], shortcut.$target[0]),
+			$.contains($current_dropdown[0], shortcut.$target[0])
 		);
 	}
 
 	if (shortcut) return shortcut;
 
 	shortcut = shortcuts.find((shortcut) =>
-		$.contains(window.cur_page.page.page.wrapper[0], shortcut.$target[0]),
+		$.contains(window.cur_page.page.page.wrapper[0], shortcut.$target[0])
 	);
 
 	return shortcut;
@@ -166,10 +166,7 @@ frappe.ui.keys.AltShortcutGroup = class AltShortcutGroup {
 			.join("");
 		text_html = `<span>${text_html}</span>`;
 		let original_text_html = shortcut.$text_el.html();
-		text_html = original_text_html.replace(
-			shortcut.text.trim(),
-			text_html.trim(),
-		);
+		text_html = original_text_html.replace(shortcut.text.trim(), text_html.trim());
 		shortcut.$text_el.html(text_html);
 	}
 

@@ -4,9 +4,7 @@ frappe.provide("frappe.model");
 	Common class for handling client side interactions that
 	apply to both DocType form and customize form.
 */
-frappe.model.DocTypeController = class DocTypeController extends (
-	frappe.ui.form.Controller
-) {
+frappe.model.DocTypeController = class DocTypeController extends frappe.ui.form.Controller {
 	setup() {
 		// setup formatters for fieldtype
 		frappe.meta.docfield_map[
@@ -31,12 +29,9 @@ frappe.model.DocTypeController = class DocTypeController extends (
 	show_db_utilization() {
 		const doctype = this.frm.doc.doc_type || this.frm.doc.name;
 		frappe
-			.xcall(
-				"frappe.core.doctype.doctype.doctype.get_row_size_utilization",
-				{
-					doctype,
-				},
-			)
+			.xcall("frappe.core.doctype.doctype.doctype.get_row_size_utilization", {
+				doctype,
+			})
 			.then((r) => {
 				if (r < 50.0) return;
 				this.frm.dashboard.show_progress(
@@ -44,8 +39,8 @@ frappe.model.DocTypeController = class DocTypeController extends (
 					r,
 					__(
 						"Database Table Row Size Utilization: {0}%, this limits number of fields you can add.",
-						[r],
-					),
+						[r]
+					)
 				);
 			});
 	}
@@ -54,19 +49,17 @@ frappe.model.DocTypeController = class DocTypeController extends (
 		if (!this.frm.doc.max_attachments) {
 			return;
 		}
-		const is_attach_field = (f) =>
-			["Attach", "Attach Image"].includes(f.fieldtype);
-		const no_of_attach_fields =
-			this.frm.doc.fields.filter(is_attach_field).length;
+		const is_attach_field = (f) => ["Attach", "Attach Image"].includes(f.fieldtype);
+		const no_of_attach_fields = this.frm.doc.fields.filter(is_attach_field).length;
 
 		if (no_of_attach_fields > this.frm.doc.max_attachments) {
 			this.frm.set_value("max_attachments", no_of_attach_fields);
 			const label = this.frm.get_docfield("max_attachments").label;
 			frappe.show_alert(
-				__(
-					"Number of attachment fields are more than {}, limit updated to {}.",
-					[label, no_of_attach_fields],
-				),
+				__("Number of attachment fields are more than {}, limit updated to {}.", [
+					label,
+					no_of_attach_fields,
+				])
 			);
 		}
 	}
@@ -89,8 +82,7 @@ frappe.model.DocTypeController = class DocTypeController extends (
 			};
 			this.frm.set_value(
 				"autoname",
-				naming_rule_default_autoname_map[this.frm.doc.naming_rule] ||
-					"",
+				naming_rule_default_autoname_map[this.frm.doc.naming_rule] || ""
 			);
 			setTimeout(() => (this.frm.__from_naming_rule = false), 500);
 
@@ -103,8 +95,7 @@ frappe.model.DocTypeController = class DocTypeController extends (
 			"Set by user": "",
 			Autoincrement:
 				"Uses Auto Increment feature of database.<br><b>WARNING: After using this option, any other naming option will not be accessible.</b>",
-			"By fieldname":
-				"Format: <code>field:[fieldname]</code>. Valid fieldname must exist",
+			"By fieldname": "Format: <code>field:[fieldname]</code>. Valid fieldname must exist",
 			'By "Naming Series" field':
 				"Format: <code>naming_series:[fieldname]</code>. Default fieldname is <code>naming_series</code>",
 			Expression:
@@ -118,25 +109,18 @@ frappe.model.DocTypeController = class DocTypeController extends (
 		if (this.frm.doc.naming_rule) {
 			this.frm
 				.get_field("autoname")
-				.set_description(
-					naming_rule_description[this.frm.doc.naming_rule],
-				);
+				.set_description(naming_rule_description[this.frm.doc.naming_rule]);
 		}
 	}
 
 	autoname() {
 		// set naming_rule based on autoname (for old doctypes where its not been set)
-		if (
-			this.frm.doc.autoname &&
-			!this.frm.doc.naming_rule &&
-			!this.frm.__from_naming_rule
-		) {
+		if (this.frm.doc.autoname && !this.frm.doc.naming_rule && !this.frm.__from_naming_rule) {
 			// flag to avoid recursion
 			this.frm.__from_autoname = true;
 			const autoname = this.frm.doc.autoname.toLowerCase();
 
-			if (autoname === "prompt")
-				this.frm.set_value("naming_rule", "Set by user");
+			if (autoname === "prompt") this.frm.set_value("naming_rule", "Set by user");
 			else if (autoname === "autoincrement")
 				this.frm.set_value("naming_rule", "Autoincrement");
 			else if (autoname.startsWith("field:"))
@@ -145,8 +129,7 @@ frappe.model.DocTypeController = class DocTypeController extends (
 				this.frm.set_value("naming_rule", 'By "Naming Series" field');
 			else if (autoname.startsWith("format:"))
 				this.frm.set_value("naming_rule", "Expression");
-			else if (autoname === "hash")
-				this.frm.set_value("naming_rule", "Random");
+			else if (autoname === "hash") this.frm.set_value("naming_rule", "Random");
 			else this.frm.set_value("naming_rule", "Expression (old style)");
 
 			setTimeout(() => (this.frm.__from_autoname = false), 500);
@@ -199,9 +182,7 @@ frappe.model.DocTypeController = class DocTypeController extends (
 
 			let link_fieldname = $doctype_select.val();
 			if (!link_fieldname) return;
-			let link_field = frm.doc.fields.find(
-				(df) => df.fieldname === link_fieldname,
-			);
+			let link_field = frm.doc.fields.find((df) => df.fieldname === link_fieldname);
 			let link_doctype = link_field.options;
 			frappe.model.with_doctype(link_doctype, () => {
 				let fields = frappe.meta

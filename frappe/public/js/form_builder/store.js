@@ -6,11 +6,7 @@ import {
 	section_boilerplate,
 } from "./utils";
 import { computed, nextTick, ref } from "vue";
-import {
-	useDebouncedRefHistory,
-	onKeyDown,
-	useActiveElement,
-} from "@vueuse/core";
+import { useDebouncedRefHistory, onKeyDown, useActiveElement } from "@vueuse/core";
 
 export const useStore = defineStore("form-builder-store", () => {
 	let doctype = ref("");
@@ -33,15 +29,11 @@ export const useStore = defineStore("form-builder-store", () => {
 
 	// Getters
 	let get_docfields = computed(() => {
-		return is_customize_form.value
-			? custom_docfields.value
-			: docfields.value;
+		return is_customize_form.value ? custom_docfields.value : docfields.value;
 	});
 
 	let current_tab = computed(() => {
-		return form.value.layout.tabs.find(
-			(tab) => tab.df.name == form.value.active_tab,
-		);
+		return form.value.layout.tabs.find((tab) => tab.df.name == form.value.active_tab);
 	});
 
 	const active_element = useActiveElement();
@@ -50,7 +42,7 @@ export const useStore = defineStore("form-builder-store", () => {
 			active_element.value?.readOnly ||
 			active_element.value?.disabled ||
 			(active_element.value?.tagName !== "INPUT" &&
-				active_element.value?.tagName !== "TEXTAREA"),
+				active_element.value?.tagName !== "TEXTAREA")
 	);
 
 	// Actions
@@ -59,9 +51,7 @@ export const useStore = defineStore("form-builder-store", () => {
 	}
 
 	function get_df(fieldtype, fieldname = "", label = "") {
-		let docfield = is_customize_form.value
-			? "Customize Form Field"
-			: "DocField";
+		let docfield = is_customize_form.value ? "Customize Form Field" : "DocField";
 		let df = frappe.model.get_new_doc(docfield);
 		df.name = frappe.utils.get_random(8);
 		df.fieldtype = fieldtype;
@@ -95,10 +85,7 @@ export const useStore = defineStore("form-builder-store", () => {
 
 	async function fetch() {
 		doc.value = frm.value.doc;
-		if (
-			doctype.value.startsWith("new-doctype-") &&
-			!doc.value.fields?.length
-		) {
+		if (doctype.value.startsWith("new-doctype-") && !doc.value.fields?.length) {
 			frappe.model.with_doctype("DocType").then(() => {
 				frappe.listview_settings["DocType"].new_doctype_dialog();
 			});
@@ -108,9 +95,7 @@ export const useStore = defineStore("form-builder-store", () => {
 		}
 
 		if (!get_docfields.value.length) {
-			let docfield = is_customize_form.value
-				? "Customize Form Field"
-				: "DocField";
+			let docfield = is_customize_form.value ? "Customize Form Field" : "DocField";
 			if (!frappe.get_meta(docfield)) {
 				await load_doctype_model(docfield);
 			}
@@ -133,9 +118,7 @@ export const useStore = defineStore("form-builder-store", () => {
 				frm.value.page.clear_indicator();
 			}
 			read_only.value =
-				!is_customize_form.value &&
-				!frappe.boot.developer_mode &&
-				!doc.value.custom;
+				!is_customize_form.value && !frappe.boot.developer_mode && !doc.value.custom;
 			preview.value = false;
 		});
 
@@ -144,17 +127,10 @@ export const useStore = defineStore("form-builder-store", () => {
 
 	let undo_redo_keyboard_event = onKeyDown(true, (e) => {
 		if (!ref_history.value) return;
-		if (
-			frm.value.get_active_tab().label == "Form" &&
-			(e.ctrlKey || e.metaKey)
-		) {
+		if (frm.value.get_active_tab().label == "Form" && (e.ctrlKey || e.metaKey)) {
 			if (e.key === "z" && !e.shiftKey && ref_history.value.canUndo) {
 				ref_history.value.undo();
-			} else if (
-				e.key === "z" &&
-				e.shiftKey &&
-				ref_history.value.canRedo
-			) {
+			} else if (e.key === "z" && e.shiftKey && ref_history.value.canRedo) {
 				ref_history.value.redo();
 			}
 		}
@@ -174,23 +150,16 @@ export const useStore = defineStore("form-builder-store", () => {
 		let error_message = "";
 
 		let has_fields = fields.some((df) => {
-			return !["Section Break", "Tab Break", "Column Break"].includes(
-				df.fieldtype,
-			);
+			return !["Section Break", "Tab Break", "Column Break"].includes(df.fieldtype);
 		});
 
 		if (!has_fields) {
 			error_message = __("DocType must have atleast one field");
 		}
 
-		let not_allowed_in_list_view = [
-			"Attach Image",
-			...frappe.model.no_value_type,
-		];
+		let not_allowed_in_list_view = ["Attach Image", ...frappe.model.no_value_type];
 		if (is_table) {
-			not_allowed_in_list_view = not_allowed_in_list_view.filter(
-				(f) => f != "Button",
-			);
+			not_allowed_in_list_view = not_allowed_in_list_view.filter((f) => f != "Button");
 		}
 
 		function get_field_data(df) {
@@ -206,20 +175,14 @@ export const useStore = defineStore("form-builder-store", () => {
 			// check if fieldname already exist
 			let duplicate = fields.filter((f) => f.fieldname == df.fieldname);
 			if (duplicate.length > 1) {
-				error_message = __(
-					"Fieldname {0} appears multiple times",
-					get_field_data(df),
-				);
+				error_message = __("Fieldname {0} appears multiple times", get_field_data(df));
 			}
 
 			// Link & Table fields should always have options set
-			if (
-				["Link", ...frappe.model.table_fields].includes(df.fieldtype) &&
-				!df.options
-			) {
+			if (["Link", ...frappe.model.table_fields].includes(df.fieldtype) && !df.options) {
 				error_message = __(
 					"Options is required for field {0} of type {1}",
-					get_field_data(df),
+					get_field_data(df)
 				);
 			}
 
@@ -227,29 +190,23 @@ export const useStore = defineStore("form-builder-store", () => {
 			if (df.hidden && df.reqd && !df.default) {
 				error_message = __(
 					"{0} cannot be hidden and mandatory without any default value",
-					get_field_data(df),
+					get_field_data(df)
 				);
 			}
 
 			// In List View is not allowed for some fieldtypes
-			if (
-				df.in_list_view &&
-				not_allowed_in_list_view.includes(df.fieldtype)
-			) {
+			if (df.in_list_view && not_allowed_in_list_view.includes(df.fieldtype)) {
 				error_message = __(
 					"'In List View' is not allowed for field {0} of type {1}",
-					get_field_data(df),
+					get_field_data(df)
 				);
 			}
 
 			// In Global Search is not allowed for no_value_type fields
-			if (
-				df.in_global_search &&
-				frappe.model.no_value_type.includes(df.fieldtype)
-			) {
+			if (df.in_global_search && frappe.model.no_value_type.includes(df.fieldtype)) {
 				error_message = __(
 					"'In Global Search' is not allowed for field {0} of type {1}",
-					get_field_data(df),
+					get_field_data(df)
 				);
 			}
 
@@ -264,7 +221,7 @@ export const useStore = defineStore("form-builder-store", () => {
 				} catch (e) {
 					error_message = __(
 						"Invalid Filter Format for field {0} of type {1}. Try using filter icon on the field to set it correctly",
-						get_field_data(df),
+						get_field_data(df)
 					);
 				}
 			}
@@ -302,11 +259,7 @@ export const useStore = defineStore("form-builder-store", () => {
 
 		layout_fields.forEach((tab, i) => {
 			if (
-				(i == 0 &&
-					is_df_updated(
-						tab.df,
-						get_df("Tab Break", "", __("Details")),
-					)) ||
+				(i == 0 && is_df_updated(tab.df, get_df("Tab Break", "", __("Details")))) ||
 				i > 0
 			) {
 				idx++;
@@ -324,11 +277,7 @@ export const useStore = defineStore("form-builder-store", () => {
 				section.has_fields = false;
 
 				// do not consider first section if label is not set
-				if (
-					(j == 0 &&
-						is_df_updated(section.df, get_df("Section Break"))) ||
-					j > 0
-				) {
+				if ((j == 0 && is_df_updated(section.df, get_df("Section Break"))) || j > 0) {
 					idx++;
 					section.df.idx = idx;
 					if (section.df.__unsaved && section.df.__islocal) {
@@ -340,8 +289,7 @@ export const useStore = defineStore("form-builder-store", () => {
 				section.columns.forEach((column, k) => {
 					// do not consider first column if label is not set
 					if (
-						(k == 0 &&
-							is_df_updated(column.df, get_df("Column Break"))) ||
+						(k == 0 && is_df_updated(column.df, get_df("Column Break"))) ||
 						k > 0 ||
 						column.fields.length == 0
 					) {
@@ -390,11 +338,7 @@ export const useStore = defineStore("form-builder-store", () => {
 	// Tab actions
 	function add_new_tab() {
 		let tab = {
-			df: get_df(
-				"Tab Break",
-				"",
-				"Tab " + (form.value.layout.tabs.length + 1),
-			),
+			df: get_df("Tab Break", "", "Tab " + (form.value.layout.tabs.length + 1)),
 			sections: [section_boilerplate()],
 		};
 

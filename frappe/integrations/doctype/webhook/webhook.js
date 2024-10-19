@@ -20,7 +20,7 @@ frappe.webhook = {
 								value: d.fieldname,
 							};
 						}
-					},
+					}
 				);
 
 				// add meta fields
@@ -33,7 +33,7 @@ frappe.webhook = {
 					} else {
 						fields.push({
 							label: `${__(field.label, null, field.parent)} (${__(
-								field.fieldtype,
+								field.fieldtype
 							)})`,
 							value: field.fieldname,
 						});
@@ -43,7 +43,7 @@ frappe.webhook = {
 				frm.fields_dict.webhook_data.grid.update_docfield_property(
 					"fieldname",
 					"options",
-					[""].concat(fields),
+					[""].concat(fields)
 				);
 			});
 		}
@@ -60,14 +60,14 @@ frappe.webhook = {
 
 			if (header_value) {
 				let header_row = (frm.doc.webhook_headers || []).find(
-					(row) => row.key === "Content-Type",
+					(row) => row.key === "Content-Type"
 				);
 				if (header_row) {
 					frappe.model.set_value(
 						header_row.doctype,
 						header_row.name,
 						"value",
-						header_value,
+						header_value
 					);
 				} else {
 					frm.add_child("webhook_headers", {
@@ -86,7 +86,7 @@ frappe.ui.form.on("Webhook", {
 		frappe.webhook.set_fieldname_select(frm);
 		frm.set_query(
 			"background_jobs_queue",
-			"frappe.integrations.doctype.webhook.webhook.get_all_queues",
+			"frappe.integrations.doctype.webhook.webhook.get_all_queues"
 		);
 	},
 
@@ -123,9 +123,7 @@ frappe.ui.form.on("Webhook Data", {
 
 		if (!df.length) {
 			// check if field is a meta field
-			df = frappe.model.std_fields.filter(
-				(field) => field.fieldname == row.fieldname,
-			);
+			df = frappe.model.std_fields.filter((field) => field.fieldname == row.fieldname);
 		}
 
 		row.key = df.length ? df[0].fieldname : "name";

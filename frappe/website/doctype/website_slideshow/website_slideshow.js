@@ -40,8 +40,7 @@ frappe.ui.form.on("Website Slideshow", {
 							},
 						})
 						.then((images) => {
-							frm.doc.slideshow_items =
-								frm.doc.slideshow_items || [];
+							frm.doc.slideshow_items = frm.doc.slideshow_items || [];
 							images.forEach((image) => {
 								frm.doc.slideshow_items.push({
 									image: image.file_url,

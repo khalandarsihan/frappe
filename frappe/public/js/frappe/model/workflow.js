@@ -28,15 +28,12 @@ frappe.workflow = {
 	get_default_state: function (doctype, docstatus) {
 		frappe.workflow.setup(doctype);
 		var value = null;
-		$.each(
-			frappe.workflow.workflows[doctype].states,
-			function (i, workflow_state) {
-				if (cint(workflow_state.doc_status) === cint(docstatus)) {
-					value = workflow_state.state;
-					return false;
-				}
-			},
-		);
+		$.each(frappe.workflow.workflows[doctype].states, function (i, workflow_state) {
+			if (cint(workflow_state.doc_status) === cint(docstatus)) {
+				value = workflow_state.state;
+				return false;
+			}
+		});
 		return value;
 	},
 	get_transitions: function (doc) {
@@ -64,16 +61,12 @@ frappe.workflow = {
 			if (doc.__islocal) return false;
 
 			var state =
-				doc[state_fieldname] ||
-				frappe.workflow.get_default_state(doctype, doc.docstatus);
+				doc[state_fieldname] || frappe.workflow.get_default_state(doctype, doc.docstatus);
 			if (!state) return false;
 
-			let allow_edit_roles = frappe.workflow.get_document_state_roles(
-				doctype,
-				state,
-			);
+			let allow_edit_roles = frappe.workflow.get_document_state_roles(doctype, state);
 			let has_common_role = frappe.user_roles.some((role) =>
-				allow_edit_roles.includes(role),
+				allow_edit_roles.includes(role)
 			);
 			return !has_common_role;
 		}
@@ -81,12 +74,9 @@ frappe.workflow = {
 	},
 	get_update_fields: function (doctype) {
 		var update_fields = $.unique(
-			$.map(
-				frappe.workflow.workflows[doctype].states || [],
-				function (d) {
-					return d.update_field;
-				},
-			),
+			$.map(frappe.workflow.workflows[doctype].states || [], function (d) {
+				return d.update_field;
+			})
 		);
 		return update_fields;
 	},

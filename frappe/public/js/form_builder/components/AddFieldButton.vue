@@ -83,21 +83,17 @@ onClickOutside(add_field_btn_ref, () => (show.value = false), {
 
 function setupPopper() {
 	if (!popper.value) {
-		popper.value = createPopper(
-			add_field_btn_ref.value,
-			autocomplete_ref.value,
-			{
-				placement: "bottom-start",
-				modifiers: [
-					{
-						name: "offset",
-						options: {
-							offset: [0, 4],
-						},
+		popper.value = createPopper(add_field_btn_ref.value, autocomplete_ref.value, {
+			placement: "bottom-start",
+			modifiers: [
+				{
+					name: "offset",
+					options: {
+						offset: [0, 4],
 					},
-				],
-			},
-		);
+				},
+			],
+		});
 	} else {
 		popper.value.update();
 	}

@@ -16,7 +16,8 @@ if TYPE_CHECKING:
 	from frappe.core.doctype.user.user import User
 
 
-class SignupDisabledError(frappe.PermissionError): ...
+class SignupDisabledError(frappe.PermissionError):
+	...
 
 
 def get_oauth2_providers() -> dict[str, dict]:

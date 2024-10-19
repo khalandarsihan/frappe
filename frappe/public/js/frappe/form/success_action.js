@@ -9,7 +9,7 @@ frappe.ui.form.SuccessAction = class SuccessAction {
 
 	load_setting() {
 		this.setting = frappe.boot.success_action.find(
-			(setting) => setting.ref_doctype === this.form.doctype,
+			(setting) => setting.ref_doctype === this.form.doctype
 		);
 	}
 
@@ -24,9 +24,7 @@ frappe.ui.form.SuccessAction = class SuccessAction {
 	prepare_dom() {
 		this.container = $(document.body).find(".success-container");
 		if (!this.container.length) {
-			this.container = $('<div class="success-container">').appendTo(
-				document.body,
-			);
+			this.container = $('<div class="success-container">').appendTo(document.body);
 		}
 	}
 
@@ -34,20 +32,17 @@ frappe.ui.form.SuccessAction = class SuccessAction {
 		frappe.db.get_list(this.form.doctype, { limit: 2 }).then((result) => {
 			const count = result.length;
 			const setting = this.setting;
-			let message =
-				count === 1 ? setting.first_success_message : setting.message;
+			let message = count === 1 ? setting.first_success_message : setting.message;
 
 			const $buttons = this.get_actions().map((action) => {
 				const $btn = $(
-					`<button class="next-action"><span>${__(action.label)}</span></button>`,
+					`<button class="next-action"><span>${__(action.label)}</span></button>`
 				);
 				$btn.click(() => action.action(this.form));
 				return $btn;
 			});
 
-			const next_action_container = $(
-				`<div class="next-action-container"></div>`,
-			);
+			const next_action_container = $(`<div class="next-action-container"></div>`);
 			next_action_container.append($buttons);
 			const html = next_action_container;
 
@@ -57,7 +52,7 @@ frappe.ui.form.SuccessAction = class SuccessAction {
 					body: html,
 					indicator: "green",
 				},
-				setting.action_timeout || 7,
+				setting.action_timeout || 7
 			);
 		});
 	}

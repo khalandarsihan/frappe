@@ -33,7 +33,7 @@ frappe.ui.form.on("Website Settings", {
 		frm.fields_dict.top_bar_items.grid.update_docfield_property(
 			"parent_label",
 			"options",
-			frm.events.get_parent_options(frm, "top_bar_items"),
+			frm.events.get_parent_options(frm, "top_bar_items")
 		);
 	},
 
@@ -41,7 +41,7 @@ frappe.ui.form.on("Website Settings", {
 		frm.fields_dict.footer_items.grid.update_docfield_property(
 			"parent_label",
 			"options",
-			frm.events.get_parent_options(frm, "footer_items"),
+			frm.events.get_parent_options(frm, "footer_items")
 		);
 	},
 
@@ -97,11 +97,7 @@ frappe.ui.form.on("Website Settings", {
 		let values_field = template_field + "_values";
 		let template = frm.doc[template_field];
 		if (!template) {
-			frappe.show_alert(
-				__("Please select {0}", [
-					frm.get_docfield(template_field).label,
-				]),
-			);
+			frappe.show_alert(__("Please select {0}", [frm.get_docfield(template_field).label]));
 			return;
 		}
 		let values = JSON.parse(frm.doc[values_field] || "{}");
@@ -142,14 +138,14 @@ frappe.tour["Website Settings"] = [
 		fieldname: "enable_view_tracking",
 		title: __("Enable Tracking Page Views"),
 		description: __(
-			"Checking this will enable tracking page views for blogs, web pages, etc.",
+			"Checking this will enable tracking page views for blogs, web pages, etc."
 		),
 	},
 	{
 		fieldname: "disable_signup",
 		title: __("Disable Signup for your site"),
 		description: __(
-			"Check this if you don't want users to sign up for an account on your site. Users won't get desk access unless you explicitly provide it.",
+			"Check this if you don't want users to sign up for an account on your site. Users won't get desk access unless you explicitly provide it."
 		),
 	},
 ];

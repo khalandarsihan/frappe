@@ -1,7 +1,6 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
-import _socket
 import datetime
 import email
 import email.utils
@@ -14,6 +13,7 @@ import time
 from contextlib import suppress
 from email.header import decode_header
 
+import _socket
 import chardet
 from email_reply_parser import EmailReplyParser
 

@@ -20,8 +20,7 @@ frappe.ui.form.on("Letter Head", {
 				frappe.throw({
 					title: __("Error in Header/Footer Script"),
 					indicator: "orange",
-					message:
-						'<pre class="small"><code>' + e.stack + "</code></pre>",
+					message: '<pre class="small"><code>' + e.stack + "</code></pre>",
 				});
 			}
 		});
@@ -33,7 +32,7 @@ const INSTRUCTIONS = `<h4>${__("Letter Head Scripts")}</h4>
 <pre>
 <code>
 // ${__(
-	"The following Header Script will add the current date to an element in 'Header HTML' with class 'header-content'",
+	"The following Header Script will add the current date to an element in 'Header HTML' with class 'header-content'"
 )}
 var el = document.getElementsByClassName("header-content");
 if (el.length > 0) {

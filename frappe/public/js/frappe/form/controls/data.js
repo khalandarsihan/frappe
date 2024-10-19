@@ -1,8 +1,6 @@
 frappe.provide("frappe.phone_call");
 
-frappe.ui.form.ControlData = class ControlData extends (
-	frappe.ui.form.ControlInput
-) {
+frappe.ui.form.ControlData = class ControlData extends frappe.ui.form.ControlInput {
 	static html_element = "input";
 	static input_type = "text";
 	static trigger_change_on_input_event = true;
@@ -23,7 +21,7 @@ frappe.ui.form.ControlData = class ControlData extends (
 			if (maxlength && pasted_data.length > maxlength) {
 				let warning_message = __(
 					"The value you pasted was {0} characters long. Max allowed characters is {1}.",
-					[cstr(pasted_data.length).bold(), cstr(maxlength).bold()],
+					[cstr(pasted_data.length).bold(), cstr(maxlength).bold()]
 				);
 
 				// Only show edit link to users who can update the doctype
@@ -34,7 +32,7 @@ frappe.ui.form.ControlData = class ControlData extends (
 							"DocType",
 							this.frm.doctype,
 							true,
-							__("this form"),
+							__("this form")
 						);
 					} else {
 						doctype_edit_link = frappe.utils.get_form_link(
@@ -44,12 +42,12 @@ frappe.ui.form.ControlData = class ControlData extends (
 							null,
 							{
 								doc_type: this.frm.doctype,
-							},
+							}
 						);
 					}
 					let edit_note = __(
 						"{0}: You can increase the limit for the field if required via {1}",
-						[__("Note").bold(), doctype_edit_link],
+						[__("Note").bold(), doctype_edit_link]
 					);
 					warning_message += `<br><br><span class="text-muted text-small">${edit_note}</span>`;
 				}
@@ -83,7 +81,7 @@ frappe.ui.form.ControlData = class ControlData extends (
 				<a class="btn-open no-decoration" title="${__("Open Link")}" target="_blank">
 					${frappe.utils.icon("link-url", "sm")}
 				</a>
-			</span>`,
+			</span>`
 		);
 
 		this.$link = this.$wrapper.find(".link-btn");
@@ -127,7 +125,7 @@ frappe.ui.form.ControlData = class ControlData extends (
 				.append(
 					`<button class="btn action-btn">
 					${frappe.utils.icon("clipboard", "sm")}
-				</button>`,
+				</button>`
 				)
 				.find(".action-btn")
 				.click(() => {
@@ -142,7 +140,7 @@ frappe.ui.form.ControlData = class ControlData extends (
 				<a class="btn-open no-decoration" title="${__("Scan")}">
 					${frappe.utils.icon("scan", "sm")}
 				</a>
-			</span>`,
+			</span>`
 		);
 
 		this.$scan_btn = this.$wrapper.find(".link-btn");
@@ -202,14 +200,11 @@ frappe.ui.form.ControlData = class ControlData extends (
 							(val) => {
 								if (val && val.name) {
 									this.set_description(
-										__(
-											"{0} already exists. Select another name",
-											[val.name],
-										),
+										__("{0} already exists. Select another name", [val.name])
 									);
 								}
 							},
-							this.doc.parenttype,
+							this.doc.parenttype
 						);
 						this.last_check = null;
 					}, 1000);
@@ -220,14 +215,9 @@ frappe.ui.form.ControlData = class ControlData extends (
 	}
 	set_input_attributes() {
 		if (
-			[
-				"Data",
-				"Link",
-				"Dynamic Link",
-				"Password",
-				"Select",
-				"Read Only",
-			].includes(this.df.fieldtype)
+			["Data", "Link", "Dynamic Link", "Password", "Select", "Read Only"].includes(
+				this.df.fieldtype
+			)
 		) {
 			if (this.frm?.meta?.issingle) {
 				// singles dont have any "real" length requirements

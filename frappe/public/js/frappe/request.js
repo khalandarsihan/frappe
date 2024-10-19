@@ -32,11 +32,9 @@ frappe.call = function (opts) {
 			{
 				indicator: "orange",
 				message: __("Connection Lost"),
-				subtitle: __(
-					"You are not connected to Internet. Retry after sometime.",
-				),
+				subtitle: __("You are not connected to Internet. Retry after sometime."),
 			},
-			3,
+			3
 		);
 		opts.always && opts.always();
 		return $.ajax();
@@ -62,14 +60,7 @@ frappe.call = function (opts) {
 
 	// cmd
 	if (opts.module && opts.page) {
-		args.cmd =
-			opts.module +
-			".page." +
-			opts.page +
-			"." +
-			opts.page +
-			"." +
-			opts.method;
+		args.cmd = opts.module + ".page." + opts.page + "." + opts.page + "." + opts.method;
 	} else if (opts.doc) {
 		$.extend(args, {
 			cmd: "run_doc_method",
@@ -139,14 +130,10 @@ frappe.request.call = function (opts) {
 
 	var statusCode = {
 		200: function (data, xhr) {
-			opts.success_callback &&
-				opts.success_callback(data, xhr.responseText);
+			opts.success_callback && opts.success_callback(data, xhr.responseText);
 		},
 		401: function (xhr) {
-			if (
-				frappe.app.session_expired_dialog &&
-				frappe.app.session_expired_dialog.display
-			) {
+			if (frappe.app.session_expired_dialog && frappe.app.session_expired_dialog.display) {
 				frappe.app.redirect_to_login();
 			} else {
 				frappe.app.handle_session_expired();
@@ -157,17 +144,12 @@ frappe.request.call = function (opts) {
 			frappe.msgprint({
 				title: __("Not found"),
 				indicator: "red",
-				message: __(
-					"The resource you are looking for is not available",
-				),
+				message: __("The resource you are looking for is not available"),
 			});
 			opts.error_callback && opts.error_callback();
 		},
 		403: function (xhr) {
-			if (
-				frappe.session.user === "Guest" &&
-				frappe.session.logged_in_user !== "Guest"
-			) {
+			if (frappe.session.user === "Guest" && frappe.session.logged_in_user !== "Guest") {
 				// session expired
 				frappe.app.handle_session_expired();
 			} else if (xhr.responseJSON && xhr.responseJSON._error_message) {
@@ -179,9 +161,7 @@ frappe.request.call = function (opts) {
 
 				xhr.responseJSON._server_messages = null;
 			} else if (xhr.responseJSON && xhr.responseJSON._server_messages) {
-				var _server_messages = JSON.parse(
-					xhr.responseJSON._server_messages,
-				);
+				var _server_messages = JSON.parse(xhr.responseJSON._server_messages);
 
 				// avoid double messages
 				if (_server_messages.indexOf(__("Not permitted")) !== -1) {
@@ -192,7 +172,7 @@ frappe.request.call = function (opts) {
 					title: __("Not permitted"),
 					indicator: "red",
 					message: __(
-						"You do not have enough permissions to access this resource. Please contact your manager to get access.",
+						"You do not have enough permissions to access this resource. Please contact your manager to get access."
 					),
 				});
 			}
@@ -204,7 +184,7 @@ frappe.request.call = function (opts) {
 				title: __("Please try again"),
 				indicator: "red",
 				message: __(
-					"Another transaction is blocking this one. Please try again in a few seconds.",
+					"Another transaction is blocking this one. Please try again in a few seconds."
 				),
 			});
 			opts.error_callback && opts.error_callback();
@@ -213,10 +193,9 @@ frappe.request.call = function (opts) {
 			frappe.msgprint({
 				indicator: "red",
 				title: __("File too big"),
-				message: __(
-					"File size exceeded the maximum allowed size of {0} MB",
-					[(frappe.boot.max_file_size || 5242880) / 1048576],
-				),
+				message: __("File size exceeded the maximum allowed size of {0} MB", [
+					(frappe.boot.max_file_size || 5242880) / 1048576,
+				]),
 			});
 			opts.error_callback && opts.error_callback();
 		},
@@ -261,9 +240,7 @@ frappe.request.call = function (opts) {
 			frappe.msgprint({
 				title: __("Request Timeout"),
 				indicator: "red",
-				message: __(
-					"Server was too busy to process this request. Please try again.",
-				),
+				message: __("Server was too busy to process this request. Please try again."),
 			});
 		},
 		QueryDeadlockError: function () {
@@ -271,9 +248,7 @@ frappe.request.call = function (opts) {
 			frappe.msgprint({
 				title: __("Deadlock Occurred"),
 				indicator: "red",
-				message: __(
-					"Server was too busy to process this request. Please try again.",
-				),
+				message: __("Server was too busy to process this request. Please try again."),
 			});
 		},
 	};
@@ -290,15 +265,13 @@ frappe.request.call = function (opts) {
 				Accept: "application/json",
 				"X-Frappe-CMD": (opts.args && opts.args.cmd) || "" || "",
 			},
-			opts.headers,
+			opts.headers
 		),
 		cache: false,
 	};
 
 	if (opts.args && opts.args.doctype) {
-		ajax_args.headers["X-Frappe-Doctype"] = encodeURIComponent(
-			opts.args.doctype,
-		);
+		ajax_args.headers["X-Frappe-Doctype"] = encodeURIComponent(opts.args.doctype);
 	}
 
 	frappe.last_request = ajax_args.data;
@@ -357,8 +330,7 @@ frappe.request.call = function (opts) {
 		.fail(function (xhr, textStatus) {
 			try {
 				if (
-					xhr.getResponseHeader("content-type") ==
-						"application/json" &&
+					xhr.getResponseHeader("content-type") == "application/json" &&
 					xhr.responseText
 				) {
 					var data;
@@ -371,11 +343,7 @@ frappe.request.call = function (opts) {
 					}
 					if (data && data.exception) {
 						// frappe.exceptions.CustomError: (1024, ...) -> CustomError
-						var exception = data.exception
-							.split(".")
-							.at(-1)
-							.split(":")
-							.at(0);
+						var exception = data.exception.split(".").at(-1).split(":").at(0);
 						var exception_handler = exception_handlers[exception];
 						if (exception_handler) {
 							exception_handler(data);
@@ -431,10 +399,7 @@ frappe.request.prepare = function (opts) {
 
 	// stringify args if required
 	for (var key in opts.args) {
-		if (
-			opts.args[key] &&
-			($.isPlainObject(opts.args[key]) || $.isArray(opts.args[key]))
-		) {
+		if (opts.args[key] && ($.isPlainObject(opts.args[key]) || $.isArray(opts.args[key]))) {
 			opts.args[key] = JSON.stringify(opts.args[key]);
 		}
 	}
@@ -466,8 +431,7 @@ frappe.request.cleanup = function (opts, r) {
 		// session expired? - Guest has no business here!
 		if (
 			r.session_expired ||
-			(frappe.session.user === "Guest" &&
-				frappe.session.logged_in_user !== "Guest")
+			(frappe.session.user === "Guest" && frappe.session.logged_in_user !== "Guest")
 		) {
 			frappe.app.handle_session_expired();
 			return;
@@ -475,12 +439,8 @@ frappe.request.cleanup = function (opts, r) {
 
 		// error handlers
 		let global_handlers = frappe.request.error_handlers[r.exc_type] || [];
-		let request_handler = opts.error_handlers
-			? opts.error_handlers[r.exc_type]
-			: null;
-		let handlers = []
-			.concat(global_handlers, request_handler)
-			.filter(Boolean);
+		let request_handler = opts.error_handlers ? opts.error_handlers[r.exc_type] : null;
+		let handlers = [].concat(global_handlers, request_handler).filter(Boolean);
 
 		if (r.exc_type) {
 			handlers.forEach((handler) => {
@@ -605,9 +565,7 @@ frappe.request.report_error = function (xhr, request_opts) {
 				border-radius: 5px; padding: 15px; margin-bottom: 15px;"></div>',
 			"<hr>",
 			"<h5>App Versions</h5>",
-			"<pre>" +
-				JSON.stringify(frappe.boot.versions, null, "\t") +
-				"</pre>",
+			"<pre>" + JSON.stringify(frappe.boot.versions, null, "\t") + "</pre>",
 			"<h5>Route</h5>",
 			"<pre>" + frappe.get_route_str() + "</pre>",
 			"<hr>",
@@ -632,7 +590,7 @@ frappe.request.report_error = function (xhr, request_opts) {
 		});
 		communication_composer.dialog.$wrapper.css(
 			"z-index",
-			cint(frappe.msg_dialog.$wrapper.css("z-index")) + 1,
+			cint(frappe.msg_dialog.$wrapper.css("z-index")) + 1
 		);
 	};
 
@@ -654,13 +612,10 @@ frappe.request.report_error = function (xhr, request_opts) {
 					frappe.error_dialog.hide();
 				});
 			} else {
-				frappe.error_dialog.set_primary_action(
-					__("Copy error to clipboard"),
-					() => {
-						copy_markdown_to_clipboard();
-						frappe.error_dialog.hide();
-					},
-				);
+				frappe.error_dialog.set_primary_action(__("Copy error to clipboard"), () => {
+					copy_markdown_to_clipboard();
+					frappe.error_dialog.hide();
+				});
 			}
 			frappe.error_dialog.wrapper.classList.add("msgprint-dialog");
 		}
@@ -695,8 +650,7 @@ frappe.request.cleanup_request_opts = function (request_opts) {
 };
 
 frappe.request.on_error = function (error_type, handler) {
-	frappe.request.error_handlers[error_type] =
-		frappe.request.error_handlers[error_type] || [];
+	frappe.request.error_handlers[error_type] = frappe.request.error_handlers[error_type] || [];
 	frappe.request.error_handlers[error_type].push(handler);
 };
 

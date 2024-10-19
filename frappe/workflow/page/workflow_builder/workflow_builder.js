@@ -43,9 +43,7 @@ function load_workflow_builder(wrapper) {
 					],
 					change() {
 						let action = d.get_value("action");
-						d.get_primary_btn().text(
-							action === "Create" ? __("Create") : __("Edit"),
-						);
+						d.get_primary_btn().text(action === "Create" ? __("Create") : __("Edit"));
 					},
 				},
 				{
@@ -57,9 +55,7 @@ function load_workflow_builder(wrapper) {
 						istable: 0,
 					},
 					reqd: 1,
-					default: frappe.route_options
-						? frappe.route_options.doctype
-						: null,
+					default: frappe.route_options ? frappe.route_options.doctype : null,
 				},
 				{
 					label: __("New Workflow Name"),

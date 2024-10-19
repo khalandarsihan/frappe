@@ -27,8 +27,8 @@ frappe.ui.misc.about = function () {
 					<hr>
 					<p class='text-muted'>${__("&copy; Frappe Technologies Pvt. Ltd. and contributors")} </p>
 					</div>`,
-				frappe.app,
-			),
+				frappe.app
+			)
 		);
 
 		frappe.ui.misc.about_dialog = d;
@@ -58,10 +58,7 @@ frappe.ui.misc.about = function () {
 						v.branch,
 					]);
 				} else {
-					text = $.format("<p><b>{0}:</b> v{1}<br></p>", [
-						v.title,
-						v.version,
-					]);
+					text = $.format("<p><b>{0}:</b> v{1}<br></p>", [v.title, v.version]);
 				}
 				$(text).appendTo($wrap);
 			});

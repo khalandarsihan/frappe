@@ -21,7 +21,7 @@ frappe.ui.form.on("Workspace", {
 
 		frm.layout.message.empty();
 		let message = __(
-			"This document allows you to edit limited fields. For all kinds of workspace customization, use the Edit button located on the workspace page",
+			"This document allows you to edit limited fields. For all kinds of workspace customization, use the Edit button located on the workspace page"
 		);
 
 		if (
@@ -33,12 +33,10 @@ frappe.ui.form.on("Workspace", {
 			frm.trigger("disable_form");
 
 			if (frm.doc.public) {
-				message = __(
-					"Only Workspace Manager can edit public workspaces",
-				);
+				message = __("Only Workspace Manager can edit public workspaces");
 			} else {
 				message = __(
-					"We do not allow editing of this document. Simply click the Edit button on the workspace page to make your workspace editable and customize it as you wish",
+					"We do not allow editing of this document. Simply click the Edit button on the workspace page to make your workspace editable and customize it as you wish"
 				);
 			}
 		}

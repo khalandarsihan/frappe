@@ -1,9 +1,7 @@
 frappe.ui.form.on("Communication", {
 	onload: function (frm) {
 		if (frm.doc.content) {
-			frm.doc.content = frappe.dom.remove_script_and_style(
-				frm.doc.content,
-			);
+			frm.doc.content = frappe.dom.remove_script_and_style(frm.doc.content);
 		}
 		frm.set_query("reference_doctype", function () {
 			return {
@@ -26,11 +24,7 @@ frappe.ui.form.on("Communication", {
 
 		if (frm.doc.reference_doctype && frm.doc.reference_name) {
 			frm.add_custom_button(__(frm.doc.reference_name), function () {
-				frappe.set_route(
-					"Form",
-					frm.doc.reference_doctype,
-					frm.doc.reference_name,
-				);
+				frappe.set_route("Form", frm.doc.reference_doctype, frm.doc.reference_name);
 			});
 		} else {
 			// if an unlinked communication, set email field
@@ -69,7 +63,7 @@ frappe.ui.form.on("Communication", {
 				function () {
 					frm.trigger("reply_all");
 				},
-				__("Actions"),
+				__("Actions")
 			);
 
 			frm.add_custom_button(
@@ -77,7 +71,7 @@ frappe.ui.form.on("Communication", {
 				function () {
 					frm.trigger("forward_mail");
 				},
-				__("Actions"),
+				__("Actions")
 			);
 
 			frm.add_custom_button(
@@ -85,7 +79,7 @@ frappe.ui.form.on("Communication", {
 				function () {
 					frm.trigger("mark_as_read_unread");
 				},
-				__("Actions"),
+				__("Actions")
 			);
 
 			frm.add_custom_button(
@@ -93,7 +87,7 @@ frappe.ui.form.on("Communication", {
 				function () {
 					frm.trigger("show_move_dialog");
 				},
-				__("Actions"),
+				__("Actions")
 			);
 
 			if (frm.doc.email_status != "Spam")
@@ -102,7 +96,7 @@ frappe.ui.form.on("Communication", {
 					function () {
 						frm.trigger("mark_as_spam");
 					},
-					__("Actions"),
+					__("Actions")
 				);
 
 			if (frm.doc.email_status != "Trash") {
@@ -111,7 +105,7 @@ frappe.ui.form.on("Communication", {
 					function () {
 						frm.trigger("move_to_trash");
 					},
-					__("Actions"),
+					__("Actions")
 				);
 			}
 
@@ -120,7 +114,7 @@ frappe.ui.form.on("Communication", {
 				function () {
 					frm.trigger("add_to_contact");
 				},
-				__("Create"),
+				__("Create")
 			);
 		}
 
@@ -134,7 +128,7 @@ frappe.ui.form.on("Communication", {
 				function () {
 					frm.trigger("add_to_contact");
 				},
-				__("Actions"),
+				__("Actions")
 			);
 		}
 	},
@@ -168,10 +162,9 @@ frappe.ui.form.on("Communication", {
 			var values = d.get_values();
 			if (values) {
 				frappe.confirm(
-					__(
-						"Are you sure you want to relink this communication to {0}?",
-						[values["reference_name"]],
-					),
+					__("Are you sure you want to relink this communication to {0}?", [
+						values["reference_name"],
+					]),
 					function () {
 						d.hide();
 						frappe.call({
@@ -191,7 +184,7 @@ frappe.ui.form.on("Communication", {
 							message: __("Document not Relinked"),
 							indicator: "info",
 						});
-					},
+					}
 				);
 			}
 		});

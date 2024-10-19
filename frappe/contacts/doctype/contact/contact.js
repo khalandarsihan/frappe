@@ -16,8 +16,7 @@ frappe.ui.form.on("Contact", {
 				frm.set_value("links", "");
 				frm.add_child("links", {
 					link_doctype: frappe.dynamic_link.doctype,
-					link_name:
-						frappe.dynamic_link.doc[frappe.dynamic_link.fieldname],
+					link_name: frappe.dynamic_link.doc[frappe.dynamic_link.fieldname],
 				});
 			}
 		}
@@ -55,11 +54,7 @@ frappe.ui.form.on("Contact", {
 		if (numbers && numbers.length && frappe.phone_call.handler) {
 			frm.add_custom_button(__("Call"), () => {
 				numbers = frm.doc.phone_nos
-					.sort(
-						(prev, next) =>
-							next.is_primary_mobile_no -
-							prev.is_primary_mobile_no,
-					)
+					.sort((prev, next) => next.is_primary_mobile_no - prev.is_primary_mobile_no)
 					.map((d) => d.phone);
 				frappe.phone_call.handler(numbers);
 			});
@@ -67,7 +62,7 @@ frappe.ui.form.on("Contact", {
 
 		if (frm.doc.links && frm.doc.links.length > 0) {
 			const filtered_links = frm.doc.links.filter(
-				(link) => link.link_doctype && link.link_name,
+				(link) => link.link_doctype && link.link_name
 			);
 
 			if (filtered_links.length > 0) {
@@ -92,13 +87,9 @@ frappe.ui.form.on("Contact", {
 				frm.add_custom_button(
 					__("{0}: {1}", [__(link.link_doctype), __(link.link_name)]),
 					function () {
-						frappe.set_route(
-							"Form",
-							link.link_doctype,
-							link.link_name,
-						);
+						frappe.set_route("Form", link.link_doctype, link.link_name);
 					},
-					__("Links"),
+					__("Links")
 				);
 			}
 		}
@@ -127,11 +118,7 @@ frappe.ui.form.on("Contact", {
 							last_doc.doctype == link.link_doctype &&
 							last_doc.docname == link.link_name
 						) {
-							frappe.set_route(
-								"Form",
-								last_doc.doctype,
-								last_doc.docname,
-							);
+							frappe.set_route("Form", last_doc.doctype, last_doc.docname);
 						}
 					}
 				}
@@ -148,7 +135,7 @@ frappe.ui.form.on("Contact", {
 					if (r && r.name) {
 						frm.set_value("google_contacts", r.name);
 					}
-				},
+				}
 			);
 		}
 	},
@@ -159,20 +146,14 @@ frappe.ui.form.on("Dynamic Link", {
 		var child = locals[cdt][cdn];
 		if (child.link_name) {
 			frappe.model.with_doctype(child.link_doctype, function () {
-				var title_field =
-					frappe.get_meta(child.link_doctype).title_field || "name";
+				var title_field = frappe.get_meta(child.link_doctype).title_field || "name";
 				frappe.model.get_value(
 					child.link_doctype,
 					child.link_name,
 					title_field,
 					function (r) {
-						frappe.model.set_value(
-							cdt,
-							cdn,
-							"link_title",
-							r[title_field],
-						);
-					},
+						frappe.model.set_value(cdt, cdn, "link_title", r[title_field]);
+					}
 				);
 			});
 		}

@@ -39,13 +39,8 @@ frappe.ui.Slide = class Slide {
 		this.$form_wrapper = this.$body.find(".form-wrapper");
 
 		if (this.image_src)
-			this.$content.append(
-				$(`<img src="${this.image_src}" style="margin: 20px;">`),
-			);
-		if (this.help)
-			this.$content.append(
-				$(`<p class="slide-help">${__(this.help)}</p>`),
-			);
+			this.$content.append($(`<img src="${this.image_src}" style="margin: 20px;">`));
+		if (this.help) this.$content.append($(`<p class="slide-help">${__(this.help)}</p>`));
 
 		this.reqd_fields = [];
 
@@ -135,7 +130,7 @@ frappe.ui.Slide = class Slide {
 					}
 					field.reqd = 0;
 					return field;
-				}),
+				})
 			);
 
 			if (this.count === this.max_count) {
@@ -266,12 +261,8 @@ frappe.ui.Slides = class Slides {
 			.addClass("slides-wrapper")
 			.attr({ tabindex: -1 })
 			.appendTo(this.parent);
-		this.$body = $(`<div>`)
-			.addClass(`slide-container`)
-			.appendTo(this.container);
-		this.$footer = $(`<div>`)
-			.addClass(`slide-footer`)
-			.appendTo(this.container);
+		this.$body = $(`<div>`).addClass(`slide-container`).appendTo(this.container);
+		this.$footer = $(`<div>`).addClass(`slide-footer`).appendTo(this.container);
 
 		this.render_progress_dots();
 		this.make_prev_next_complete_buttons();
@@ -291,10 +282,9 @@ frappe.ui.Slides = class Slides {
 					$.extend(this.slides[id], {
 						parent: this.$body,
 						slides_footer: this.$footer,
-						render_parent_dots:
-							this.render_progress_dots.bind(this),
+						render_parent_dots: this.render_progress_dots.bind(this),
 						id: id,
-					}),
+					})
 				);
 				if (!this.unidirectional) {
 					this.slide_dict[id].make();
@@ -331,8 +321,7 @@ frappe.ui.Slides = class Slides {
 
 			if (
 				this.done_state &&
-				((this.slide_dict[id] && this.slide_dict[id].done) ||
-					slide.done)
+				((this.slide_dict[id] && this.slide_dict[id].done) || slide.done)
 			) {
 				$dot.addClass("step-success");
 			}
@@ -364,19 +353,19 @@ frappe.ui.Slides = class Slides {
 				<button class="prev-btn btn btn-secondary btn-sm" tabindex="0">${__(
 					"Previous",
 					null,
-					"Go to previous slide",
+					"Go to previous slide"
 				)}</button>
 			</div>
 			<div class="col-sm-8 text-right next-div">
 				<button class="complete-btn btn btn-sm primary">${__(
 					"Complete Setup",
 					null,
-					"Finish the setup wizard",
+					"Finish the setup wizard"
 				)}</button>
 				<button class="next-btn btn btn-default btn-sm" tabindex="0">${__(
 					"Next",
 					null,
-					"Go to next slide",
+					"Go to next slide"
 				)}</button>
 			</div>
 		</div>`).appendTo(this.$footer);
@@ -402,9 +391,7 @@ frappe.ui.Slides = class Slides {
 				}
 			});
 
-		this.$complete_btn = this.$footer
-			.find(".complete-btn")
-			.attr("tabIndex", 0);
+		this.$complete_btn = this.$footer.find(".complete-btn").attr("tabIndex", 0);
 	}
 
 	bind_progress_dots() {
@@ -424,10 +411,7 @@ frappe.ui.Slides = class Slides {
 
 	show_slide(id) {
 		id = cint(id);
-		if (
-			!this.before_show_slide() ||
-			(this.current_slide && this.current_id === id)
-		) {
+		if (!this.before_show_slide() || (this.current_slide && this.current_id === id)) {
 			return;
 		}
 
@@ -452,9 +436,7 @@ frappe.ui.Slides = class Slides {
 
 	show_hide_prev_next(id) {
 		id === 0 ? this.$prev_btn.hide() : this.$prev_btn.show();
-		id + 1 === this.slides.length
-			? this.$next_btn.hide()
-			: this.$next_btn.show();
+		id + 1 === this.slides.length ? this.$next_btn.hide() : this.$next_btn.show();
 	}
 
 	get_values() {

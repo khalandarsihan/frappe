@@ -22,9 +22,7 @@ frappe.ui.form.on("Document Naming Settings", {
 			method: "get_transactions_and_prefixes",
 			doc: frm.doc,
 			callback: function (r) {
-				frm.fields_dict.transaction_type.set_data(
-					r.message.transactions,
-				);
+				frm.fields_dict.transaction_type.set_data(r.message.transactions);
 				frm.fields_dict.prefix.set_data(r.message.prefixes);
 			},
 		});
@@ -74,10 +72,7 @@ frappe.ui.form.on("Document Naming Settings", {
 				if (!r.exc) {
 					frm.set_value("series_preview", r.message);
 				} else {
-					frm.set_value(
-						"series_preview",
-						__("Failed to generate preview of series"),
-					);
+					frm.set_value("series_preview", __("Failed to generate preview of series"));
 				}
 			},
 		});

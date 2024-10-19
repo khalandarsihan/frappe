@@ -23,18 +23,15 @@ frappe.ui.form.on("Email Group", {
 									doctype: data.doctype,
 								},
 								callback: function (r) {
-									frm.set_value(
-										"total_subscribers",
-										r.message,
-									);
+									frm.set_value("total_subscribers", r.message);
 								},
 							});
 						},
 						__("Import Subscribers"),
-						__("Import"),
+						__("Import")
 					);
 				},
-				__("Action"),
+				__("Action")
 			);
 
 			frm.add_custom_button(
@@ -55,18 +52,15 @@ frappe.ui.form.on("Email Group", {
 									email_list: data.email_list,
 								},
 								callback: function (r) {
-									frm.set_value(
-										"total_subscribers",
-										r.message,
-									);
+									frm.set_value("total_subscribers", r.message);
 								},
 							});
 						},
 						__("Add Subscribers"),
-						__("Add"),
+						__("Add")
 					);
 				},
-				__("Action"),
+				__("Action")
 			);
 
 			frm.add_custom_button(
@@ -75,7 +69,7 @@ frappe.ui.form.on("Email Group", {
 					frappe.route_options = { email_group: frm.doc.name };
 					frappe.new_doc("Newsletter");
 				},
-				__("Action"),
+				__("Action")
 			);
 		}
 
@@ -89,15 +83,13 @@ frappe.ui.form.on("Email Group", {
 	},
 	preview_welcome_url: function (frm) {
 		if (frm.doc.add_query_parameters && frm.doc.welcome_url) {
-			frm.call("preview_welcome_url", { email: "mail@example.org" }).then(
-				(r) => {
-					frm.set_df_property(
-						"add_query_parameters",
-						"description",
-						`${__("Preview:")} ${r.message}`,
-					);
-				},
-			);
+			frm.call("preview_welcome_url", { email: "mail@example.org" }).then((r) => {
+				frm.set_df_property(
+					"add_query_parameters",
+					"description",
+					`${__("Preview:")} ${r.message}`
+				);
+			});
 		} else {
 			frm.set_df_property("add_query_parameters", "description", "");
 		}

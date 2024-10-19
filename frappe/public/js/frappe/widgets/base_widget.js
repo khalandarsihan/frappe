@@ -32,7 +32,7 @@ export default class Widget {
 				"drag-handle",
 				__("Drag"),
 				null,
-				this.action_area,
+				this.action_area
 			);
 
 		if (options.allow_hiding) {
@@ -50,12 +50,10 @@ export default class Widget {
 				"show-or-hide-button",
 				title,
 				null,
-				this.action_area,
+				this.action_area
 			);
 
-			this.show_or_hide_button = this.action_area.find(
-				".show-or-hide-button",
-			);
+			this.show_or_hide_button = this.action_area.find(".show-or-hide-button");
 		}
 
 		options.allow_edit &&
@@ -65,7 +63,7 @@ export default class Widget {
 				"edit-button",
 				__("Edit"),
 				null,
-				this.action_area,
+				this.action_area
 			);
 	}
 
@@ -75,8 +73,7 @@ export default class Widget {
 	}
 
 	make_widget() {
-		this.widget =
-			$(`<div class="widget" data-widget-name="${this.name ? this.name : ""}">
+		this.widget = $(`<div class="widget" data-widget-name="${this.name ? this.name : ""}">
 			<div class="widget-head">
 				<div class="widget-label">
 					<div class="widget-title"></div>
@@ -102,7 +99,7 @@ export default class Widget {
 		let title = max_chars ? frappe.ellipsis(base, max_chars) : base;
 
 		this.title_field[0].innerHTML = `<span class="ellipsis" title="${__(title)}">${__(
-			title,
+			title
 		)}</span>`;
 		if (max_chars) {
 			this.title_field[0].setAttribute("title", this.title || this.label);
@@ -113,9 +110,7 @@ export default class Widget {
 	delete(animate = true, dismissed = false) {
 		let remove_widget = (setup_new) => {
 			this.widget.remove();
-			!dismissed &&
-				this.options.on_delete &&
-				this.options.on_delete(this.name, setup_new);
+			!dismissed && this.options.on_delete && this.options.on_delete(this.name, setup_new);
 		};
 
 		if (animate) {
@@ -182,9 +177,9 @@ export default class Widget {
 		const classname = this.hidden ? "fa fa-eye" : "fa fa-eye-slash";
 		const title = this.hidden ? __("Show") : __("Hide");
 
-		$(
-			`<i class="${classname}" aria-hidden="true" title="${title}"></i>`,
-		).appendTo(this.show_or_hide_button);
+		$(`<i class="${classname}" aria-hidden="true" title="${title}"></i>`).appendTo(
+			this.show_or_hide_button
+		);
 	}
 
 	setup_events() {

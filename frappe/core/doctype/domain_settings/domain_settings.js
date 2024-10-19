@@ -11,7 +11,7 @@ frappe.ui.form.on("Domain Settings", {
 					fieldtype: "MultiCheck",
 					get_data: () => {
 						let active_domains = (frm.doc.active_domains || []).map(
-							(row) => row.domain,
+							(row) => row.domain
 						);
 						return frappe.boot.all_domains.map((domain) => {
 							return {
@@ -59,11 +59,7 @@ frappe.ui.form.on("Domain Settings", {
 		selected_options.map((option) => {
 			if (!list.includes(option)) {
 				frappe.model.clear_doc("Has Domain", map[option]);
-				let row = frappe.model.add_child(
-					frm.doc,
-					"Has Domain",
-					"active_domains",
-				);
+				let row = frappe.model.add_child(frm.doc, "Has Domain", "active_domains");
 				row.domain = option;
 			}
 		});

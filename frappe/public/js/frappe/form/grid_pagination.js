@@ -47,8 +47,7 @@ export default class GridPagination {
 		});
 
 		this.$page_number.on("keyup", (e) => {
-			e.currentTarget.style.width =
-				(e.currentTarget.value.length + 1) * 8 + "px";
+			e.currentTarget.style.width = (e.currentTarget.value.length + 1) * 8 + "px";
 		});
 
 		this.$page_number.on("keydown", (e) => {
@@ -155,10 +154,7 @@ export default class GridPagination {
 		this.grid.render_result_rows($rows, true);
 		if (this.$page_number) {
 			this.$page_number.val(index);
-			this.$page_number.css(
-				"width",
-				(index.toString().length + 1) * 8 + "px",
-			);
+			this.$page_number.css("width", (index.toString().length + 1) * 8 + "px");
 		}
 
 		this.update_page_numbers();

@@ -21,9 +21,7 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 		this.start = 0;
 		this.page_length = 10;
 		this.dialog = new frappe.ui.Dialog({
-			title: __("Select {0}", [
-				this.doctype == "[Select]" ? __("value") : __(this.doctype),
-			]),
+			title: __("Select {0}", [this.doctype == "[Select]" ? __("value") : __(this.doctype)]),
 			fields: [
 				{
 					fieldtype: "Data",
@@ -82,10 +80,7 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 			this.target.fieldinfo[this.fieldname] &&
 			this.target.fieldinfo[this.fieldname].get_query
 		) {
-			$.extend(
-				args,
-				this.target.fieldinfo[this.fieldname].get_query(cur_frm.doc),
-			);
+			$.extend(args, this.target.fieldinfo[this.fieldname].get_query(cur_frm.doc));
 		}
 
 		frappe.link_search(
@@ -110,8 +105,8 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 								{
 									name: v[0],
 									values: v.splice(1).join(", "),
-								},
-							),
+								}
+							)
 						).appendTo(parent);
 
 						row.find("a")
@@ -121,14 +116,10 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 								if (me.target.is_grid) {
 									// set in grid
 									// call search after value is set to get latest filtered results
-									me.set_in_grid(value).then(() =>
-										me.search(),
-									);
+									me.set_in_grid(value).then(() => me.search());
 								} else {
 									if (me.target.doctype)
-										me.target.parse_validate_and_set_in_model(
-											value,
-										);
+										me.target.parse_validate_and_set_in_model(value);
 									else {
 										me.target.set_input(value);
 										me.target.$input.trigger("change");
@@ -145,10 +136,10 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 							"</span>" +
 							(frappe.model.can_create(me.doctype)
 								? '<br><br><a class="new-doc btn btn-default btn-sm">' +
-									__("Create a new {0}", [__(me.doctype)]) +
-									"</a>"
+								  __("Create a new {0}", [__(me.doctype)]) +
+								  "</a>"
 								: "") +
-							"</p>",
+							"</p>"
 					)
 						.appendTo(parent)
 						.find(".new-doc")
@@ -164,7 +155,7 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 					more_btn.show();
 				}
 			},
-			this.dialog.get_primary_btn(),
+			this.dialog.get_primary_btn()
 		);
 	}
 	set_in_grid(value) {
@@ -179,29 +170,24 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 						reqd: 1,
 					},
 					(data) => {
-						let updated = (
-							this.target.frm.doc[this.target.df.fieldname] || []
-						).some((d) => {
-							if (d[this.fieldname] === value) {
-								frappe.model
-									.set_value(
-										d.doctype,
-										d.name,
-										this.qty_fieldname,
-										data.qty,
-									)
-									.then(() => {
-										frappe.show_alert(
-											__("Added {0} ({1})", [
-												value,
-												d[this.qty_fieldname],
-											]),
-										);
-										resolve();
-									});
-								return true;
+						let updated = (this.target.frm.doc[this.target.df.fieldname] || []).some(
+							(d) => {
+								if (d[this.fieldname] === value) {
+									frappe.model
+										.set_value(d.doctype, d.name, this.qty_fieldname, data.qty)
+										.then(() => {
+											frappe.show_alert(
+												__("Added {0} ({1})", [
+													value,
+													d[this.qty_fieldname],
+												])
+											);
+											resolve();
+										});
+									return true;
+								}
 							}
-						});
+						);
 						if (!updated) {
 							let d = null;
 							frappe.run_serially([
@@ -211,25 +197,15 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 									let args = {};
 									args[this.fieldname] = value;
 									args[this.qty_fieldname] = data.qty;
-									return frappe.model.set_value(
-										d.doctype,
-										d.name,
-										args,
-									);
+									return frappe.model.set_value(d.doctype, d.name, args);
 								},
-								() =>
-									frappe.show_alert(
-										__("Added {0} ({1})", [
-											value,
-											data.qty,
-										]),
-									),
+								() => frappe.show_alert(__("Added {0} ({1})", [value, data.qty])),
 								() => resolve(),
 							]);
 						}
 					},
 					__("Set Quantity"),
-					__("Set Quantity"),
+					__("Set Quantity")
 				);
 			} else if (this.dynamic_link_field) {
 				let d = this.target.add_new_row();
@@ -237,27 +213,18 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 					d.doctype,
 					d.name,
 					this.dynamic_link_field,
-					this.dynamic_link_reference,
+					this.dynamic_link_reference
 				);
-				frappe.model
-					.set_value(d.doctype, d.name, this.fieldname, value)
-					.then(() => {
-						frappe.show_alert(
-							__("{0} {1} added", [
-								this.dynamic_link_reference,
-								value,
-							]),
-						);
-						resolve();
-					});
+				frappe.model.set_value(d.doctype, d.name, this.fieldname, value).then(() => {
+					frappe.show_alert(__("{0} {1} added", [this.dynamic_link_reference, value]));
+					resolve();
+				});
 			} else {
 				let d = this.target.add_new_row();
-				frappe.model
-					.set_value(d.doctype, d.name, this.fieldname, value)
-					.then(() => {
-						frappe.show_alert(__("{0} added", [value]));
-						resolve();
-					});
+				frappe.model.set_value(d.doctype, d.name, this.fieldname, value).then(() => {
+					frappe.show_alert(__("{0} added", [value]));
+					resolve();
+				});
 			}
 		});
 	}

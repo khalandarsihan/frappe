@@ -4,10 +4,7 @@
 frappe.ui.form.on("Package", {
 	validate: function (frm) {
 		if (!frm.doc.package_name) {
-			frm.set_value(
-				"package_name",
-				frm.doc.name.toLowerCase().replace(" ", "-"),
-			);
+			frm.set_value("package_name", frm.doc.name.toLowerCase().replace(" ", "-"));
 		}
 	},
 

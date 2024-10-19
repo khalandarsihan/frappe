@@ -88,21 +88,16 @@ export default class WebForm extends frappe.ui.FieldGroup {
 			return;
 		}
 
-		this.$next_button =
-			$(`<button class="btn btn-default btn-next btn-sm ml-2">
+		this.$next_button = $(`<button class="btn btn-default btn-next btn-sm ml-2">
 			${__("Next")}
 		</button>`);
 
-		this.$previous_button =
-			$(`<button class="btn btn-default btn-previous btn-sm">
+		this.$previous_button = $(`<button class="btn btn-default btn-previous btn-sm">
 			${__("Previous")}
 		</button>`);
 
-		this.$next_button.insertAfter(
-			".web-form-footer .right-area .discard-btn",
-		);
-		this.in_view_mode &&
-			$(".web-form-footer .right-area").append(this.$next_button);
+		this.$next_button.insertAfter(".web-form-footer .right-area .discard-btn");
+		this.in_view_mode && $(".web-form-footer .right-area").append(this.$next_button);
 		$(".web-form-footer .left-area").prepend(this.$previous_button);
 
 		this.$previous_button.on("click", () => {
@@ -118,16 +113,10 @@ export default class WebForm extends frappe.ui.FieldGroup {
 				https://eslint.org/docs/rules/for-direction
 			*/
 			/* eslint-disable for-direction */
-			for (
-				let idx = me.current_section;
-				idx < me.sections.length;
-				idx--
-			) {
+			for (let idx = me.current_section; idx < me.sections.length; idx--) {
 				let is_empty = me.is_previous_section_empty(idx);
 				me.current_section =
-					me.current_section > 0
-						? me.current_section - 1
-						: me.current_section;
+					me.current_section > 0 ? me.current_section - 1 : me.current_section;
 
 				if (!is_empty) {
 					break;
@@ -143,11 +132,7 @@ export default class WebForm extends frappe.ui.FieldGroup {
 
 			if (!is_validated) return false;
 
-			for (
-				let idx = me.current_section;
-				idx < me.sections.length;
-				idx++
-			) {
+			for (let idx = me.current_section; idx < me.sections.length; idx++) {
 				let is_empty = me.is_next_section_empty(idx);
 				me.current_section =
 					me.current_section < me.sections.length
@@ -186,9 +171,7 @@ export default class WebForm extends frappe.ui.FieldGroup {
 	}
 
 	setup_discard_action() {
-		$(".web-form-footer .discard-btn").on("click", () =>
-			this.discard_form(),
-		);
+		$(".web-form-footer .discard-btn").on("click", () => this.discard_form());
 	}
 
 	discard_form() {
@@ -201,7 +184,7 @@ export default class WebForm extends frappe.ui.FieldGroup {
 				__("Discard?"),
 				__("Are you sure you want to discard the changes?"),
 				() => (window.location.href = path),
-				__("Discard"),
+				__("Discard")
 			);
 		} else {
 			window.location.href = path;
@@ -226,9 +209,7 @@ export default class WebForm extends frappe.ui.FieldGroup {
 				let value = field.get_value();
 				if (
 					field.df.reqd &&
-					is_null(
-						typeof value === "string" ? strip_html(value) : value,
-					)
+					is_null(typeof value === "string" ? strip_html(value) : value)
 				)
 					errors.push(__(field.df.label));
 
@@ -245,21 +226,12 @@ export default class WebForm extends frappe.ui.FieldGroup {
 
 		let message = "";
 		if (invalid_values.length) {
-			message += __(
-				"Invalid values for fields:",
-				null,
-				"Error message in web form",
-			);
-			message +=
-				"<br><br><ul><li>" + invalid_values.join("<li>") + "</ul>";
+			message += __("Invalid values for fields:", null, "Error message in web form");
+			message += "<br><br><ul><li>" + invalid_values.join("<li>") + "</ul>";
 		}
 
 		if (errors.length) {
-			message += __(
-				"Mandatory fields required:",
-				null,
-				"Error message in web form",
-			);
+			message += __("Mandatory fields required:", null, "Error message in web form");
 			message += "<br><br><ul><li>" + errors.join("<li>") + "</ul>";
 		}
 
@@ -297,9 +269,9 @@ export default class WebForm extends frappe.ui.FieldGroup {
 			return;
 		}
 
-		this.$slide_progress = $(
-			`<div class="slides-progress"></div>`,
-		).appendTo($(".center-area.paging"));
+		this.$slide_progress = $(`<div class="slides-progress"></div>`).appendTo(
+			$(".center-area.paging")
+		);
 		this.$slide_progress.empty();
 
 		if (this.page_breaks.length < 1) return;
@@ -321,11 +293,7 @@ export default class WebForm extends frappe.ui.FieldGroup {
 	}
 
 	toggle_buttons() {
-		for (
-			let idx = this.current_section;
-			idx <= this.page_breaks.length;
-			idx++
-		) {
+		for (let idx = this.current_section; idx <= this.page_breaks.length; idx++) {
 			if (this.is_next_section_empty(idx)) {
 				this.show_save_and_hide_next_button();
 			} else {
@@ -364,9 +332,7 @@ export default class WebForm extends frappe.ui.FieldGroup {
 	}
 
 	toggle_previous_button() {
-		this.current_section == 0
-			? $(".btn-previous").hide()
-			: $(".btn-previous").show();
+		this.current_section == 0 ? $(".btn-previous").hide() : $(".btn-previous").show();
 	}
 
 	get_page(idx) {
@@ -391,7 +357,7 @@ export default class WebForm extends frappe.ui.FieldGroup {
 		if (!valid && valid !== undefined) {
 			frappe.msgprint(
 				__("Couldn't save, please check the data you have entered"),
-				__("Validation Error"),
+				__("Validation Error")
 			);
 			return false;
 		}
@@ -431,17 +397,12 @@ export default class WebForm extends frappe.ui.FieldGroup {
 					frappe.web_form.events.trigger("after_save");
 					this.after_save && this.after_save();
 					// args doctype and docname added to link doctype in file manager
-					if (
-						is_new &&
-						(response.message.attachment || response.message.file)
-					) {
+					if (is_new && (response.message.attachment || response.message.file)) {
 						frappe.call({
 							type: "POST",
 							method: "frappe.handler.upload_file",
 							args: {
-								file_url:
-									response.message.attachment ||
-									response.message.file,
+								file_url: response.message.attachment || response.message.file,
 								doctype: response.message.doctype,
 								docname: response.message.name,
 							},
@@ -464,9 +425,7 @@ export default class WebForm extends frappe.ui.FieldGroup {
 
 		if (!this.is_new) {
 			$(".success-title").text(__("Updated"));
-			$(".success-message").text(
-				__("Your form has been successfully updated"),
-			);
+			$(".success-message").text(__("Your form has been successfully updated"));
 		}
 
 		$(".web-form-container").hide();
@@ -491,12 +450,7 @@ export default class WebForm extends frappe.ui.FieldGroup {
 			`);
 		}
 
-		if (
-			this.login_required &&
-			!this.allow_multiple &&
-			!this.show_list &&
-			data.name
-		) {
+		if (this.login_required && !this.allow_multiple && !this.show_list && data.name) {
 			$(".success-footer").append(`
 				<a href="/${this.route}/${data.name}" class="view-button btn btn-default btn-md">
 					${__("View your response", null, "Button in web form")}

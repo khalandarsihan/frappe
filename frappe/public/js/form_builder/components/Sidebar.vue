@@ -42,11 +42,7 @@ function resize(e) {
 		<div class="default-state" v-else>
 			<div
 				class="actions"
-				v-if="
-					store.form.layout.tabs.length == 1 &&
-					!store.read_only &&
-					!store.doc.istable
-				"
+				v-if="store.form.layout.tabs.length == 1 && !store.read_only && !store.doc.istable"
 			>
 				<button
 					class="new-tab-btn btn btn-default btn-xs"

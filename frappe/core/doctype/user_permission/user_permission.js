@@ -24,7 +24,7 @@ frappe.ui.form.on("User Permission", {
 		frm.add_custom_button(__("View Permitted Documents"), () =>
 			frappe.set_route("query-report", "Permitted Documents For User", {
 				user: frm.doc.user,
-			}),
+			})
 		);
 		frm.trigger("set_applicable_for_constraint");
 		frm.trigger("toggle_hide_descendants");

@@ -13,11 +13,7 @@
 						type="button"
 						class="btn btn-xs"
 						@click="letterhead.align = direction"
-						:class="
-							letterhead.align == direction
-								? 'btn-secondary'
-								: 'btn-default'
-						"
+						:class="letterhead.align == direction ? 'btn-secondary' : 'btn-default'"
 					>
 						{{ direction }}
 					</button>
@@ -30,12 +26,7 @@
 					min="20"
 					:max="range_input_field === 'image_width' ? 700 : 500"
 					:value="letterhead[range_input_field]"
-					@input="
-						(e) =>
-							(letterhead[range_input_field] = parseFloat(
-								e.target.value,
-							))
-					"
+					@input="(e) => (letterhead[range_input_field] = parseFloat(e.target.value))"
 				/>
 			</div>
 			<div>
@@ -58,11 +49,7 @@
 					class="ml-2 btn btn-default btn-xs btn-edit"
 					@click="toggle_edit_letterhead"
 				>
-					{{
-						!store.edit_letterhead
-							? __("Edit Letter Head")
-							: __("Done")
-					}}
+					{{ !store.edit_letterhead ? __("Edit Letter Head") : __("Done") }}
 				</button>
 				<button
 					v-if="!letterhead"
@@ -73,10 +60,7 @@
 				</button>
 			</div>
 		</div>
-		<div
-			v-if="letterhead && !store.edit_letterhead"
-			v-html="letterhead.content"
-		></div>
+		<div v-if="letterhead && !store.edit_letterhead" v-html="letterhead.content"></div>
 		<!-- <div v-show="letterhead && store.edit_letterhead" ref="editor"></div> -->
 		<div
 			class="edit-letterhead"
@@ -176,40 +160,34 @@ function upload_image() {
 	new frappe.ui.FileUploader({
 		folder: "Home/Attachments",
 		on_success: (file_doc) => {
-			get_image_dimensions(file_doc.file_url).then(
-				({ width, height }) => {
-					letterhead.value["image"] = file_doc.file_url;
-					let new_width = width;
-					let new_height = height;
-					aspect_ratio.value = width / height;
-					range_input_field.value =
-						aspect_ratio.value > 1 ? "image_width" : "image_height";
+			get_image_dimensions(file_doc.file_url).then(({ width, height }) => {
+				letterhead.value["image"] = file_doc.file_url;
+				let new_width = width;
+				let new_height = height;
+				aspect_ratio.value = width / height;
+				range_input_field.value = aspect_ratio.value > 1 ? "image_width" : "image_height";
 
-					if (width > 200) {
-						new_width = 200;
-						new_height = new_width / aspect_ratio.value;
-					}
-					if (height > 80) {
-						new_height = 80;
-						new_width = aspect_ratio.value * new_height;
-					}
+				if (width > 200) {
+					new_width = 200;
+					new_height = new_width / aspect_ratio.value;
+				}
+				if (height > 80) {
+					new_height = 80;
+					new_width = aspect_ratio.value * new_height;
+				}
 
-					letterhead.value["image_height"] = new_height;
-					letterhead.value["image_width"] = new_width;
-				},
-			);
+				letterhead.value["image_height"] = new_height;
+				letterhead.value["image_width"] = new_width;
+			});
 		},
 	});
 }
 function set_letterhead(_letterhead) {
 	store.value.change_letterhead(_letterhead).then(() => {
-		get_image_dimensions(letterhead.value.image).then(
-			({ width, height }) => {
-				aspect_ratio.value = width / height;
-				range_input_field.value =
-					aspect_ratio.value > 1 ? "image_width" : "image_height";
-			},
-		);
+		get_image_dimensions(letterhead.value.image).then(({ width, height }) => {
+			aspect_ratio.value = width / height;
+			range_input_field.value = aspect_ratio.value > 1 ? "image_width" : "image_height";
+		});
 	});
 }
 function create_letterhead() {
@@ -247,22 +225,18 @@ onMounted(() => {
 
 	watch(
 		() => {
-			return letterhead.value
-				? letterhead.value[range_input_field.value]
-				: null;
+			return letterhead.value ? letterhead.value[range_input_field.value] : null;
 		},
 		() => {
 			if (aspect_ratio.value === null) return;
 
 			let update_field =
-				range_input_field.value == "image_width"
-					? "image_height"
-					: "image_width";
+				range_input_field.value == "image_width" ? "image_height" : "image_width";
 			letterhead.value[update_field] =
 				update_field == "image_width"
 					? aspect_ratio.value * letterhead.value.image_height
 					: letterhead.value.image_width / aspect_ratio.value;
-		},
+		}
 	);
 });
 
@@ -273,9 +247,7 @@ watch(
 		if (!letterhead.value) return;
 		if (letterhead.value.image_width && letterhead.value.image_height) {
 			let dimension =
-				letterhead.value.image_width > letterhead.value.image_height
-					? "width"
-					: "height";
+				letterhead.value.image_width > letterhead.value.image_height ? "width" : "height";
 			let dimension_value = letterhead.value["image_" + dimension];
 			letterhead.value.content = `
 			<div style="text-align: ${letterhead.value.align.toLowerCase()};">
@@ -289,7 +261,7 @@ watch(
 		}
 	},
 	{ deep: true },
-	{ immediate: true },
+	{ immediate: true }
 );
 </script>
 

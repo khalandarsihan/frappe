@@ -11,20 +11,10 @@ frappe.ui.form.on("Custom Field", {
 				["DocType", "issingle", "=", 0],
 				["DocType", "custom", "=", 0],
 				["DocType", "name", "not in", frappe.model.core_doctypes_list],
-				[
-					"DocType",
-					"restrict_to_domain",
-					"in",
-					frappe.boot.active_domains,
-				],
+				["DocType", "restrict_to_domain", "in", frappe.boot.active_domains],
 			];
 			if (frappe.session.user !== "Administrator") {
-				filters.push([
-					"DocType",
-					"module",
-					"not in",
-					["Core", "Custom"],
-				]);
+				filters.push(["DocType", "module", "not in", ["Core", "Custom"]]);
 			}
 			return {
 				filters: filters,
@@ -49,12 +39,12 @@ frappe.ui.form.on("Custom Field", {
 							__("Customize Form"),
 							{
 								doc_type: frm.doc.dt,
-							},
+							}
 						),
-					],
+					]
 				),
 				"yellow",
-				true,
+				true
 			);
 		}
 	},
@@ -77,10 +67,7 @@ frappe.ui.form.on("Custom Field", {
 							return v.value;
 						});
 
-						if (
-							insert_after == null ||
-							!fieldnames.includes(insert_after)
-						) {
+						if (insert_after == null || !fieldnames.includes(insert_after)) {
 							insert_after = fieldnames[-1];
 						}
 
@@ -93,9 +80,7 @@ frappe.ui.form.on("Custom Field", {
 	label: function (frm) {
 		if (frm.doc.label && frappe.utils.has_special_chars(frm.doc.label)) {
 			frm.fields_dict["label_help"].disp_area.innerHTML =
-				'<font color = "red">' +
-				__("Special Characters are not allowed") +
-				"</font>";
+				'<font color = "red">' + __("Special Characters are not allowed") + "</font>";
 			frm.set_value("label", "");
 		} else {
 			frm.fields_dict["label_help"].disp_area.innerHTML = "";
@@ -104,7 +89,7 @@ frappe.ui.form.on("Custom Field", {
 	fieldtype: function (frm) {
 		if (frm.doc.fieldtype == "Link") {
 			frm.fields_dict["options_help"].disp_area.innerHTML = __(
-				"Name of the Document Type (DocType) you want this field to be linked to. e.g. Customer",
+				"Name of the Document Type (DocType) you want this field to be linked to. e.g. Customer"
 			);
 		} else if (frm.doc.fieldtype == "Select") {
 			frm.fields_dict["options_help"].disp_area.innerHTML =
@@ -120,7 +105,7 @@ frappe.ui.form.on("Custom Field", {
 				"<br>";
 		} else if (frm.doc.fieldtype == "Dynamic Link") {
 			frm.fields_dict["options_help"].disp_area.innerHTML = __(
-				"Fieldname which will be the DocType for this link field.",
+				"Fieldname which will be the DocType for this link field."
 			);
 		} else {
 			frm.fields_dict["options_help"].disp_area.innerHTML = "";
@@ -144,12 +129,12 @@ frappe.ui.form.on("Custom Field", {
 								{
 									custom_field: frm.doc.name,
 									fieldname: data.fieldname,
-								},
+								}
 							)
 							.then(() => frm.reload());
 					},
 					__("Rename Fieldname"),
-					__("Rename"),
+					__("Rename")
 				);
 			});
 		}

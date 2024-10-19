@@ -1,14 +1,8 @@
 frappe.listview_settings["Email Account"] = {
-	add_fields: [
-		"default_incoming",
-		"default_outgoing",
-		"enable_incoming",
-		"enable_outgoing",
-	],
+	add_fields: ["default_incoming", "default_outgoing", "enable_incoming", "enable_outgoing"],
 	get_indicator: function (doc) {
 		if (doc.default_incoming && doc.default_outgoing) {
-			var color =
-				doc.enable_incoming && doc.enable_outgoing ? "blue" : "gray";
+			var color = doc.enable_incoming && doc.enable_outgoing ? "blue" : "gray";
 			return [
 				__("Default Sending and Inbox"),
 				color,
@@ -22,11 +16,7 @@ frappe.listview_settings["Email Account"] = {
 			return [__("Default Sending"), color, "default_outgoing,=,Yes"];
 		} else {
 			color = doc.enable_incoming ? "blue" : "gray";
-			return [
-				__("Inbox"),
-				color,
-				"default_outgoing,=,No|default_incoming=No",
-			];
+			return [__("Inbox"), color, "default_outgoing,=,No|default_incoming=No"];
 		}
 	},
 };

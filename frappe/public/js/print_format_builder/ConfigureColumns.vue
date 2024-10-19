@@ -51,10 +51,7 @@
 							max="100"
 							step="5"
 						/>
-						<button
-							class="ml-2 btn btn-xs btn-icon"
-							@click="remove_column(column)"
-						>
+						<button class="ml-2 btn btn-xs btn-icon" @click="remove_column(column)">
 							<svg class="icon icon-sm">
 								<use href="#icon-close"></use>
 							</svg>
@@ -75,9 +72,7 @@ const props = defineProps(["df"]);
 
 // methods
 function remove_column(column) {
-	props.df["table_columns"] = props.df.table_columns.filter(
-		(_column) => _column !== column,
-	);
+	props.df["table_columns"] = props.df.table_columns.filter((_column) => _column !== column);
 }
 // computed
 let help_message = computed(() => {

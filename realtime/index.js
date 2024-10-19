@@ -46,9 +46,7 @@ const subscriber = get_redis_subscriber();
 		message = JSON.parse(message);
 		let namespace = "/" + message.namespace;
 		if (message.room) {
-			io.of(namespace)
-				.to(message.room)
-				.emit(message.event, message.message);
+			io.of(namespace).to(message.room).emit(message.event, message.message);
 		} else {
 			// publish to ALL sites only used for things like build event.
 			realtime.emit(message.event, message.message);

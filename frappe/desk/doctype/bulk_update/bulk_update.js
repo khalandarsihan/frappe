@@ -7,23 +7,14 @@ frappe.ui.form.on("Bulk Update", {
 			return {
 				filters: [
 					["DocType", "issingle", "=", 0],
-					[
-						"DocType",
-						"name",
-						"not in",
-						frappe.model.core_doctypes_list,
-					],
+					["DocType", "name", "not in", frappe.model.core_doctypes_list],
 				],
 			};
 		});
 
 		frm.page.set_primary_action(__("Update"), function () {
 			if (!frm.doc.update_value) {
-				frappe.throw(
-					__(
-						'Field "value" is mandatory. Please specify value to be updated',
-					),
-				);
+				frappe.throw(__('Field "value" is mandatory. Please specify value to be updated'));
 			} else {
 				frm.call("bulk_update").then((r) => {
 					let failed = r.message;
@@ -32,10 +23,8 @@ frappe.ui.form.on("Bulk Update", {
 					if (failed.length && !r._server_messages) {
 						frappe.throw(
 							__("Cannot update {0}", [
-								failed
-									.map((f) => (f.bold ? f.bold() : f))
-									.join(", "),
-							]),
+								failed.map((f) => (f.bold ? f.bold() : f)).join(", "),
+							])
 						);
 					} else {
 						frappe.msgprint({
@@ -57,18 +46,12 @@ frappe.ui.form.on("Bulk Update", {
 		if (!frm.doc.document_type) return;
 
 		frappe.model.with_doctype(frm.doc.document_type, function () {
-			var options = $.map(
-				frappe.get_meta(frm.doc.document_type).fields,
-				function (d) {
-					if (
-						d.fieldname &&
-						frappe.model.no_value_type.indexOf(d.fieldtype) === -1
-					) {
-						return d.fieldname;
-					}
-					return null;
-				},
-			);
+			var options = $.map(frappe.get_meta(frm.doc.document_type).fields, function (d) {
+				if (d.fieldname && frappe.model.no_value_type.indexOf(d.fieldtype) === -1) {
+					return d.fieldname;
+				}
+				return null;
+			});
 			frm.set_df_property("field", "options", options);
 		});
 	},

@@ -28,10 +28,7 @@ export default class Onboarding extends Block {
 
 	rendered() {
 		let block = this.wrapper.closest(".ce-block");
-		if (
-			this.readOnly &&
-			!$(this.wrapper).find(".onboarding-widget-box").is(":visible")
-		) {
+		if (this.readOnly && !$(this.wrapper).find(".onboarding-widget-box").is(":visible")) {
 			$(block).hide();
 		}
 		this.set_col_class(block, this.get_col());
@@ -60,12 +57,9 @@ export default class Onboarding extends Block {
 				this.block_widget.customize(this.options);
 				this.wrapper.setAttribute(
 					block_name,
-					this.block_widget.label ||
-						this.block_widget.onboarding_name,
+					this.block_widget.label || this.block_widget.onboarding_name
 				);
-				$(this.wrapper)
-					.find(".widget")
-					.addClass(`${widget_type} edit-mode`);
+				$(this.wrapper).find(".widget").addClass(`${widget_type} edit-mode`);
 				this.new_block_widget = this.block_widget.get_config();
 				this.add_settings_button();
 			},
@@ -81,11 +75,9 @@ export default class Onboarding extends Block {
 	}
 
 	make(block, block_name) {
-		let block_data = this.config.page_data["onboardings"].items.find(
-			(obj) => {
-				return obj.label == __(block_name);
-			},
-		);
+		let block_data = this.config.page_data["onboardings"].items.find((obj) => {
+			return obj.label == __(block_name);
+		});
 		if (!block_data) return false;
 		this.wrapper.innerHTML = "";
 		block_data.in_customize_mode = !this.readOnly;

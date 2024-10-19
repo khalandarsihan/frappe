@@ -63,7 +63,7 @@ watch(
 	(value) => {
 		update_control.value = false;
 		link_control.value?.set_value(value);
-	},
+	}
 );
 </script>
 
@@ -84,11 +84,7 @@ watch(
 		<input class="form-control" type="text" readonly />
 
 		<!-- description -->
-		<div
-			v-if="df.description"
-			class="mt-2 description"
-			v-html="df.description"
-		/>
+		<div v-if="df.description" class="mt-2 description" v-html="df.description" />
 	</div>
 	<div v-else ref="link"></div>
 </template>

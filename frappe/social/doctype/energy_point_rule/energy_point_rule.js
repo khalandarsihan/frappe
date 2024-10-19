@@ -4,21 +4,14 @@
 frappe.ui.form.on("Energy Point Rule", {
 	validate(frm) {
 		frm.set_df_property("user_field", "reqd", !frm.doc.for_assigned_users);
-		frm.set_df_property(
-			"condition",
-			"reqd",
-			frm.doc.for_doc_event === "Custom",
-		);
+		frm.set_df_property("condition", "reqd", frm.doc.for_doc_event === "Custom");
 	},
 	refresh(frm) {
 		frm.events.set_field_options(frm);
 	},
 	for_doc_event(frm) {
 		if (frm.doc.for_assigned_users) {
-			frm.set_value(
-				"for_assigned_users",
-				!frm.doc.for_doc_event === "New",
-			);
+			frm.set_value("for_assigned_users", !frm.doc.for_doc_event === "New");
 		}
 	},
 	reference_doctype(frm) {
@@ -45,7 +38,7 @@ frappe.ui.form.on("Energy Point Rule", {
 				.filter(
 					(df) =>
 						(df.fieldtype === "Link" && df.options === "User") ||
-						df.fieldtype === "Data",
+						df.fieldtype === "Data"
 				)
 				.map(map_for_options)
 				.concat([
@@ -62,11 +55,7 @@ frappe.ui.form.on("Energy Point Rule", {
 
 			frm.set_df_property("field_to_check", "options", fields_to_check);
 			frm.set_df_property("user_field", "options", user_fields);
-			frm.set_df_property(
-				"multiplier_field",
-				"options",
-				multiplier_fields,
-			);
+			frm.set_df_property("multiplier_field", "options", multiplier_fields);
 		});
 	},
 });

@@ -19,11 +19,7 @@ window.refresh_field = function (n, docname, table_field) {
 
 		if (field && field.length) {
 			field = field[0];
-			var meta = frappe.meta.get_docfield(
-				field.parent,
-				field.fieldname,
-				docname,
-			);
+			var meta = frappe.meta.get_docfield(field.parent, field.fieldname, docname);
 			$.extend(field, meta);
 			if (grid_row) {
 				grid_row.refresh_field(n);
@@ -46,11 +42,7 @@ window.toggle_field = function (n, hidden) {
 		df.hidden = hidden;
 		refresh_field(n);
 	} else {
-		console.log(
-			(hidden ? "hide_field" : "unhide_field") +
-				" cannot find field " +
-				n,
-		);
+		console.log((hidden ? "hide_field" : "unhide_field") + " cannot find field " + n);
 	}
 };
 

@@ -1,6 +1,4 @@
-frappe.ui.form.ControlAttachImage = class ControlAttachImage extends (
-	frappe.ui.form.ControlAttach
-) {
+frappe.ui.form.ControlAttachImage = class ControlAttachImage extends frappe.ui.form.ControlAttach {
 	make_input() {
 		super.make_input();
 

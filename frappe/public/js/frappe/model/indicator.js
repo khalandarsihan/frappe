@@ -39,9 +39,9 @@ frappe.get_indicator = function (doc, doctype, show_workflow_state) {
 	var is_submittable = frappe.model.is_submittable(doctype);
 	let workflow_fieldname = frappe.workflow.get_state_fieldname(doctype);
 
-	let avoid_status_override = (
-		frappe.workflow.avoid_status_override[doctype] || []
-	).includes(doc[workflow_fieldname]);
+	let avoid_status_override = (frappe.workflow.avoid_status_override[doctype] || []).includes(
+		doc[workflow_fieldname]
+	);
 	// workflow
 	if (
 		workflow_fieldname &&
@@ -52,10 +52,7 @@ frappe.get_indicator = function (doc, doctype, show_workflow_state) {
 		if (value) {
 			let colour = "";
 
-			if (
-				locals["Workflow State"][value] &&
-				locals["Workflow State"][value].style
-			) {
+			if (locals["Workflow State"][value] && locals["Workflow State"][value].style) {
 				colour = {
 					Success: "green",
 					Warning: "orange",
@@ -72,30 +69,17 @@ frappe.get_indicator = function (doc, doctype, show_workflow_state) {
 	}
 
 	// draft if document is submittable
-	if (
-		is_submittable &&
-		doc.docstatus == 0 &&
-		!settings.has_indicator_for_draft
-	) {
+	if (is_submittable && doc.docstatus == 0 && !settings.has_indicator_for_draft) {
 		return [__("Draft"), "red", "docstatus,=,0"];
 	}
 
 	// cancelled
-	if (
-		is_submittable &&
-		doc.docstatus == 2 &&
-		!settings.has_indicator_for_cancelled
-	) {
+	if (is_submittable && doc.docstatus == 2 && !settings.has_indicator_for_cancelled) {
 		return [__("Cancelled"), "red", "docstatus,=,2"];
 	}
 
 	// based on document state
-	if (
-		doc.status &&
-		meta &&
-		meta.states &&
-		meta.states.find((d) => d.title === doc.status)
-	) {
+	if (doc.status && meta && meta.states && meta.states.find((d) => d.title === doc.status)) {
 		let state = meta.states.find((d) => d.title === doc.status);
 		let color_class = frappe.scrub(state.color, "-");
 		return [__(doc.status), color_class, "status,=," + doc.status];
@@ -113,11 +97,7 @@ frappe.get_indicator = function (doc, doctype, show_workflow_state) {
 
 	// based on status
 	if (doc.status) {
-		return [
-			__(doc.status),
-			frappe.utils.guess_colour(doc.status),
-			"status,=," + doc.status,
-		];
+		return [__(doc.status), frappe.utils.guess_colour(doc.status), "status,=," + doc.status];
 	}
 
 	// based on enabled

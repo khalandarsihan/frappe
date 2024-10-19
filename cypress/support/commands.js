@@ -35,8 +35,7 @@ Cypress.Commands.add("login", (email, password) => {
 		password = Cypress.env("adminPassword");
 	}
 	// cy.session clears all localStorage on new login, so we need to retain the last route
-	const session_last_route =
-		window.localStorage.getItem("session_last_route");
+	const session_last_route = window.localStorage.getItem("session_last_route");
 	return cy
 		.session(
 			[email, password] || "",
@@ -52,14 +51,11 @@ Cypress.Commands.add("login", (email, password) => {
 			},
 			{
 				cacheAcrossSpecs: true,
-			},
+			}
 		)
 		.then(() => {
 			if (session_last_route) {
-				window.localStorage.setItem(
-					"session_last_route",
-					session_last_route,
-				);
+				window.localStorage.setItem("session_last_route", session_last_route);
 			}
 		});
 });
@@ -216,9 +212,7 @@ Cypress.Commands.add("get_field", (fieldname, fieldtype = "Data") => {
 Cypress.Commands.add(
 	"fill_table_field",
 	(tablefieldname, row_idx, fieldname, value, fieldtype = "Data") => {
-		cy.get_table_field(tablefieldname, row_idx, fieldname, fieldtype).as(
-			"input",
-		);
+		cy.get_table_field(tablefieldname, row_idx, fieldname, fieldtype).as("input");
 
 		if (["Date", "Time", "Datetime"].includes(fieldtype)) {
 			cy.get("@input").click().wait(200);
@@ -237,7 +231,7 @@ Cypress.Commands.add(
 			});
 		}
 		return cy.get("@input");
-	},
+	}
 );
 
 Cypress.Commands.add(
@@ -252,13 +246,10 @@ Cypress.Commands.add(
 			selector += ` [data-fieldname="${fieldname}"] .ace_text-input`;
 		} else {
 			selector += ` [data-fieldname="${fieldname}"]`;
-			return cy
-				.get(selector)
-				.find(".form-control:visible, .static-area:visible")
-				.first();
+			return cy.get(selector).find(".form-control:visible, .static-area:visible").first();
 		}
 		return cy.get(selector);
-	},
+	}
 );
 
 Cypress.Commands.add("awesomebar", (text) => {
@@ -270,18 +261,13 @@ Cypress.Commands.add("new_form", (doctype) => {
 	cy.visit(`/app/${dt_in_route}/new`);
 	cy.get("body").should(($body) => {
 		const dataRoute = $body.attr("data-route");
-		expect(dataRoute).to.match(
-			new RegExp(`^Form/${doctype}/new-${dt_in_route}-`),
-		);
+		expect(dataRoute).to.match(new RegExp(`^Form/${doctype}/new-${dt_in_route}-`));
 	});
 	cy.get("body").should("have.attr", "data-ajax-state", "complete");
 });
 
 Cypress.Commands.add("select_form_tab", (label) => {
-	cy.get(".form-tabs-list [data-toggle='tab']")
-		.contains(label)
-		.click()
-		.wait(500);
+	cy.get(".form-tabs-list [data-toggle='tab']").contains(label).click().wait(500);
 });
 
 Cypress.Commands.add("go_to_list", (doctype) => {
@@ -378,14 +364,11 @@ Cypress.Commands.add("insert_doc", (doctype, args, ignore_duplicate) => {
 					}
 
 					let message = null;
-					if (
-						ignore_duplicate &&
-						!status_codes.includes(res.status)
-					) {
+					if (ignore_duplicate && !status_codes.includes(res.status)) {
 						message = `Document insert failed, response: ${JSON.stringify(
 							res,
 							null,
-							"\t",
+							"\t"
 						)}`;
 					}
 					expect(res.status).to.be.oneOf(status_codes, message);
@@ -465,23 +448,17 @@ Cypress.Commands.add("open_list_filter", () => {
 });
 
 Cypress.Commands.add("click_custom_action_button", (name) => {
-	cy.get(
-		`.custom-actions [data-label="${encodeURIComponent(name)}"]`,
-	).click();
+	cy.get(`.custom-actions [data-label="${encodeURIComponent(name)}"]`).click();
 });
 
 Cypress.Commands.add("click_action_button", (name) => {
 	cy.findByRole("button", { name: "Actions" }).click();
-	cy.get(
-		`.actions-btn-group [data-label="${encodeURIComponent(name)}"]`,
-	).click();
+	cy.get(`.actions-btn-group [data-label="${encodeURIComponent(name)}"]`).click();
 });
 
 Cypress.Commands.add("click_menu_button", (name) => {
 	cy.get(".standard-actions .menu-btn-group > .btn").click();
-	cy.get(
-		`.menu-btn-group [data-label="${encodeURIComponent(name)}"]`,
-	).click();
+	cy.get(`.menu-btn-group [data-label="${encodeURIComponent(name)}"]`).click();
 });
 
 Cypress.Commands.add("clear_filters", () => {
@@ -497,9 +474,7 @@ Cypress.Commands.add("click_modal_primary_button", (btn_name) => {
 });
 
 Cypress.Commands.add("click_sidebar_button", (btn_name) => {
-	cy.get(".list-group-by-fields .list-link > a")
-		.contains(btn_name)
-		.click({ force: true });
+	cy.get(".list-group-by-fields .list-link > a").contains(btn_name).click({ force: true });
 });
 
 Cypress.Commands.add("click_listview_row_item", (row_no) => {
@@ -528,9 +503,7 @@ Cypress.Commands.add("click_doc_primary_button", (btn_name) => {
 });
 
 Cypress.Commands.add("click_timeline_action_btn", (btn_name) => {
-	cy.get(".timeline-message-box .actions .action-btn")
-		.contains(btn_name)
-		.click();
+	cy.get(".timeline-message-box .actions .action-btn").contains(btn_name).click();
 });
 
 Cypress.Commands.add("select_listview_row_checkbox", (row_no) => {
@@ -549,11 +522,7 @@ const compare_document = (expected, actual) => {
 				compare_document(item, actual[prop][idx]);
 			});
 		} else {
-			assert.equal(
-				expected[prop],
-				actual[prop],
-				`${prop} should be equal.`,
-			);
+			assert.equal(expected[prop], actual[prop], `${prop} should be equal.`);
 		}
 	}
 };

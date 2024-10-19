@@ -78,9 +78,7 @@ let url = computed(() => {
 		params.append("letterhead", store.value.letterhead.name);
 	}
 	let _url =
-		type.value == "PDF"
-			? `/api/method/frappe.utils.weasyprint.download_pdf`
-			: "/printpreview";
+		type.value == "PDF" ? `/api/method/frappe.utils.weasyprint.download_pdf` : "/printpreview";
 	return `${_url}?${params.toString()}`;
 });
 

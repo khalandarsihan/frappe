@@ -20,9 +20,7 @@ frappe.listview_settings["Energy Point Log"] = {
 			return __("View Ref");
 		},
 		get_description: function (doc) {
-			return __("Open {0}", [
-				`${doc.reference_doctype} ${doc.reference_name}`,
-			]);
+			return __("Open {0}", [`${doc.reference_doctype} ${doc.reference_name}`]);
 		},
 		action: function (doc) {
 			frappe.set_route("Form", doc.reference_doctype, doc.reference_name);

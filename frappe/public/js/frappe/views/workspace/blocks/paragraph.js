@@ -22,9 +22,7 @@ export default class Paragraph extends Block {
 		this._data = {};
 		this._element = this.drawView();
 		this._preserveBlank =
-			this.config.preserveBlank !== undefined
-				? this.config.preserveBlank
-				: false;
+			this.config.preserveBlank !== undefined ? this.config.preserveBlank : false;
 
 		this.data = data;
 		this.col = this.data.col ? this.data.col : "12";
@@ -49,9 +47,7 @@ export default class Paragraph extends Block {
 		let $wrapper = $(this.wrapper).hasClass("ce-paragraph")
 			? $(this.wrapper.parentElement)
 			: $(this.wrapper);
-		let $block_list_container = $wrapper.find(
-			".block-list-container.dropdown-list",
-		);
+		let $block_list_container = $wrapper.find(".block-list-container.dropdown-list");
 		$block_list_container.removeClass("hidden");
 		hide && $block_list_container.addClass("hidden");
 	}
@@ -121,9 +117,7 @@ export default class Paragraph extends Block {
 	render() {
 		this.wrapper = document.createElement("div");
 		if (!this.readOnly) {
-			let $para_control = $(
-				`<div class="widget-control paragraph-control"></div>`,
-			);
+			let $para_control = $(`<div class="widget-control paragraph-control"></div>`);
 
 			this.wrapper.appendChild(this._element);
 			this._element.classList.remove("widget");
@@ -141,7 +135,7 @@ export default class Paragraph extends Block {
 				"drag-handle",
 				__("Drag"),
 				null,
-				$para_control,
+				$para_control
 			);
 
 			return this.wrapper;

@@ -23,40 +23,29 @@ frappe.ui.form.on("Website Theme", {
 	},
 
 	set_default_theme_button_and_indicator(frm) {
-		frappe.db
-			.get_single_value("Website Settings", "website_theme")
-			.then((value) => {
-				if (value === frm.doc.name) {
-					frm.page.set_indicator(__("Default Theme"), "green");
-				} else {
-					frm.page.clear_indicator();
-					// show set as default button
-					if (!frm.is_new() && !frm.is_dirty()) {
-						frm.add_custom_button(
-							__("Set as Default Theme"),
-							() => {
-								frm.call("set_as_default").then(() =>
-									frm.trigger("refresh"),
-								);
-							},
-						);
-					}
+		frappe.db.get_single_value("Website Settings", "website_theme").then((value) => {
+			if (value === frm.doc.name) {
+				frm.page.set_indicator(__("Default Theme"), "green");
+			} else {
+				frm.page.clear_indicator();
+				// show set as default button
+				if (!frm.is_new() && !frm.is_dirty()) {
+					frm.add_custom_button(__("Set as Default Theme"), () => {
+						frm.call("set_as_default").then(() => frm.trigger("refresh"));
+					});
 				}
-			});
+			}
+		});
 	},
 
 	make_app_theme_selector(frm) {
 		if (frm.app_theme_selector) {
 			frm.events.get_installed_apps(frm).then((apps) => {
-				let ignored_apps = (frm.doc.ignored_apps || []).map(
-					(d) => d.app,
-				);
+				let ignored_apps = (frm.doc.ignored_apps || []).map((d) => d.app);
 				frm.app_theme_selector
 					.get_field("apps")
 					.select_options(
-						apps
-							.map((d) => d.name)
-							.filter((app) => !ignored_apps.includes(app)),
+						apps.map((d) => d.name).filter((app) => !ignored_apps.includes(app))
 					);
 			});
 			return;
@@ -78,10 +67,7 @@ frappe.ui.form.on("Website Theme", {
 								.get_field("apps")
 								.get_unchecked_options()
 								.map((app) => ({ app: app }));
-							frm.set_value(
-								"ignored_apps",
-								value.length ? value : null,
-							);
+							frm.set_value("ignored_apps", value.length ? value : null);
 						},
 						options: apps.map((app) => ({
 							label: app.title,

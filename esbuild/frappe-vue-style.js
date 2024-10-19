@@ -17,22 +17,15 @@ module.exports = {
 					name = path.basename(name);
 
 					let index = result.outputFiles.findIndex((f) => {
-						return (
-							f.path.endsWith(".css") &&
-							f.path.includes(`/${name}.bundle.`)
-						);
+						return f.path.endsWith(".css") && f.path.includes(`/${name}.bundle.`);
 					});
 
-					let css_data = JSON.stringify(
-						result.outputFiles[index].text,
-					);
+					let css_data = JSON.stringify(result.outputFiles[index].text);
 					let modified = `frappe.dom.set_style(${css_data});\n${out.text}`;
 					out.contents = Buffer.from(modified);
 
 					result.outputFiles.splice(index, 1);
-					if (
-						result.outputFiles[index - 1].path.endsWith(".css.map")
-					) {
+					if (result.outputFiles[index - 1].path.endsWith(".css.map")) {
 						result.outputFiles.splice(index - 1, 1);
 					}
 				}
@@ -55,9 +48,7 @@ function get_files(files) {
 		if (info && info.entryPoint && Object.keys(info.inputs).length !== 0) {
 			for (let input in info.inputs) {
 				if (input.includes(".vue?type=style")) {
-					let bundle_css = path
-						.basename(info.entryPoint)
-						.replace(".js", ".css");
+					let bundle_css = path.basename(info.entryPoint).replace(".js", ".css");
 					result[asset_path] = bundle_css;
 					break;
 				}

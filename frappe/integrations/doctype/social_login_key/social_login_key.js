@@ -69,10 +69,7 @@ frappe.ui.form.on("Social Login Key", {
 		}
 
 		// hide social_login_provider and provider_name for non local
-		if (
-			!frm.doc.__islocal &&
-			(frm.doc.social_login_provider || frm.doc.provider_name)
-		) {
+		if (!frm.doc.__islocal && (frm.doc.social_login_provider || frm.doc.provider_name)) {
 			frm.set_df_property("social_login_provider", "hidden", 1);
 			frm.set_df_property("provider_name", "hidden", 1);
 		}

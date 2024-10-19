@@ -31,9 +31,7 @@ class BroadcastManager {
 		if (callback) {
 			let handlers = this._event_handlers[event];
 			if (!handlers) return;
-			this._event_handlers[event] = handlers.filter(
-				(h) => h !== callback,
-			);
+			this._event_handlers[event] = handlers.filter((h) => h !== callback);
 		} else {
 			this._event_handlers[event] = [];
 		}

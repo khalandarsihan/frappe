@@ -6,14 +6,11 @@ export default class Block {
 	}
 
 	make(block, block_name, widget_type = block) {
-		let block_data = this.config.page_data[block + "s"].items.find(
-			(obj) => {
-				return (
-					frappe.utils.unescape_html(obj.label) ==
-					frappe.utils.unescape_html(__(block_name))
-				);
-			},
-		);
+		let block_data = this.config.page_data[block + "s"].items.find((obj) => {
+			return (
+				frappe.utils.unescape_html(obj.label) == frappe.utils.unescape_html(__(block_name))
+			);
+		});
 		if (!block_data) return false;
 		this.wrapper.innerHTML = "";
 		block_data.in_customize_mode = !this.readOnly;
@@ -52,16 +49,8 @@ export default class Block {
 		function init_drag(e) {
 			startX = e.clientX;
 			startWidth = this.parentElement.offsetWidth;
-			document.documentElement.addEventListener(
-				"mousemove",
-				do_drag,
-				false,
-			);
-			document.documentElement.addEventListener(
-				"mouseup",
-				stop_drag,
-				false,
-			);
+			document.documentElement.addEventListener("mousemove", do_drag, false);
+			document.documentElement.addEventListener("mouseup", stop_drag, false);
 		}
 
 		function do_drag(e) {
@@ -96,16 +85,8 @@ export default class Block {
 				.find(".resizer")
 				.css("border-right", "0px solid transparent");
 
-			document.documentElement.removeEventListener(
-				"mousemove",
-				do_drag,
-				false,
-			);
-			document.documentElement.removeEventListener(
-				"mouseup",
-				stop_drag,
-				false,
-			);
+			document.documentElement.removeEventListener("mousemove", do_drag, false);
+			document.documentElement.removeEventListener("mouseup", stop_drag, false);
 		}
 	}
 
@@ -251,14 +232,7 @@ export default class Block {
 			}
 			$button
 				.find(".dropdown-list")
-				.append(
-					dropdown_item(
-						item.label,
-						item.title,
-						item.icon,
-						item.action,
-					),
-				);
+				.append(dropdown_item(item.label, item.title, item.icon, item.action));
 		});
 	}
 
@@ -294,8 +268,7 @@ export default class Block {
 			return;
 		}
 
-		let current_block =
-			this.api.blocks.getBlockByIndex(current_block_index);
+		let current_block = this.api.blocks.getBlockByIndex(current_block_index);
 		if (!current_block) {
 			return;
 		}

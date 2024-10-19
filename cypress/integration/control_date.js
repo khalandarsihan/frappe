@@ -31,19 +31,15 @@ context("Date Control", () => {
 
 		//Inputing values in the date field
 		cy.get(
-			".datepicker--years > .datepicker--cells > .datepicker--cell[data-year=2020]",
+			".datepicker--years > .datepicker--cells > .datepicker--cell[data-year=2020]"
 		).click();
 		cy.get(
-			".datepicker--months > .datepicker--cells > .datepicker--cell[data-month=0]",
+			".datepicker--months > .datepicker--cells > .datepicker--cell[data-month=0]"
 		).click();
-		cy.get(
-			".datepicker--days > .datepicker--cells > .datepicker--cell[data-date=15]",
-		).click();
+		cy.get(".datepicker--days > .datepicker--cells > .datepicker--cell[data-date=15]").click();
 
 		// Verify if the selected date is set the date field
-		cy.window()
-			.its("cur_dialog.fields_dict.date.value")
-			.should("be.equal", "2020-01-15");
+		cy.window().its("cur_dialog.fields_dict.date.value").should("be.equal", "2020-01-15");
 
 		cy.get_field("date", "Date").click();
 
@@ -54,9 +50,7 @@ context("Date Control", () => {
 		cy.get(".datepicker--cell[data-date=15]").click({ force: true });
 
 		//Verifying if the selected date has been displayed in the date field
-		cy.window()
-			.its("cur_dialog.fields_dict.date.value")
-			.should("be.equal", "2020-02-15");
+		cy.window().its("cur_dialog.fields_dict.date.value").should("be.equal", "2020-02-15");
 		cy.wait(500);
 		cy.get_field("date", "Date").click();
 
@@ -67,9 +61,7 @@ context("Date Control", () => {
 		cy.get(".datepicker--cell[data-date=15]").click({ force: true });
 
 		//Verifying if the selected date has been displayed in the date field
-		cy.window()
-			.its("cur_dialog.fields_dict.date.value")
-			.should("be.equal", "2020-01-15");
+		cy.window().its("cur_dialog.fields_dict.date.value").should("be.equal", "2020-01-15");
 	});
 
 	it('Clicking on "Today" button gives todays date', () => {
@@ -87,7 +79,7 @@ context("Date Control", () => {
 			// `expect` can not wait like `should`
 			cy.wait(500);
 			expect(win.cur_dialog.fields_dict.date.value).to.be.equal(
-				win.frappe.datetime.get_today(),
+				win.frappe.datetime.get_today()
 			);
 		});
 	});

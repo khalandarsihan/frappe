@@ -16,33 +16,9 @@ import "air-datepicker/dist/js/i18n/datepicker.zh.js";
 
 (function ($) {
 	$.fn.datepicker.language["ar"] = {
-		days: [
-			"الأحد",
-			"الأثنين",
-			"الثلاثاء",
-			"الأربعاء",
-			"الخميس",
-			"الجمعه",
-			"السبت",
-		],
-		daysShort: [
-			"الأحد",
-			"الأثنين",
-			"الثلاثاء",
-			"الأربعاء",
-			"الخميس",
-			"الجمعه",
-			"السبت",
-		],
-		daysMin: [
-			"الأحد",
-			"الأثنين",
-			"الثلاثاء",
-			"الأربعاء",
-			"الخميس",
-			"الجمعه",
-			"السبت",
-		],
+		days: ["الأحد", "الأثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعه", "السبت"],
+		daysShort: ["الأحد", "الأثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعه", "السبت"],
+		daysMin: ["الأحد", "الأثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعه", "السبت"],
 		months: [
 			"يناير",
 			"فبراير",
@@ -81,15 +57,7 @@ import "air-datepicker/dist/js/i18n/datepicker.zh.js";
 
 (function ($) {
 	$.fn.datepicker.language["gr"] = {
-		days: [
-			"Κυριακή",
-			"Δευτέρα",
-			"Τρίτη",
-			"Τετάρτη",
-			"Πέμπτη",
-			"Παρασκευή",
-			"Σάββατο",
-		],
+		days: ["Κυριακή", "Δευτέρα", "Τρίτη", "Τετάρτη", "Πέμπτη", "Παρασκευή", "Σάββατο"],
 		daysShort: ["Κυρ", "Δευ", "Τρι", "Τετ", "Πεμ", "Παρ", "Σαβ"],
 		daysMin: ["Κυ", "Δε", "Τρ", "Τε", "Πε", "Πα", "Σα"],
 		months: [
@@ -130,15 +98,7 @@ import "air-datepicker/dist/js/i18n/datepicker.zh.js";
 
 (function ($) {
 	$.fn.datepicker.language["it"] = {
-		days: [
-			"Domenica",
-			"Lunedì",
-			"Martedì",
-			"Mercoledì",
-			"Giovedì",
-			"Venerdì",
-			"Sabato",
-		],
+		days: ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"],
 		daysShort: ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"],
 		daysMin: ["Do", "Lu", "Ma", "Me", "Gi", "Ve", "Sa"],
 		months: [
@@ -179,15 +139,7 @@ import "air-datepicker/dist/js/i18n/datepicker.zh.js";
 
 (function ($) {
 	$.fn.datepicker.language["tr"] = {
-		days: [
-			"Pazar",
-			"Pazartesi",
-			"Salı",
-			"Çarşamba",
-			"Perşembe",
-			"Cuma",
-			"Cumartesi",
-		],
+		days: ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"],
 		daysShort: ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"],
 		daysMin: ["Pz", "Pt", "Sa", "Ça", "Pe", "Cu", "Ct"],
 		months: [

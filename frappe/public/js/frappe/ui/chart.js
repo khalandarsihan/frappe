@@ -9,8 +9,8 @@ frappe.ui.RealtimeChart = class RealtimeChart extends frappe.Chart {
 		if (data.data.datasets[0].values.length > maxLabelPoints) {
 			frappe.throw(
 				__(
-					"Length of passed data array is greater than value of maximum allowed label points!",
-				),
+					"Length of passed data array is greater than value of maximum allowed label points!"
+				)
 			);
 		}
 		this.currentSize = data.data.datasets[0].values.length;

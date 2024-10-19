@@ -64,10 +64,7 @@ export function create_default_layout(meta, print_format) {
 					options: df.options,
 				};
 
-				let field_template = get_field_template(
-					print_format,
-					df.fieldname,
-				);
+				let field_template = get_field_template(print_format, df.fieldname);
 				if (field_template) {
 					field.label = `${__(df.label, null, df.parent)} (${__("Field Template")})`;
 					field.fieldtype = "Field Template";
@@ -103,11 +100,7 @@ export function get_table_columns(df) {
 			total_width < 100
 		) {
 			let width =
-				typeof tf.width == "number" && tf.width < 100
-					? tf.width
-					: tf.width
-						? 20
-						: 10;
+				typeof tf.width == "number" && tf.width < 100 ? tf.width : tf.width ? 20 : 10;
 			table_columns.push({
 				label: tf.label,
 				fieldname: tf.fieldname,

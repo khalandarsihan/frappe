@@ -1,6 +1,4 @@
-frappe.ui.form.ControlButton = class ControlButton extends (
-	frappe.ui.form.ControlData
-) {
+frappe.ui.form.ControlButton = class ControlButton extends frappe.ui.form.ControlData {
 	can_write() {
 		// should be always true in case of button
 		return true;
@@ -8,9 +6,7 @@ frappe.ui.form.ControlButton = class ControlButton extends (
 	make_input() {
 		var me = this;
 		const btn_type = this.df.primary ? "btn-primary" : "btn-default";
-		const btn_size = this.df.btn_size
-			? `btn-${this.df.btn_size}`
-			: "btn-xs";
+		const btn_size = this.df.btn_size ? `btn-${this.df.btn_size}` : "btn-xs";
 		this.$input = $(`<button class="btn ${btn_size} ${btn_type}">`)
 			.prependTo(me.input_area)
 			.on("click", function () {
@@ -23,17 +19,8 @@ frappe.ui.form.ControlButton = class ControlButton extends (
 	}
 	onclick() {
 		if (this.frm && this.frm.doc) {
-			if (
-				this.frm.script_manager.has_handlers(
-					this.df.fieldname,
-					this.doctype,
-				)
-			) {
-				this.frm.script_manager.trigger(
-					this.df.fieldname,
-					this.doctype,
-					this.docname,
-				);
+			if (this.frm.script_manager.has_handlers(this.df.fieldname, this.doctype)) {
+				this.frm.script_manager.trigger(this.df.fieldname, this.doctype, this.docname);
 			} else {
 				if (this.df.options) {
 					this.run_server_script();

@@ -6,18 +6,14 @@ context("Web Form", () => {
 			.window()
 			.its("frappe")
 			.then((frappe) => {
-				return frappe.xcall(
-					"frappe.tests.ui_test_helpers.prepare_webform_test",
-				);
+				return frappe.xcall("frappe.tests.ui_test_helpers.prepare_webform_test");
 			});
 	});
 
 	it("Create Web Form", () => {
 		cy.visit("/app/web-form/new");
 
-		cy.intercept("POST", "/api/method/frappe.desk.form.save.savedocs").as(
-			"save_form",
-		);
+		cy.intercept("POST", "/api/method/frappe.desk.form.save.savedocs").as("save_form");
 
 		cy.fill_field("title", "Note");
 		cy.fill_field("doc_type", "Note", "Link");
@@ -69,9 +65,7 @@ context("Web Form", () => {
 		cy.visit("/note");
 		cy.get_open_dialog()
 			.get(".modal-message")
-			.contains(
-				"You are not permitted to access this page without login.",
-			);
+			.contains("You are not permitted to access this page without login.");
 	});
 
 	it("Show List", () => {
@@ -118,28 +112,20 @@ context("Web Form", () => {
 			.as("add-row");
 
 		cy.get("@add-row").click();
-		cy.get('[data-fieldname="list_columns"] .grid-body .rows').as(
-			"grid-rows",
-		);
-		cy.get("@grid-rows")
-			.find('.grid-row:first [data-fieldname="fieldname"]')
-			.click();
+		cy.get('[data-fieldname="list_columns"] .grid-body .rows').as("grid-rows");
+		cy.get("@grid-rows").find('.grid-row:first [data-fieldname="fieldname"]').click();
 		cy.get("@grid-rows")
 			.find('.grid-row:first select[data-fieldname="fieldname"]')
 			.select("Title");
 
 		cy.get("@add-row").click();
-		cy.get("@grid-rows")
-			.find('.grid-row[data-idx="2"] [data-fieldname="fieldname"]')
-			.click();
+		cy.get("@grid-rows").find('.grid-row[data-idx="2"] [data-fieldname="fieldname"]').click();
 		cy.get("@grid-rows")
 			.find('.grid-row[data-idx="2"] select[data-fieldname="fieldname"]')
 			.select("Public");
 
 		cy.get("@add-row").click();
-		cy.get("@grid-rows")
-			.find('.grid-row:last [data-fieldname="fieldname"]')
-			.click();
+		cy.get("@grid-rows").find('.grid-row:last [data-fieldname="fieldname"]').click();
 		cy.get("@grid-rows")
 			.find('.grid-row:last select[data-fieldname="fieldname"]')
 			.select("Content");
@@ -169,23 +155,18 @@ context("Web Form", () => {
 		cy.visit("/app/web-form/note");
 
 		cy.findByRole("tab", { name: "Customization" }).click();
-		cy.fill_field(
-			"breadcrumbs",
-			'[{"label": _("Notes"), "route":"note"}]',
-			"Code",
-		);
+		cy.fill_field("breadcrumbs", '[{"label": _("Notes"), "route":"note"}]', "Code");
 		cy.wait(2000);
-		cy.get(".form-tabs .nav-item .nav-link")
-			.contains("Customization")
-			.click();
+		cy.get(".form-tabs .nav-item .nav-link").contains("Customization").click();
 		cy.save();
 
 		cy.visit("/note");
 		cy.url().should("include", "/note/list");
 		cy.get(".web-list-table tbody tr:last").click();
-		cy.get(
-			".breadcrumb-container .breadcrumb .breadcrumb-item:first a",
-		).should("contain.text", "Notes");
+		cy.get(".breadcrumb-container .breadcrumb .breadcrumb-item:first a").should(
+			"contain.text",
+			"Notes"
+		);
 	});
 
 	it("Read Only", () => {
@@ -198,7 +179,7 @@ context("Web Form", () => {
 		cy.get('.frappe-control[data-fieldname="title"] .control-input').should(
 			"have.css",
 			"display",
-			"none",
+			"none"
 		);
 	});
 
@@ -255,19 +236,11 @@ context("Web Form", () => {
 		cy.visit("/note");
 		cy.url().should("include", "/note/list");
 
-		cy.get(
-			".web-list-table tbody tr:nth-child(1) .list-col-checkbox input",
-		).click();
-		cy.get(
-			".web-list-table tbody tr:nth-child(2) .list-col-checkbox input",
-		).click();
-		cy.get(".web-list-actions button:visible")
-			.contains("Delete")
-			.click({ force: true });
+		cy.get(".web-list-table tbody tr:nth-child(1) .list-col-checkbox input").click();
+		cy.get(".web-list-table tbody tr:nth-child(2) .list-col-checkbox input").click();
+		cy.get(".web-list-actions button:visible").contains("Delete").click({ force: true });
 
-		cy.get(".web-list-actions button")
-			.contains("Delete")
-			.should("not.be.visible");
+		cy.get(".web-list-actions button").contains("Delete").should("not.be.visible");
 
 		cy.visit("/note");
 		cy.get(".web-list-table tbody tr:nth-child(1)").should("not.exist");
@@ -285,9 +258,7 @@ context("Web Form", () => {
 	});
 
 	it("Navigate and Submit a MultiStep WebForm", () => {
-		cy.call(
-			"frappe.tests.ui_test_helpers.update_webform_to_multistep",
-		).then(() => {
+		cy.call("frappe.tests.ui_test_helpers.update_webform_to_multistep").then(() => {
 			cy.visit("/update-profile-duplicate");
 
 			cy.get(".web-form-actions a").contains("Edit").click();

@@ -32,9 +32,7 @@ let $store = computed(() => {
 
 let shouldRender = computed(() => {
 	return Boolean(
-		$store.value.print_format.value &&
-			$store.value.meta.value &&
-			$store.value.layout.value,
+		$store.value.print_format.value && $store.value.meta.value && $store.value.layout.value
 	);
 });
 

@@ -8,9 +8,7 @@ context("Kanban Board", () => {
 		cy.visit("/app/todo");
 
 		cy.get(".page-actions .custom-btn-group button").click();
-		cy.get(".page-actions .custom-btn-group ul.dropdown-menu li")
-			.contains("Kanban")
-			.click();
+		cy.get(".page-actions .custom-btn-group ul.dropdown-menu li").contains("Kanban").click();
 
 		cy.focused().blur();
 		cy.fill_field("board_name", "ToDo Kanban", "Data");
@@ -28,9 +26,7 @@ context("Kanban Board", () => {
 
 		cy.click_listview_primary_button("Add ToDo");
 
-		cy.fill_field("description", "Test Kanban ToDo", "Text Editor").wait(
-			300,
-		);
+		cy.fill_field("description", "Test Kanban ToDo", "Text Editor").wait(300);
 		cy.get(".modal-footer .btn-primary").last().click();
 
 		cy.wait("@save-todo");
@@ -41,11 +37,11 @@ context("Kanban Board", () => {
 
 		cy.intercept(
 			"POST",
-			"/api/method/frappe.desk.doctype.kanban_board.kanban_board.save_settings",
+			"/api/method/frappe.desk.doctype.kanban_board.kanban_board.save_settings"
 		).as("save-kanban");
 		cy.intercept(
 			"POST",
-			"/api/method/frappe.desk.doctype.kanban_board.kanban_board.update_order",
+			"/api/method/frappe.desk.doctype.kanban_board.kanban_board.update_order"
 		).as("update-order");
 
 		cy.get(".page-actions .menu-btn-group > .btn").click();
@@ -55,10 +51,7 @@ context("Kanban Board", () => {
 		cy.get(".add-new-fields").click();
 
 		cy.get(".checkbox-options .checkbox").contains("ID").click();
-		cy.get(".checkbox-options .checkbox")
-			.contains("Status")
-			.first()
-			.click();
+		cy.get(".checkbox-options .checkbox").contains("Status").first().click();
 		cy.get(".checkbox-options .checkbox").contains("Priority").click();
 
 		cy.get(".modal-footer .btn-primary").last().click();
@@ -68,9 +61,7 @@ context("Kanban Board", () => {
 
 		cy.wait("@save-kanban");
 
-		cy.get('.kanban-column[data-column-value="Open"] .kanban-cards').as(
-			"open-cards",
-		);
+		cy.get('.kanban-column[data-column-value="Open"] .kanban-cards').as("open-cards");
 		cy.get("@open-cards")
 			.find(".kanban-card .kanban-card-doc")
 			.first()
@@ -90,15 +81,12 @@ context("Kanban Board", () => {
 			.click();
 		cy.get_open_dialog()
 			.find(
-				'.frappe-control[data-fieldname="fields_html"] div[data-label="ID"] .remove-field',
+				'.frappe-control[data-fieldname="fields_html"] div[data-label="ID"] .remove-field'
 			)
 			.click();
 
 		cy.wait("@update-order");
-		cy.get_open_dialog()
-			.find(".frappe-control .label-area")
-			.contains("Show Labels")
-			.click();
+		cy.get_open_dialog().find(".frappe-control .label-area").contains("Show Labels").click();
 		cy.get(".modal-footer .btn-primary").last().click();
 
 		cy.wait("@save-kanban");
@@ -127,9 +115,10 @@ context("Kanban Board", () => {
 		cy.visit("/app/todo/view/kanban/Admin Kanban");
 
 		// Menu button should be hidden (dropdown for 'Save Filters' and 'Delete Kanban Board')
-		cy.get(
-			".no-list-sidebar .menu-btn-group .btn-default[data-original-title='Menu']",
-		).should("have.length", 0);
+		cy.get(".no-list-sidebar .menu-btn-group .btn-default[data-original-title='Menu']").should(
+			"have.length",
+			0
+		);
 		// Kanban Columns should be visible (read-only)
 		cy.get(".kanban .kanban-column").should("have.length", 2);
 		// User should be able to add card (has access to ToDo)

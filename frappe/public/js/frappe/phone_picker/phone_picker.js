@@ -27,9 +27,7 @@ class PhonePicker {
 		`);
 		this.parent.append(this.phone_picker_wrapper);
 		this.phone_wrapper = this.phone_picker_wrapper.find(".phones");
-		this.search_input = this.phone_picker_wrapper.find(
-			".search-phones > input",
-		);
+		this.search_input = this.phone_picker_wrapper.find(".search-phones > input");
 		this.refresh();
 		this.setup_countries();
 	}

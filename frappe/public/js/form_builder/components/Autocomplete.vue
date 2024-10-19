@@ -34,12 +34,7 @@
 </template>
 
 <script setup>
-import {
-	Combobox,
-	ComboboxInput,
-	ComboboxOptions,
-	ComboboxOption,
-} from "@headlessui/vue";
+import { Combobox, ComboboxInput, ComboboxOptions, ComboboxOption } from "@headlessui/vue";
 import { computed, ref, useAttrs, watch, nextTick } from "vue";
 
 const props = defineProps({
@@ -92,10 +87,8 @@ const selectedValue = computed({
 const filteredOptions = computed(() => {
 	return query.value
 		? props.options.filter((option) => {
-				return option.label
-					.toLowerCase()
-					.includes(query.value.toLowerCase());
-			})
+				return option.label.toLowerCase().includes(query.value.toLowerCase());
+		  })
 		: props.options;
 });
 

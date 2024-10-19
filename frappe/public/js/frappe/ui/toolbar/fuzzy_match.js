@@ -45,7 +45,7 @@ export function fuzzy_match(pattern, str) {
 		max_matches,
 		0 /* next_match */,
 		recursion_count,
-		recursion_limit,
+		recursion_limit
 	);
 }
 
@@ -59,7 +59,7 @@ function fuzzy_match_recursive(
 	max_matches,
 	next_match,
 	recursion_count,
-	recursion_limit,
+	recursion_limit
 ) {
 	let out_score = 0;
 
@@ -82,10 +82,7 @@ function fuzzy_match_recursive(
 	let first_match = true;
 	while (pattern_cur_index < pattern.length && str_curr_index < str.length) {
 		// Match found.
-		if (
-			pattern[pattern_cur_index].toLowerCase() ===
-			str[str_curr_index].toLowerCase()
-		) {
+		if (pattern[pattern_cur_index].toLowerCase() === str[str_curr_index].toLowerCase()) {
 			if (next_match >= max_matches) {
 				return [false, out_score, matches];
 			}
@@ -95,26 +92,22 @@ function fuzzy_match_recursive(
 				first_match = false;
 			}
 
-			const [matched, recursive_score, recursive_matches] =
-				fuzzy_match_recursive(
-					pattern,
-					str,
-					pattern_cur_index,
-					str_curr_index + 1,
-					matches,
-					[] /* recursive_matches */,
-					max_matches,
-					next_match,
-					recursion_count,
-					recursion_limit,
-				);
+			const [matched, recursive_score, recursive_matches] = fuzzy_match_recursive(
+				pattern,
+				str,
+				pattern_cur_index,
+				str_curr_index + 1,
+				matches,
+				[] /* recursive_matches */,
+				max_matches,
+				next_match,
+				recursion_count,
+				recursion_limit
+			);
 
 			if (matched) {
 				// Pick best recursive score.
-				if (
-					!recursive_match ||
-					recursive_score > best_recursive_score
-				) {
+				if (!recursive_match || recursive_score > best_recursive_score) {
 					best_recursive_matches = [...recursive_matches];
 					best_recursive_score = recursive_score;
 				}
@@ -134,10 +127,7 @@ function fuzzy_match_recursive(
 
 		// Apply leading letter penalty
 		let penalty = LEADING_LETTER_PENALTY * matches[0];
-		penalty =
-			penalty < MAX_LEADING_LETTER_PENALTY
-				? MAX_LEADING_LETTER_PENALTY
-				: penalty;
+		penalty = penalty < MAX_LEADING_LETTER_PENALTY ? MAX_LEADING_LETTER_PENALTY : penalty;
 		out_score += penalty;
 
 		//Apply unmatched penalty
@@ -160,14 +150,10 @@ function fuzzy_match_recursive(
 				// Camel case
 				const neighbor = str[curr_idx - 1];
 				const curr = str[curr_idx];
-				if (
-					neighbor !== neighbor.toUpperCase() &&
-					curr !== curr.toLowerCase()
-				) {
+				if (neighbor !== neighbor.toUpperCase() && curr !== curr.toLowerCase()) {
 					out_score += CAMEL_BONUS;
 				}
-				const is_neighbour_separator =
-					neighbor == "_" || neighbor == " ";
+				const is_neighbour_separator = neighbor == "_" || neighbor == " ";
 				if (is_neighbour_separator) {
 					out_score += SEPARATOR_BONUS;
 				}

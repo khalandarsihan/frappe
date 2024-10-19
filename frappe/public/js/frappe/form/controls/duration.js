@@ -1,6 +1,4 @@
-frappe.ui.form.ControlDuration = class ControlDuration extends (
-	frappe.ui.form.ControlData
-) {
+frappe.ui.form.ControlDuration = class ControlDuration extends frappe.ui.form.ControlData {
 	make_input() {
 		super.make_input();
 		this.make_picker();
@@ -12,7 +10,7 @@ frappe.ui.form.ControlDuration = class ControlDuration extends (
 		this.$picker = $(
 			`<div class="duration-picker">
 				<div class="picker-row row"></div>
-			</div>`,
+			</div>`
 		);
 		this.$wrapper.append(this.$picker);
 		this.build_numeric_input("days", this.duration_options.hide_days);
@@ -30,9 +28,7 @@ frappe.ui.form.ControlDuration = class ControlDuration extends (
 			<input class="input-sm duration-input" data-duration="${label}" type="number" min="0" value="0">
 		`);
 
-		let $input = $(`<div class="row duration-row"></div>`).prepend(
-			$duration_input,
-		);
+		let $input = $(`<div class="row duration-row"></div>`).prepend($duration_input);
 
 		if (max) {
 			$duration_input.attr("max", max);
@@ -57,10 +53,7 @@ frappe.ui.form.ControlDuration = class ControlDuration extends (
 	}
 
 	set_duration_picker_value(value) {
-		let total_duration = frappe.utils.seconds_to_duration(
-			value,
-			this.duration_options,
-		);
+		let total_duration = frappe.utils.seconds_to_duration(value, this.duration_options);
 
 		if (this.$picker) {
 			Object.keys(total_duration).forEach((duration) => {
@@ -86,7 +79,7 @@ frappe.ui.form.ControlDuration = class ControlDuration extends (
 				duration.days,
 				duration.hours,
 				duration.minutes,
-				duration.seconds,
+				duration.seconds
 			);
 			this.set_value(value);
 			this.set_focus();
@@ -126,10 +119,7 @@ frappe.ui.form.ControlDuration = class ControlDuration extends (
 	}
 
 	format_for_input(value) {
-		return frappe.utils.get_formatted_duration(
-			value,
-			this.duration_options,
-		);
+		return frappe.utils.get_formatted_duration(value, this.duration_options);
 	}
 
 	get_duration() {

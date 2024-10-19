@@ -31,10 +31,7 @@ export default class CustomBlock extends Block {
 		this.new("custom_block");
 
 		if (this.data && this.data.custom_block_name) {
-			let has_data = this.make(
-				"custom_block",
-				this.data.custom_block_name,
-			);
+			let has_data = this.make("custom_block", this.data.custom_block_name);
 			if (!has_data) return;
 		}
 

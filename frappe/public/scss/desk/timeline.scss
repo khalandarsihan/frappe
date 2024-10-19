@@ -23,9 +23,7 @@ $threshold: 34;
 	padding-top: var(--padding-lg);
 
 	@include media-breakpoint-down(xs) {
-		padding-left: calc(
-			var(--padding-sm) + var(--timeline-item-icon-size) / 2
-		);
+		padding-left: calc(var(--padding-sm) + var(--timeline-item-icon-size) / 2);
 	}
 	&:before {
 		content: " ";
@@ -105,10 +103,7 @@ $threshold: 34;
 				background-color: var(--bg-color);
 				box-shadow: none;
 				border: 1px solid var(--border-color);
-				margin: calc(
-						var(--timeline-item-bottom-margin) + var(--padding-md)
-					)
-					0;
+				margin: calc(var(--timeline-item-bottom-margin) + var(--padding-md)) 0;
 				margin-left: var(--margin-lg);
 
 				.action-btn {
@@ -131,9 +126,7 @@ $threshold: 34;
 			left: calc(-1 * var(--timeline-item-left-margin));
 		}
 		.timeline-load-more {
-			margin-left: calc(
-				var(--timeline-item-left-margin) + var(--padding-sm)
-			);
+			margin-left: calc(var(--timeline-item-left-margin) + var(--padding-sm));
 			width: var(--timeline-content-max-width);
 			text-align: center;
 		}

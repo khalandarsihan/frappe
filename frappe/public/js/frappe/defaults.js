@@ -104,8 +104,7 @@ frappe.defaults = {
 	},
 
 	in_user_permission: function (key, value) {
-		let user_permission =
-			this.get_user_permissions()[frappe.model.unscrub(key)];
+		let user_permission = this.get_user_permissions()[frappe.model.unscrub(key)];
 
 		if (user_permission && user_permission.length) {
 			return user_permission.some((perm) => {
@@ -123,8 +122,7 @@ frappe.defaults = {
 	},
 
 	update_user_permissions: function () {
-		const method =
-			"frappe.core.doctype.user_permission.user_permission.get_user_permissions";
+		const method = "frappe.core.doctype.user_permission.user_permission.get_user_permissions";
 		frappe.call(method).then((r) => {
 			if (r.message) {
 				this._user_permissions = Object.assign({}, r.message);
@@ -134,10 +132,7 @@ frappe.defaults = {
 
 	load_user_permission_from_boot: function () {
 		if (frappe.boot.user.user_permissions) {
-			this._user_permissions = Object.assign(
-				{},
-				frappe.boot.user.user_permissions,
-			);
+			this._user_permissions = Object.assign({}, frappe.boot.user.user_permissions);
 		} else {
 			frappe.defaults.update_user_permissions();
 		}

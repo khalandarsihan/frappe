@@ -7,13 +7,12 @@ function prettyDate(date, mini) {
 			(date || "")
 				.replace(/-/g, "/")
 				.replace(/[TZ]/g, " ")
-				.replace(/\.[0-9]*/, ""),
+				.replace(/\.[0-9]*/, "")
 		);
 	}
 
 	let diff =
-		(new Date(frappe.datetime.now_datetime().replace(/-/g, "/")).getTime() -
-			date.getTime()) /
+		(new Date(frappe.datetime.now_datetime().replace(/-/g, "/")).getTime() - date.getTime()) /
 		1000;
 	let day_diff = Math.floor(diff / 86400);
 
@@ -78,9 +77,7 @@ function prettyDate(date, mini) {
 
 frappe.provide("frappe.datetime");
 window.comment_when = function (datetime, mini) {
-	var timestamp = frappe.datetime.str_to_user
-		? frappe.datetime.str_to_user(datetime)
-		: datetime;
+	var timestamp = frappe.datetime.str_to_user ? frappe.datetime.str_to_user(datetime) : datetime;
 	return (
 		'<span class="frappe-timestamp ' +
 		(mini ? " mini" : "") +
@@ -99,12 +96,7 @@ frappe.datetime.prettyDate = prettyDate;
 frappe.datetime.refresh_when = function () {
 	if (jQuery) {
 		$(".frappe-timestamp").each(function () {
-			$(this).html(
-				prettyDate(
-					$(this).attr("data-timestamp"),
-					$(this).hasClass("mini"),
-				),
-			);
+			$(this).html(prettyDate($(this).attr("data-timestamp"), $(this).hasClass("mini")));
 		});
 	}
 };

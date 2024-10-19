@@ -17,34 +17,25 @@ frappe.listview_settings["Deleted Document"] = {
 							};
 
 							let message = (title, docnames) => {
-								return docnames.length > 0
-									? title + body(docnames) + "</ul>"
-									: "";
+								return docnames.length > 0 ? title + body(docnames) + "</ul>" : "";
 							};
 
 							const { restored, invalid, failed } = r.message;
 							const restored_summary = message(
 								__("Documents restored successfully"),
-								restored,
+								restored
 							);
 							const invalid_summary = message(
 								__("Documents that were already restored"),
-								invalid,
+								invalid
 							);
 							const failed_summary = message(
 								__("Documents that failed to restore"),
-								failed,
+								failed
 							);
-							const summary =
-								restored_summary +
-								invalid_summary +
-								failed_summary;
+							const summary = restored_summary + invalid_summary + failed_summary;
 
-							frappe.msgprint(
-								summary,
-								__("Document Restoration Summary"),
-								true,
-							);
+							frappe.msgprint(summary, __("Document Restoration Summary"), true);
 
 							if (restored.length > 0) {
 								doclist.refresh();

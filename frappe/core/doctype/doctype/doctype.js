@@ -41,10 +41,7 @@ frappe.ui.form.on("DocType", {
 			}
 		});
 
-		if (
-			frappe.session.user !== "Administrator" ||
-			!frappe.boot.developer_mode
-		) {
+		if (frappe.session.user !== "Administrator" || !frappe.boot.developer_mode) {
 			if (frm.is_new()) {
 				frm.set_value("custom", 1);
 			}
@@ -55,45 +52,35 @@ frappe.ui.form.on("DocType", {
 
 		if (!frm.is_new() && !frm.doc.istable) {
 			if (frm.doc.issingle) {
-				frm.add_custom_button(
-					__("Go to {0}", [__(frm.doc.name)]),
-					() => {
-						window.open(`/app/${frappe.router.slug(frm.doc.name)}`);
-					},
-				);
+				frm.add_custom_button(__("Go to {0}", [__(frm.doc.name)]), () => {
+					window.open(`/app/${frappe.router.slug(frm.doc.name)}`);
+				});
 			} else {
-				frm.add_custom_button(
-					__("Go to {0} List", [__(frm.doc.name)]),
-					() => {
-						window.open(`/app/${frappe.router.slug(frm.doc.name)}`);
-					},
-				);
+				frm.add_custom_button(__("Go to {0} List", [__(frm.doc.name)]), () => {
+					window.open(`/app/${frappe.router.slug(frm.doc.name)}`);
+				});
 			}
 		}
 
-		const customize_form_link =
-			"<a href='/app/customize-form'>Customize Form</a>";
+		const customize_form_link = "<a href='/app/customize-form'>Customize Form</a>";
 		if (!frappe.boot.developer_mode && !frm.doc.custom) {
 			// make the document read-only
 			frm.set_read_only();
 			frm.dashboard.clear_comment();
 			frm.dashboard.add_comment(
-				__("DocTypes can not be modified, please use {0} instead", [
-					customize_form_link,
-				]),
+				__("DocTypes can not be modified, please use {0} instead", [customize_form_link]),
 				"blue",
-				true,
+				true
 			);
 		} else if (frappe.boot.developer_mode) {
 			frm.dashboard.clear_comment();
 			let msg = __(
-				"This site is running in developer mode. Any change made here will be updated in code.",
+				"This site is running in developer mode. Any change made here will be updated in code."
 			);
 			msg += "<br>";
-			msg += __(
-				"If you just want to customize for your site, use {0} instead.",
-				[customize_form_link],
-			);
+			msg += __("If you just want to customize for your site, use {0} instead.", [
+				customize_form_link,
+			]);
 			frm.dashboard.add_comment(msg, "yellow", true);
 		}
 
@@ -179,9 +166,7 @@ function render_form_builder(frm) {
 	}
 
 	if (frappe.form_builder) {
-		frappe.form_builder.wrapper = $(
-			frm.fields_dict["form_builder"].wrapper,
-		);
+		frappe.form_builder.wrapper = $(frm.fields_dict["form_builder"].wrapper);
 		frappe.form_builder.frm = frm;
 		frappe.form_builder.doctype = frm.doc.name;
 		frappe.form_builder.customize = false;
@@ -199,7 +184,4 @@ function render_form_builder(frm) {
 	}
 }
 
-extend_cscript(
-	cur_frm.cscript,
-	new frappe.model.DocTypeController({ frm: cur_frm }),
-);
+extend_cscript(cur_frm.cscript, new frappe.model.DocTypeController({ frm: cur_frm }));

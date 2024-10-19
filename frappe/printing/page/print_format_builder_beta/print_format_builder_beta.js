@@ -43,9 +43,7 @@ function load_print_format_builder_beta(wrapper) {
 					],
 					change() {
 						let action = d.get_value("action");
-						d.get_primary_btn().text(
-							action === "Create" ? __("Create") : __("Edit"),
-						);
+						d.get_primary_btn().text(action === "Create" ? __("Create") : __("Edit"));
 					},
 				},
 				{
@@ -57,9 +55,7 @@ function load_print_format_builder_beta(wrapper) {
 						istable: 0,
 					},
 					reqd: 1,
-					default: frappe.route_options
-						? frappe.route_options.doctype
-						: null,
+					default: frappe.route_options ? frappe.route_options.doctype : null,
 				},
 				{
 					label: __("New Print Format Name"),
@@ -87,12 +83,7 @@ function load_print_format_builder_beta(wrapper) {
 				},
 			],
 			primary_action_label: __("Edit"),
-			primary_action({
-				action,
-				doctype,
-				print_format,
-				print_format_name,
-			}) {
+			primary_action({ action, doctype, print_format, print_format_name }) {
 				if (action === "Edit") {
 					frappe.set_route("print-format-builder-beta", print_format);
 				} else if (action === "Create") {
@@ -105,10 +96,7 @@ function load_print_format_builder_beta(wrapper) {
 							print_format_builder_beta: 1,
 						})
 						.then((doc) => {
-							frappe.set_route(
-								"print-format-builder-beta",
-								doc.name,
-							);
+							frappe.set_route("print-format-builder-beta", doc.name);
 						})
 						.finally(() => {
 							d.get_primary_btn().prop("disabled", false);

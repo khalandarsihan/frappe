@@ -26,7 +26,7 @@ export default class NewWidget {
 	make_widget() {
 		const new_widget_class = `new-${frappe.scrub(
 			frappe.model.unscrub(this.type),
-			"-",
+			"-"
 		)}-widget`;
 		this.widget = $(`<div class="widget new-widget ${new_widget_class}">
 				+ ${this.get_title()}

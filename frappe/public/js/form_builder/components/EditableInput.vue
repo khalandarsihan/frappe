@@ -60,9 +60,7 @@ defineExpose({ focus_on_label });
 			{{ empty_label }}
 		</i>
 		<span class="hidden-span" ref="hidden_text" v-html="text"></span>
-		<span class="hidden-span" ref="hidden_placeholder">{{
-			placeholder
-		}}</span>
+		<span class="hidden-span" ref="hidden_placeholder">{{ placeholder }}</span>
 	</div>
 </template>
 

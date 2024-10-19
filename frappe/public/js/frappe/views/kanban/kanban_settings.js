@@ -124,46 +124,30 @@ export default class KanbanSettings {
 			</div>
 		`);
 
-		new Sortable(
-			wrapper.getElementsByClassName("control-input-wrapper")[0],
-			{
-				handle: ".sortable-handle",
-				draggable: ".sortable",
-				onUpdate: (params) => {
-					this.fields.splice(
-						params.newIndex,
-						0,
-						this.fields.splice(params.oldIndex, 1)[0],
-					);
-					this.dialog.set_value(
-						"fields",
-						JSON.stringify(this.fields),
-					);
-					this.refresh();
-				},
+		new Sortable(wrapper.getElementsByClassName("control-input-wrapper")[0], {
+			handle: ".sortable-handle",
+			draggable: ".sortable",
+			onUpdate: (params) => {
+				this.fields.splice(params.newIndex, 0, this.fields.splice(params.oldIndex, 1)[0]);
+				this.dialog.set_value("fields", JSON.stringify(this.fields));
+				this.refresh();
 			},
-		);
+		});
 	}
 
 	add_new_fields() {
 		let add_new_fields =
-			this.get_dialog_fields_wrapper().getElementsByClassName(
-				"add-new-fields",
-			)[0];
+			this.get_dialog_fields_wrapper().getElementsByClassName("add-new-fields")[0];
 		add_new_fields.onclick = () => this.show_column_selector();
 	}
 
 	setup_remove_fields() {
 		let remove_fields =
-			this.get_dialog_fields_wrapper().getElementsByClassName(
-				"remove-field",
-			);
+			this.get_dialog_fields_wrapper().getElementsByClassName("remove-field");
 
 		for (let idx = 0; idx < remove_fields.length; idx++) {
 			remove_fields.item(idx).onclick = () =>
-				this.remove_fields(
-					remove_fields.item(idx).getAttribute("data-fieldname"),
-				);
+				this.remove_fields(remove_fields.item(idx).getAttribute("data-fieldname"));
 		}
 	}
 
@@ -183,9 +167,7 @@ export default class KanbanSettings {
 		this.fields = [];
 
 		for (let idx = 0; idx < fields_order.length; idx++) {
-			this.fields.push(
-				fields_order.item(idx).getAttribute("data-fieldname"),
-			);
+			this.fields.push(fields_order.item(idx).getAttribute("data-fieldname"));
 		}
 
 		this.dialog.set_value("fields", JSON.stringify(this.fields));
@@ -252,7 +234,7 @@ export default class KanbanSettings {
 			.filter(
 				(field) =>
 					!ignore_fields.includes(field.fieldname) &&
-					!ignore_fieldtypes.includes(field.fieldtype),
+					!ignore_fieldtypes.includes(field.fieldtype)
 			)
 			.map((field) => {
 				return {

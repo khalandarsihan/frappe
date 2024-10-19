@@ -70,8 +70,7 @@ function frappe_handlers(realtime, socket) {
 			callback: () => {
 				let room = open_doc_room(doctype, docname);
 				socket.join(room);
-				if (!socket.subscribed_documents)
-					socket.subscribed_documents = [];
+				if (!socket.subscribed_documents) socket.subscribed_documents = [];
 				socket.subscribed_documents.push([doctype, docname]);
 
 				// show who is currently viewing the form
@@ -90,11 +89,9 @@ function frappe_handlers(realtime, socket) {
 		socket.leave(room);
 
 		if (socket.subscribed_documents) {
-			socket.subscribed_documents = socket.subscribed_documents.filter(
-				([dt, dn]) => {
-					!(dt == doctype && dn == docname);
-				},
-			);
+			socket.subscribed_documents = socket.subscribed_documents.filter(([dt, dn]) => {
+				!(dt == doctype && dn == docname);
+			});
 		}
 
 		notify_subscribed_doc_users({
@@ -120,10 +117,7 @@ function notify_disconnected_documents(socket) {
 function can_subscribe_doctype(args) {
 	if (!args) return;
 	if (!args.doctype) return;
-	frappe_request(
-		"/api/method/frappe.realtime.can_subscribe_doctype",
-		args.socket,
-	)
+	frappe_request("/api/method/frappe.realtime.can_subscribe_doctype", args.socket)
 		.type("form")
 		.query({
 			doctype: args.doctype,
@@ -195,8 +189,7 @@ function can_subscribe_doc(args) {
 }
 
 const doc_room = (doctype, docname) => "doc:" + doctype + "/" + docname;
-const open_doc_room = (doctype, docname) =>
-	"open_doc:" + doctype + "/" + docname;
+const open_doc_room = (doctype, docname) => "open_doc:" + doctype + "/" + docname;
 const user_room = (user) => "user:" + user;
 const doctype_room = (doctype) => "doctype:" + doctype;
 const task_room = (task_id) => "task_progress:" + task_id;

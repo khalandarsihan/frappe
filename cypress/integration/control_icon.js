@@ -19,9 +19,7 @@ context("Control Icon", () => {
 
 	it("should set icon", () => {
 		get_dialog_with_icon().as("dialog");
-		cy.get(".frappe-control[data-fieldname=icon]")
-			.findByRole("textbox")
-			.click();
+		cy.get(".frappe-control[data-fieldname=icon]").findByRole("textbox").click();
 
 		cy.get(".icon-picker .icon-wrapper[id=heart-active]").first().click();
 		cy.get(".frappe-control[data-fieldname=icon]")
@@ -44,22 +42,14 @@ context("Control Icon", () => {
 
 	it("search for icon and clear search input", () => {
 		let search_text = "ed";
-		cy.get(".icon-picker")
-			.get(".search-icons > input")
-			.click()
-			.type(search_text);
+		cy.get(".icon-picker").get(".search-icons > input").click().type(search_text);
 		cy.get(".icon-section .icon-wrapper:not(.hidden)").then((i) => {
-			cy.get(`.icon-section .icon-wrapper[id*='${search_text}']`).then(
-				(icons) => {
-					expect(i.length).to.equal(icons.length);
-				},
-			);
+			cy.get(`.icon-section .icon-wrapper[id*='${search_text}']`).then((icons) => {
+				expect(i.length).to.equal(icons.length);
+			});
 		});
 
 		cy.get(".icon-picker").get(".search-icons > input").clear().blur();
-		cy.get(".icon-section .icon-wrapper").should(
-			"not.have.class",
-			"hidden",
-		);
+		cy.get(".icon-section .icon-wrapper").should("not.have.class", "hidden");
 	});
 });

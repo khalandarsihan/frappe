@@ -1,10 +1,5 @@
 <template>
-	<div
-		class="field"
-		v-show="!df.remove"
-		:title="df.fieldname"
-		@click="editing = true"
-	>
+	<div class="field" v-show="!df.remove" :title="df.fieldname" @click="editing = true">
 		<div class="field-controls">
 			<div>
 				<div
@@ -12,10 +7,7 @@
 					v-if="df.fieldtype == 'HTML' && df.html"
 					v-html="df.html"
 				></div>
-				<div
-					class="custom-html"
-					v-if="df.fieldtype == 'Field Template'"
-				>
+				<div class="custom-html" v-if="df.fieldtype == 'Field Template'">
 					{{ df.label }}
 				</div>
 				<input
@@ -29,9 +21,7 @@
 					@blur="editing = false"
 				/>
 				<span v-else-if="df.label">{{ df.label }}</span>
-				<i class="text-muted" v-else>
-					{{ __("No Label") }} ({{ df.fieldname }})
-				</i>
+				<i class="text-muted" v-else> {{ __("No Label") }} ({{ df.fieldname }}) </i>
 			</div>
 			<div class="field-actions">
 				<button
@@ -50,10 +40,7 @@
 				>
 					Configure columns
 				</button>
-				<button
-					class="btn btn-xs btn-icon"
-					@click="df['remove'] = true"
-				>
+				<button class="btn btn-xs btn-icon" @click="df['remove'] = true">
 					<svg class="icon icon-sm">
 						<use href="#icon-close"></use>
 					</svg>
@@ -144,9 +131,7 @@ function configure_columns() {
 			app.mount(dialog.get_field("columns_area").$wrapper.get(0));
 		},
 		on_hide: () => {
-			props.df["table_columns"] = props.df.table_columns.filter(
-				(col) => !col.invalid_width,
-			);
+			props.df["table_columns"] = props.df.table_columns.filter((col) => !col.invalid_width);
 		},
 	});
 	dialog.show();
@@ -170,7 +155,7 @@ function get_all_columns() {
 					value: tf.fieldname,
 				};
 			})
-			.filter(Boolean),
+			.filter(Boolean)
 	);
 }
 function get_column_to_add(fieldname) {
@@ -219,7 +204,7 @@ watch(editing, (value) => {
 watch(
 	() => props.df.table_columns,
 	() => validate_table_columns(),
-	{ deep: true },
+	{ deep: true }
 );
 </script>
 

@@ -31,17 +31,14 @@ frappe.ui.TagEditor = class TagEditor {
 
 		this.tags = new frappe.ui.Tags({
 			parent: this.wrapper,
-			placeholder:
-				'<svg class="es-icon icon-sm"><use href="#es-line-add"></use></svg>',
+			placeholder: '<svg class="es-icon icon-sm"><use href="#es-line-add"></use></svg>',
 			onTagAdd: (tag) => {
 				if (me.initialized && !me.refreshing) {
 					return frappe.call({
 						method: "frappe.desk.doctype.tag.tag.add_tag",
 						args: me.get_args(tag),
 						callback: function (r) {
-							var user_tags = me.user_tags
-								? me.user_tags.split(",")
-								: [];
+							var user_tags = me.user_tags ? me.user_tags.split(",") : [];
 							user_tags.push(tag);
 							me.user_tags = user_tags.join(",");
 							me.on_change && me.on_change(me.user_tags);
@@ -112,8 +109,7 @@ frappe.ui.TagEditor = class TagEditor {
 	}
 	refresh(user_tags) {
 		var me = this;
-		if (!this.initialized || !this.setup_complete || this.refreshing)
-			return;
+		if (!this.initialized || !this.setup_complete || this.refreshing) return;
 
 		me.refreshing = true;
 		try {

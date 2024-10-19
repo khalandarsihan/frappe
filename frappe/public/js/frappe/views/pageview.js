@@ -20,10 +20,7 @@ frappe.views.pageview = {
 		) {
 			// already loaded
 			callback();
-		} else if (
-			localStorage["_page:" + name] &&
-			frappe.boot.developer_mode != 1
-		) {
+		} else if (localStorage["_page:" + name] && frappe.boot.developer_mode != 1) {
 			// cached in local storage
 			frappe.model.sync(JSON.parse(localStorage["_page:" + name]));
 			callback();
@@ -35,9 +32,7 @@ frappe.views.pageview = {
 				callback: function (r) {
 					if (!r.docs._dynamic_page) {
 						try {
-							localStorage["_page:" + name] = JSON.stringify(
-								r.docs,
-							);
+							localStorage["_page:" + name] = JSON.stringify(r.docs);
 						} catch (e) {
 							console.warn(e);
 						}
@@ -87,8 +82,7 @@ frappe.views.Page = class Page {
 			this.wrapper.page_name = this.pagedoc.name;
 
 			// set content, script and style
-			if (this.pagedoc.content)
-				this.wrapper.innerHTML = this.pagedoc.content;
+			if (this.pagedoc.content) this.wrapper.innerHTML = this.pagedoc.content;
 			frappe.dom.eval(this.pagedoc.__script || this.pagedoc.script || "");
 			frappe.dom.set_style(this.pagedoc.style || "");
 
@@ -138,17 +132,12 @@ frappe.show_message_page = function (opts) {
 	}
 
 	if (opts.icon) {
-		opts.img = repl(
-			'<span class="%(icon)s message-page-icon"></span> ',
-			opts,
-		);
+		opts.img = repl('<span class="%(icon)s message-page-icon"></span> ', opts);
 	} else if (opts.img) {
 		opts.img = repl('<img src="%(img)s" class="message-page-image">', opts);
 	}
 
-	var page =
-		frappe.pages[opts.page_name] ||
-		frappe.container.add_page(opts.page_name);
+	var page = frappe.pages[opts.page_name] || frappe.container.add_page(opts.page_name);
 	$(page).html(
 		repl(
 			'<div class="page message-page">\
@@ -162,8 +151,8 @@ frappe.show_message_page = function (opts) {
 				img: opts.img || "",
 				message: opts.message || "",
 				home: __("Home"),
-			},
-		),
+			}
+		)
 	);
 
 	frappe.container.change_to(opts.page_name);

@@ -12,12 +12,9 @@ frappe.ui.form.Review = class Review {
 	}
 	update_points() {
 		return frappe
-			.xcall(
-				"frappe.social.doctype.energy_point_log.energy_point_log.get_energy_points",
-				{
-					user: frappe.session.user,
-				},
-			)
+			.xcall("frappe.social.doctype.energy_point_log.energy_point_log.get_energy_points", {
+				user: frappe.session.user,
+			})
 			.then((data) => {
 				frappe.boot.points = data;
 				this.points = data;
@@ -54,9 +51,7 @@ frappe.ui.form.Review = class Review {
 					reqd: 1,
 					options: user_options,
 					ignore_validation: 1,
-					description: __(
-						"Only users involved in the document are listed",
-					),
+					description: __("Only users involved in the document are listed"),
 				},
 				{
 					fieldname: "review_type",
@@ -96,25 +91,20 @@ frappe.ui.form.Review = class Review {
 					return frappe.msgprint(__("You do not have enough points"));
 				}
 				frappe
-					.xcall(
-						"frappe.social.doctype.energy_point_log.energy_point_log.review",
-						{
-							doc: {
-								doctype: this.frm.doc.doctype,
-								name: this.frm.doc.name,
-							},
-							to_user: values.to_user,
-							points: values.points,
-							review_type: values.review_type,
-							reason: values.reason,
+					.xcall("frappe.social.doctype.energy_point_log.energy_point_log.review", {
+						doc: {
+							doctype: this.frm.doc.doctype,
+							name: this.frm.doc.name,
 						},
-					)
+						to_user: values.to_user,
+						points: values.points,
+						review_type: values.review_type,
+						reason: values.reason,
+					})
 					.then((review) => {
 						review_dialog.hide();
 						review_dialog.clear();
-						this.frm
-							.get_docinfo()
-							.energy_point_logs.unshift(review);
+						this.frm.get_docinfo().energy_point_logs.unshift(review);
 						this.frm.timeline.refresh();
 						this.update_reviewers();
 						this.update_points();
@@ -130,9 +120,7 @@ frappe.ui.form.Review = class Review {
 	update_reviewers() {
 		const review_logs = this.frm
 			.get_docinfo()
-			.energy_point_logs.filter((log) =>
-				["Appreciation", "Criticism"].includes(log.type),
-			);
+			.energy_point_logs.filter((log) => ["Appreciation", "Criticism"].includes(log.type));
 
 		this.reviews.find(".review").remove();
 		review_logs.forEach((log) => {
@@ -152,7 +140,7 @@ frappe.ui.form.Review = class Review {
 		let subject = "";
 		let fullname = frappe.user.full_name(data.user);
 		let timestamp = `<span class="text-muted">${frappe.datetime.comment_when(
-			data.creation,
+			data.creation
 		)}</span>`;
 		let message_parts = [Math.abs(data.points), fullname, timestamp];
 		if (data.type === "Appreciation") {

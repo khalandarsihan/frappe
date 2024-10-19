@@ -35,12 +35,11 @@ frappe.ui.form.on("Notification Log", {
 
 		$wrapper.find(".attached-file-link").click(() => {
 			const w = window.open(
-				frappe.urllib
-					.get_full_url(`/api/method/frappe.utils.print_format.download_pdf?
+				frappe.urllib.get_full_url(`/api/method/frappe.utils.print_format.download_pdf?
 					doctype=${encodeURIComponent(attachment.doctype)}
 					&name=${encodeURIComponent(attachment.name)}
 					&format=${encodeURIComponent(attachment.print_format)}
-					&lang=${encodeURIComponent(attachment.lang)}`),
+					&lang=${encodeURIComponent(attachment.lang)}`)
 			);
 			if (!w) {
 				frappe.msgprint(__("Please enable pop-ups"));

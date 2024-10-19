@@ -50,8 +50,7 @@ export default class WidgetGroup {
 	}
 
 	make_container() {
-		const widget_area =
-			$(`<div class="widget-group ${this.class_name || ""}">
+		const widget_area = $(`<div class="widget-group ${this.class_name || ""}">
 				<div class="widget-group-head">
 					<div class="widget-group-title"></div>
 					<div class="widget-group-control"></div>

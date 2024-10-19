@@ -7,7 +7,7 @@ frappe.ui.form.on("Google Drive", {
 			frm.dashboard.set_headline(
 				__("To use Google Drive, enable {0}.", [
 					`<a href='/app/google-settings'>${__("Google Settings")}</a>`,
-				]),
+				])
 			);
 		}
 
@@ -17,7 +17,7 @@ frappe.ui.form.on("Google Drive", {
 				frm.dashboard.show_progress(
 					progress_title,
 					(data.progress / data.total) * 100,
-					data.message,
+					data.message
 				);
 				if (data.progress === data.total) {
 					frm.dashboard.hide_progress(progress_title);
@@ -26,42 +26,31 @@ frappe.ui.form.on("Google Drive", {
 		});
 
 		if (frm.doc.enable && frm.doc.refresh_token) {
-			let sync_button = frm.add_custom_button(
-				__("Take Backup"),
-				function () {
-					frappe.show_alert({
-						indicator: "green",
-						message: __("Backing up to Google Drive."),
+			let sync_button = frm.add_custom_button(__("Take Backup"), function () {
+				frappe.show_alert({
+					indicator: "green",
+					message: __("Backing up to Google Drive."),
+				});
+				frappe
+					.call({
+						method: "frappe.integrations.doctype.google_drive.google_drive.take_backup",
+						btn: sync_button,
+					})
+					.then((r) => {
+						frappe.msgprint(r.message);
 					});
-					frappe
-						.call({
-							method: "frappe.integrations.doctype.google_drive.google_drive.take_backup",
-							btn: sync_button,
-						})
-						.then((r) => {
-							frappe.msgprint(r.message);
-						});
-				},
-			);
+			});
 		}
 
-		if (
-			frm.doc.enable &&
-			frm.doc.backup_folder_name &&
-			!frm.doc.refresh_token
-		) {
+		if (frm.doc.enable && frm.doc.backup_folder_name && !frm.doc.refresh_token) {
 			frm.dashboard.set_headline(
 				__(
-					"Click on <b>Authorize Google Drive Access</b> to authorize Google Drive Access.",
-				),
+					"Click on <b>Authorize Google Drive Access</b> to authorize Google Drive Access."
+				)
 			);
 		}
 
-		if (
-			frm.doc.enable &&
-			frm.doc.refresh_token &&
-			frm.doc.authorization_code
-		) {
+		if (frm.doc.enable && frm.doc.refresh_token && frm.doc.authorization_code) {
 			frm.page.set_indicator("Authorized", "green");
 		}
 	},

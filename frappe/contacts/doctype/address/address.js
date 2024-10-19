@@ -13,8 +13,7 @@ frappe.ui.form.on("Address", {
 				frm.set_value("links", "");
 				frm.add_child("links", {
 					link_doctype: frappe.dynamic_link.doctype,
-					link_name:
-						frappe.dynamic_link.doc[frappe.dynamic_link.fieldname],
+					link_name: frappe.dynamic_link.doc[frappe.dynamic_link.fieldname],
 				});
 			}
 		}
@@ -35,13 +34,9 @@ frappe.ui.form.on("Address", {
 				frm.add_custom_button(
 					__("{0}: {1}", [__(link.link_doctype), __(link.link_name)]),
 					function () {
-						frappe.set_route(
-							"Form",
-							link.link_doctype,
-							link.link_name,
-						);
+						frappe.set_route("Form", link.link_doctype, link.link_name);
 					},
-					__("Links"),
+					__("Links")
 				);
 			}
 		}
@@ -70,11 +65,7 @@ frappe.ui.form.on("Address", {
 							last_doc.doctype == link.link_doctype &&
 							last_doc.docname == link.link_name
 						) {
-							frappe.set_route(
-								"Form",
-								last_doc.doctype,
-								last_doc.docname,
-							);
+							frappe.set_route("Form", last_doc.doctype, last_doc.docname);
 						}
 					}
 				}

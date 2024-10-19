@@ -26,7 +26,7 @@ const d = computed(() =>
 		...props,
 		borderRadius: 30,
 		targetPosition: opposite[props.targetPosition],
-	}),
+	})
 );
 </script>
 <template>

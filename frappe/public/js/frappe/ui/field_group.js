@@ -26,10 +26,7 @@ frappe.ui.FieldGroup = class FieldGroup extends frappe.ui.form.Layout {
 				if (field.df["default"]) {
 					let def_value = field.df["default"];
 
-					if (
-						def_value == "Today" &&
-						field.df["fieldtype"] == "Date"
-					) {
+					if (def_value == "Today" && field.df["fieldtype"] == "Date") {
 						def_value = frappe.datetime.get_today();
 					}
 
@@ -58,12 +55,7 @@ frappe.ui.FieldGroup = class FieldGroup extends frappe.ui.form.Layout {
 	focus_on_first_input() {
 		if (this.no_focus) return;
 		$.each(this.fields_list, function (i, f) {
-			if (
-				!["Date", "Datetime", "Time", "Check"].includes(
-					f.df.fieldtype,
-				) &&
-				f.set_focus
-			) {
+			if (!["Date", "Datetime", "Time", "Check"].includes(f.df.fieldtype) && f.set_focus) {
 				f.set_focus();
 				return false;
 			}
@@ -103,17 +95,10 @@ frappe.ui.FieldGroup = class FieldGroup extends frappe.ui.form.Layout {
 			let f = this.fields_dict[key];
 			if (f.get_value) {
 				let v = f.get_value();
-				if (
-					f.df.reqd &&
-					is_null(typeof v === "string" ? strip_html(v) : v)
-				)
+				if (f.df.reqd && is_null(typeof v === "string" ? strip_html(v) : v))
 					errors.push(__(f.df.label));
 
-				if (
-					f.df.reqd &&
-					f.df.fieldtype === "Text Editor" &&
-					is_null(strip_html(cstr(v)))
-				)
+				if (f.df.reqd && f.df.fieldtype === "Text Editor" && is_null(strip_html(cstr(v))))
 					errors.push(__(f.df.label));
 
 				if (!is_null(v)) ret[f.df.fieldname] = v;

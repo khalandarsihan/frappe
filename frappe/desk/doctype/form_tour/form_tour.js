@@ -24,11 +24,7 @@ frappe.ui.form.on("Form Tour", {
 	},
 	async report_name(frm) {
 		if (!frm.doc.ui_tour || !frm.doc.report_name) return;
-		let { message } = await frappe.db.get_value(
-			"Report",
-			frm.doc.report_name,
-			"ref_doctype",
-		);
+		let { message } = await frappe.db.get_value("Report", frm.doc.report_name, "ref_doctype");
 		frm.set_value("reference_doctype", message?.ref_doctype || "");
 	},
 	async before_save(frm) {
@@ -39,13 +35,10 @@ frappe.ui.form.on("Form Tour", {
 			frm.doc.reference_doctype
 		) {
 			frappe.throw(
-				__(
-					"Referance Doctype and Dashboard Name both can't be used at the same time.",
-				),
+				__("Referance Doctype and Dashboard Name both can't be used at the same time.")
 			);
 		}
-		frm.doc.ui_tour &&
-			(frm.doc.page_route = JSON.stringify(await get_path(frm)));
+		frm.doc.ui_tour && (frm.doc.page_route = JSON.stringify(await get_path(frm)));
 	},
 	disable_form: function (frm) {
 		frm.set_read_only();
@@ -60,27 +53,25 @@ frappe.ui.form.on("Form Tour", {
 	reference_doctype(frm) {
 		if (!frm.doc.reference_doctype) return;
 
-		frm.set_fields_as_options(
-			"fieldname",
-			frm.doc.reference_doctype,
-			(df) => !df.hidden,
-		).then((options) => {
-			frm.fields_dict.steps.grid.update_docfield_property(
-				"fieldname",
-				"options",
-				[""].concat(options),
-			);
-		});
+		frm.set_fields_as_options("fieldname", frm.doc.reference_doctype, (df) => !df.hidden).then(
+			(options) => {
+				frm.fields_dict.steps.grid.update_docfield_property(
+					"fieldname",
+					"options",
+					[""].concat(options)
+				);
+			}
+		);
 
 		frm.set_fields_as_options(
 			"parent_fieldname",
 			frm.doc.reference_doctype,
-			(df) => df.fieldtype == "Table" && !df.hidden,
+			(df) => df.fieldtype == "Table" && !df.hidden
 		).then((options) => {
 			frm.fields_dict.steps.grid.update_docfield_property(
 				"parent_fieldname",
 				"options",
-				[""].concat(options),
+				[""].concat(options)
 			);
 		});
 		if (!frm.doc.ui_tour) {
@@ -93,14 +84,10 @@ frappe.ui.form.on("Form Tour", {
 							ref_doctype: frm.doc.reference_doctype,
 						},
 					},
-					{ fields: ["name"] },
+					{ fields: ["name"] }
 				)
 				.then((reports) => {
-					if (
-						reports.findIndex(
-							(r) => r.name == frm.doc.report_name,
-						) == -1
-					) {
+					if (reports.findIndex((r) => r.name == frm.doc.report_name) == -1) {
 						frm.set_value("report_name", "");
 						frm.refresh_field("report_name");
 					}
@@ -113,9 +100,7 @@ let add_custom_button = (frm) => {
 	if (frm.doc.ui_tour) {
 		frm.add_custom_button(__("Reset"), function () {
 			frappe.confirm(
-				__(
-					"This will reset this tour and show it to all users. Are you sure?",
-				),
+				__("This will reset this tour and show it to all users. Are you sure?"),
 				function () {
 					frappe.call({
 						method: "frappe.desk.doctype.form_tour.form_tour.reset_tour",
@@ -124,7 +109,7 @@ let add_custom_button = (frm) => {
 						},
 					});
 					delete frappe.boot.user.onboarding_status[frm.doc.name];
-				},
+				}
 			);
 		});
 	} else {
@@ -133,31 +118,16 @@ let add_custom_button = (frm) => {
 			let route_changed = null;
 
 			if (issingle) {
-				route_changed = frappe.set_route(
-					"Form",
-					frm.doc.reference_doctype,
-				);
+				route_changed = frappe.set_route("Form", frm.doc.reference_doctype);
 			} else if (frm.doc.first_document) {
-				const name = await get_first_document(
-					frm.doc.reference_doctype,
-				);
-				route_changed = frappe.set_route(
-					"Form",
-					frm.doc.reference_doctype,
-					name,
-				);
+				const name = await get_first_document(frm.doc.reference_doctype);
+				route_changed = frappe.set_route("Form", frm.doc.reference_doctype, name);
 			} else {
-				route_changed = frappe.set_route(
-					"Form",
-					frm.doc.reference_doctype,
-					"new",
-				);
+				route_changed = frappe.set_route("Form", frm.doc.reference_doctype, "new");
 			}
 			route_changed.then(() => {
 				const tour_name = frm.doc.name;
-				cur_frm.tour
-					.init({ tour_name })
-					.then(() => cur_frm.tour.start());
+				cur_frm.tour.init({ tour_name }).then(() => cur_frm.tour.start());
 			});
 		});
 	}
@@ -179,31 +149,22 @@ frappe.ui.form.on("Form Tour Step", {
 		frm.set_fields_as_options(
 			"fieldname",
 			parent_fieldname_df.options,
-			(df) => !df.hidden,
+			(df) => !df.hidden
 		).then((options) => {
 			frm.fields_dict.steps.grid.update_docfield_property(
 				"fieldname",
 				"options",
-				[""].concat(options),
+				[""].concat(options)
 			);
 			if (child_row.fieldname) {
-				frappe.model.set_value(
-					cdt,
-					cdn,
-					"fieldname",
-					child_row.fieldname,
-				);
+				frappe.model.set_value(cdt, cdn, "fieldname", child_row.fieldname);
 			}
 		});
 	},
 });
 
 async function check_if_single(doctype) {
-	const { message } = await frappe.db.get_value(
-		"DocType",
-		doctype,
-		"issingle",
-	);
+	const { message } = await frappe.db.get_value("DocType", doctype, "issingle");
 	return message.issingle || 0;
 }
 async function check_if_private_workspace(name) {
@@ -271,9 +232,7 @@ async function get_path(frm) {
 			if (await check_if_single(frm.doc.reference_doctype)) {
 				route.push(frm.doc.reference_doctype);
 			} else if (frm.doc.new_document_form) {
-				route.push(
-					"new-" + frappe.router.slug(frm.doc.reference_doctype),
-				);
+				route.push("new-" + frappe.router.slug(frm.doc.reference_doctype));
 			}
 			return route;
 		case "Tree":

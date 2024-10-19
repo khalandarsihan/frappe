@@ -9,20 +9,12 @@ context("Folder Navigation", () => {
 		//Adding filter to go into the home folder
 		cy.get(".filter-x-button").click();
 		cy.click_filter_button();
-		cy.get(".filter-action-buttons > .text-muted")
-			.findByText("+ Add a Filter")
-			.click();
-		cy.get(
-			".fieldname-select-area > .awesomplete > .form-control:last",
-		).type("Fol{enter}");
-		cy.get(
-			".filter-field > .form-group > .link-field > .awesomplete > .input-with-feedback",
-		)
+		cy.get(".filter-action-buttons > .text-muted").findByText("+ Add a Filter").click();
+		cy.get(".fieldname-select-area > .awesomplete > .form-control:last").type("Fol{enter}");
+		cy.get(".filter-field > .form-group > .link-field > .awesomplete > .input-with-feedback")
 			.first()
 			.type("Home{enter}");
-		cy.get(".filter-action-buttons > div > .btn-primary")
-			.findByText("Apply Filters")
-			.click();
+		cy.get(".filter-action-buttons > div > .btn-primary").findByText("Apply Filters").click();
 
 		//Adding folder (Test Folder)
 		cy.click_menu_button("New Folder");
@@ -50,27 +42,19 @@ context("Folder Navigation", () => {
 		cy.get('[title="Test Folder"] > span').click();
 
 		//To check if the URL is correct after visiting the Test Folder
-		cy.location("pathname").should(
-			"eq",
-			"/app/file/view/home/Attachments/Test%20Folder",
-		);
+		cy.location("pathname").should("eq", "/app/file/view/home/Attachments/Test%20Folder");
 		cy.visit("/app/file/view/home/Attachments/Test%20Folder");
 
 		//Adding a file inside the Test Folder
-		cy.findByRole("button", { name: "Add File" })
-			.eq(0)
-			.click({ force: true });
+		cy.findByRole("button", { name: "Add File" }).eq(0).click({ force: true });
 		cy.get(".file-uploader").findByText("Link").click();
 		cy.get(".input-group > input.form-control:visible").as("upload_input");
-		cy.get("@upload_input").type(
-			"https://wallpaperplay.com/walls/full/8/2/b/72402.jpg",
-			{
-				waitForAnimations: false,
-				parseSpecialCharSequences: false,
-				force: true,
-				delay: 100,
-			},
-		);
+		cy.get("@upload_input").type("https://wallpaperplay.com/walls/full/8/2/b/72402.jpg", {
+			waitForAnimations: false,
+			parseSpecialCharSequences: false,
+			force: true,
+			delay: 100,
+		});
 		cy.click_modal_primary_button("Upload");
 
 		//To check if the added file is present in the Test Folder

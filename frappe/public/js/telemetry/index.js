@@ -7,11 +7,7 @@ class TelemetryManager {
 		this.project_id = frappe.boot.posthog_project_id;
 		this.telemetry_host = frappe.boot.posthog_host;
 		this.site_age = frappe.boot.telemetry_site_age;
-		if (
-			cint(frappe.boot.enable_telemetry) &&
-			this.project_id &&
-			this.telemetry_host
-		) {
+		if (cint(frappe.boot.enable_telemetry) && this.project_id && this.telemetry_host) {
 			this.enabled = true;
 		}
 	}

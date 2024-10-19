@@ -51,16 +51,12 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 
 	get_section(section_heading = "") {
-		let $section = $(
-			this.wrapper.find(`[data-section-heading="${section_heading}"]`),
-		);
+		let $section = $(this.wrapper.find(`[data-section-heading="${section_heading}"]`));
 		if ($section.length) {
 			return $section;
 		}
 
-		const $section_heading = section_heading
-			? `<li class="h6">${section_heading}</li>`
-			: "";
+		const $section_heading = section_heading ? `<li class="h6">${section_heading}</li>` : "";
 
 		$section = $(`
 			<ul class="list-unstyled sidebar-menu" data-section-heading="${section_heading || "default"}">

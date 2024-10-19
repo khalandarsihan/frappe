@@ -2,15 +2,7 @@
 // MIT License. See license.txt
 
 frappe.ui.Tags = class {
-	constructor({
-		parent,
-		placeholder,
-		tagsList,
-		onTagAdd,
-		onTagRemove,
-		onTagClick,
-		onChange,
-	}) {
+	constructor({ parent, placeholder, tagsList, onTagAdd, onTagRemove, onTagClick, onChange }) {
 		this.tagsList = tagsList || [];
 		this.onTagAdd = onTagAdd;
 		this.onTagRemove = onTagRemove;
@@ -117,7 +109,7 @@ frappe.ui.Tags = class {
 				pill_wrapper.closest(".form-tag-row").remove();
 			},
 			null,
-			colored,
+			colored
 		);
 		if (this.onTagClick) {
 			$tag.on("click", ".pill-label", () => {

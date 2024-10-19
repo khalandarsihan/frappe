@@ -28,13 +28,9 @@ function get_options() {
 		if (!in_list(frappe.model.layout_fields, props.modelValue)) {
 			options =
 				options &&
-				options.filter(
-					(opt) => !in_list(frappe.model.layout_fields, opt.value),
-				);
+				options.filter((opt) => !in_list(frappe.model.layout_fields, opt.value));
 		} else {
-			options = [
-				{ label: __(props.modelValue), value: props.modelValue },
-			];
+			options = [{ label: __(props.modelValue), value: props.modelValue }];
 		}
 	}
 
@@ -84,23 +80,19 @@ watch(
 	(value) => {
 		update_control.value = false;
 		select_control.value?.set_value(value);
-	},
+	}
 );
 
 watch(
 	() => props.df.options,
 	() => {
 		select_control.value;
-	},
+	}
 );
 </script>
 
 <template>
-	<div
-		v-if="slots.label"
-		class="control frappe-control"
-		:class="{ editable: slots.label }"
-	>
+	<div v-if="slots.label" class="control frappe-control" :class="{ editable: slots.label }">
 		<!-- label -->
 		<div class="field-controls">
 			<slot name="label" />
@@ -110,18 +102,11 @@ watch(
 		<!-- select input -->
 		<div class="select-input">
 			<input class="form-control" readonly />
-			<div
-				class="select-icon"
-				v-html="frappe.utils.icon('select', 'sm')"
-			></div>
+			<div class="select-icon" v-html="frappe.utils.icon('select', 'sm')"></div>
 		</div>
 
 		<!-- description -->
-		<div
-			v-if="df.description"
-			class="mt-2 description"
-			v-html="df.description"
-		></div>
+		<div v-if="df.description" class="mt-2 description" v-html="df.description"></div>
 	</div>
 	<div v-else class="control" ref="select"></div>
 </template>

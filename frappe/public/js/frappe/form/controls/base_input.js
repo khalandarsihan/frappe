@@ -1,6 +1,4 @@
-frappe.ui.form.ControlInput = class ControlInput extends (
-	frappe.ui.form.Control
-) {
+frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control {
 	static horizontal = true;
 	make() {
 		// parent element
@@ -12,9 +10,7 @@ frappe.ui.form.ControlInput = class ControlInput extends (
 	}
 	make_wrapper() {
 		if (this.only_input) {
-			this.$wrapper = $(
-				'<div class="form-group frappe-control">',
-			).appendTo(this.parent);
+			this.$wrapper = $('<div class="form-group frappe-control">').appendTo(this.parent);
 		} else {
 			this.$wrapper = $(
 				`<div class="frappe-control">
@@ -29,7 +25,7 @@ frappe.ui.form.ControlInput = class ControlInput extends (
 						<p class="help-box small text-muted"></p>
 					</div>
 				</div>
-			</div>`,
+			</div>`
 			).appendTo(this.parent);
 		}
 	}
@@ -43,9 +39,7 @@ frappe.ui.form.ControlInput = class ControlInput extends (
 		if (this.only_input) {
 			this.input_area = this.wrapper;
 		} else {
-			this.label_area = this.label_span = this.$wrapper
-				.find("label")
-				.get(0);
+			this.label_area = this.label_span = this.$wrapper.find("label").get(0);
 			this.input_area = this.$wrapper.find(".control-input").get(0);
 			this.$input_wrapper = this.$wrapper.find(".control-input-wrapper");
 			// keep a separate display area to rendered formatted values
@@ -92,11 +86,7 @@ frappe.ui.form.ControlInput = class ControlInput extends (
 		if (me.disp_status != "None") {
 			// refresh value
 			if (me.frm) {
-				me.value = frappe.model.get_value(
-					me.doctype,
-					me.docname,
-					me.df.fieldname,
-				);
+				me.value = frappe.model.get_value(me.doctype, me.docname, me.df.fieldname);
 			} else if (me.doc) {
 				me.value = me.doc[me.df.fieldname] || "";
 			}
@@ -127,10 +117,8 @@ frappe.ui.form.ControlInput = class ControlInput extends (
 						"title",
 						__(
 							"This value is fetched from {0}'s {1} field",
-							me.df.fetch_from
-								.split(".")
-								.map((value) => __(frappe.unscrub(value))),
-						),
+							me.df.fetch_from.split(".").map((value) => __(frappe.unscrub(value)))
+						)
 					);
 				}
 			}
@@ -162,12 +150,7 @@ frappe.ui.form.ControlInput = class ControlInput extends (
 			value = frappe.utils.escape_html(value);
 		}
 		let doc = this.doc || (this.frm && this.frm.doc);
-		let display_value = frappe.format(
-			value,
-			this.df,
-			{ no_icon: true, inline: true },
-			doc,
-		);
+		let display_value = frappe.format(value, this.df, { no_icon: true, inline: true }, doc);
 		this.disp_area && $(this.disp_area).html(display_value);
 	}
 	set_label(label) {
@@ -184,7 +167,7 @@ frappe.ui.form.ControlInput = class ControlInput extends (
 
 	set_doc_url() {
 		let unsupported_fieldtypes = frappe.model.no_value_type.filter(
-			(x) => frappe.model.table_fields.indexOf(x) === -1,
+			(x) => frappe.model.table_fields.indexOf(x) === -1
 		);
 
 		if (
@@ -227,24 +210,14 @@ frappe.ui.form.ControlInput = class ControlInput extends (
 
 		// do not set has-error class while dialog is rendered
 		// set has-error if dialog primary button is clicked
-		if (
-			this.layout &&
-			this.layout.is_dialog &&
-			!this.layout.primary_action_fulfilled
-		)
-			return;
+		if (this.layout && this.layout.is_dialog && !this.layout.primary_action_fulfilled) return;
 
-		this.$wrapper.toggleClass(
-			"has-error",
-			Boolean(this.df.reqd && is_null(value)),
-		);
+		this.$wrapper.toggleClass("has-error", Boolean(this.df.reqd && is_null(value)));
 	}
 	set_invalid() {
 		let invalid = !!this.df.invalid;
 		if (this.grid) {
-			this.$wrapper
-				.parents(".grid-static-col")
-				.toggleClass("invalid", invalid);
+			this.$wrapper.parents(".grid-static-col").toggleClass("invalid", invalid);
 			this.$input?.toggleClass("invalid", invalid);
 			this.grid_row.columns[this.df.fieldname].is_invalid = invalid;
 		} else {
@@ -252,18 +225,14 @@ frappe.ui.form.ControlInput = class ControlInput extends (
 		}
 	}
 	set_required() {
-		this.label_area &&
-			$(this.label_area).toggleClass("reqd", Boolean(this.df.reqd));
+		this.label_area && $(this.label_area).toggleClass("reqd", Boolean(this.df.reqd));
 	}
 	set_bold() {
 		if (this.$input) {
 			this.$input.toggleClass("bold", !!(this.df.bold || this.df.reqd));
 		}
 		if (this.disp_area) {
-			$(this.disp_area).toggleClass(
-				"bold",
-				!!(this.df.bold || this.df.reqd),
-			);
+			$(this.disp_area).toggleClass("bold", !!(this.df.bold || this.df.reqd));
 		}
 	}
 };

@@ -54,7 +54,7 @@ frappe.ui.form.ControlMultiSelectList = class ControlMultiSelectList extends (
 						.uniqBy((opt) => opt.value);
 					this.set_selectable_items(options);
 				});
-			}, 300),
+			}, 300)
 		);
 		this.$list_wrapper.on("keydown", "input", (e) => {
 			if (e.key === "ArrowDown") {
@@ -145,9 +145,7 @@ frappe.ui.form.ControlMultiSelectList = class ControlMultiSelectList extends (
 			if (this.values.includes(value)) {
 				this._selected_values.push(option);
 			} else {
-				this._selected_values = this._selected_values.filter(
-					(opt) => opt.value !== value,
-				);
+				this._selected_values = this._selected_values.filter((opt) => opt.value !== value);
 			}
 		}
 	}
@@ -214,9 +212,7 @@ frappe.ui.form.ControlMultiSelectList = class ControlMultiSelectList extends (
 		let html = options
 			.map((option) => {
 				let encoded_value = encodeURIComponent(option.value);
-				let selected = this.values.includes(option.value)
-					? "selected"
-					: "";
+				let selected = this.values.includes(option.value) ? "selected" : "";
 				return `<li class="selectable-item ${selected}" data-value="${encoded_value}">
 				<div>
 					<strong>${option.label}</strong>
@@ -266,8 +262,7 @@ frappe.ui.form.ControlMultiSelectList = class ControlMultiSelectList extends (
 				inline: "start",
 			});
 		} else {
-			$item.parentNode.scrollTop =
-				$item.offsetTop - $item.parentNode.offsetTop;
+			$item.parentNode.scrollTop = $item.offsetTop - $item.parentNode.offsetTop;
 		}
 	}
 };

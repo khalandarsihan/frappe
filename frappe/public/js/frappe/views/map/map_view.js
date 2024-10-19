@@ -30,43 +30,35 @@ frappe.views.MapView = class MapView extends frappe.views.ListView {
 	render_map_view() {
 		this.map_id = frappe.dom.get_unique_id();
 
-		this.$result.html(
-			`<div id="${this.map_id}" class="map-view-container"></div>`,
-		);
+		this.$result.html(`<div id="${this.map_id}" class="map-view-container"></div>`);
 
 		L.Icon.Default.imagePath = frappe.utils.map_defaults.image_path;
 		this.map = L.map(this.map_id).setView(
 			frappe.utils.map_defaults.center,
-			frappe.utils.map_defaults.zoom,
+			frappe.utils.map_defaults.zoom
 		);
 
-		L.tileLayer(
-			frappe.utils.map_defaults.tiles,
-			frappe.utils.map_defaults.options,
-		).addTo(this.map);
+		L.tileLayer(frappe.utils.map_defaults.tiles, frappe.utils.map_defaults.options).addTo(
+			this.map
+		);
 
 		L.control.scale().addTo(this.map);
 		if (this.coords.features && this.coords.features.length) {
 			this.coords.features.forEach((coords) =>
-				L.geoJSON(coords)
-					.bindPopup(coords.properties.name)
-					.addTo(this.map),
+				L.geoJSON(coords).bindPopup(coords.properties.name).addTo(this.map)
 			);
-			let lastCoords =
-				this.coords.features[0].geometry.coordinates.reverse();
+			let lastCoords = this.coords.features[0].geometry.coordinates.reverse();
 			this.map.panTo(lastCoords, 8);
 		}
 	}
 
 	get_coords() {
 		let get_coords_method =
-			(this.settings && this.settings.get_coords_method) ||
-			"frappe.geo.utils.get_coords";
+			(this.settings && this.settings.get_coords_method) || "frappe.geo.utils.get_coords";
 
 		if (
 			cur_list.meta.fields.find(
-				(i) =>
-					i.fieldname === "location" && i.fieldtype === "Geolocation",
+				(i) => i.fieldname === "location" && i.fieldtype === "Geolocation"
 			)
 		) {
 			this.type = "location_field";

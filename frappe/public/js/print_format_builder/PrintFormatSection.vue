@@ -28,10 +28,7 @@
 								<use href="#icon-dot-horizontal"></use>
 							</svg>
 						</button>
-						<div
-							class="dropdown-menu dropdown-menu-right"
-							role="menu"
-						>
+						<div class="dropdown-menu dropdown-menu-right" role="menu">
 							<button
 								v-for="option in section_options"
 								class="dropdown-item"
@@ -44,17 +41,11 @@
 				</div>
 			</div>
 			<div class="row section-columns">
-				<div
-					class="column col"
-					v-for="(column, i) in section.columns"
-					:key="i"
-				>
+				<div class="column col" v-for="(column, i) in section.columns" :key="i">
 					<draggable
 						class="drag-container"
 						:style="{
-							backgroundColor: column.fields.length
-								? null
-								: 'var(--gray-50)',
+							backgroundColor: column.fields.length ? null : 'var(--gray-50)',
 						}"
 						v-model="column.fields"
 						group="fields"
@@ -68,10 +59,7 @@
 				</div>
 			</div>
 		</div>
-		<div
-			class="my-4 text-center text-muted font-italic"
-			v-if="section.page_break"
-		>
+		<div class="my-4 text-center text-muted font-italic" v-if="section.page_break">
 			{{ __("Page Break") }}
 		</div>
 	</div>

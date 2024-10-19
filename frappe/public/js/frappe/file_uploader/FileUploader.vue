@@ -22,12 +22,7 @@
 							fill="none"
 							xmlns="http://www.w3.org/2000/svg"
 						>
-							<circle
-								cx="15"
-								cy="15"
-								r="15"
-								fill="var(--subtle-fg)"
-							/>
+							<circle cx="15" cy="15" r="15" fill="var(--subtle-fg)" />
 							<path
 								d="M13.5 22V19"
 								stroke="var(--text-color)"
@@ -67,9 +62,7 @@
 						ref="file_input"
 						@change="on_file_input"
 						:multiple="allow_multiple"
-						:accept="
-							(restrictions.allowed_file_types || []).join(', ')
-						"
+						:accept="(restrictions.allowed_file_types || []).join(', ')"
 					/>
 					<button
 						class="btn btn-file-upload"
@@ -83,12 +76,7 @@
 							fill="none"
 							xmlns="http://www.w3.org/2000/svg"
 						>
-							<circle
-								cx="15"
-								cy="15"
-								r="15"
-								fill="var(--subtle-fg)"
-							/>
+							<circle cx="15" cy="15" r="15" fill="var(--subtle-fg)" />
 							<path
 								d="M13.0245 11.5H8C7.72386 11.5 7.5 11.7239 7.5 12V20C7.5 21.1046 8.39543 22 9.5 22H20.5C21.6046 22 22.5 21.1046 22.5 20V14.5C22.5 14.2239 22.2761 14 22 14H15.2169C15.0492 14 14.8926 13.9159 14.8 13.776L13.4414 11.724C13.3488 11.5841 13.1922 11.5 13.0245 11.5Z"
 								stroke="var(--text-color)"
@@ -117,12 +105,7 @@
 							fill="none"
 							xmlns="http://www.w3.org/2000/svg"
 						>
-							<circle
-								cx="15"
-								cy="15"
-								r="15"
-								fill="var(--subtle-fg)"
-							/>
+							<circle cx="15" cy="15" r="15" fill="var(--subtle-fg)" />
 							<path
 								d="M12.0469 17.9543L17.9558 12.0454"
 								stroke="var(--text-color)"
@@ -156,23 +139,13 @@
 							fill="none"
 							xmlns="http://www.w3.org/2000/svg"
 						>
-							<circle
-								cx="15"
-								cy="15"
-								r="15"
-								fill="var(--subtle-fg)"
-							/>
+							<circle cx="15" cy="15" r="15" fill="var(--subtle-fg)" />
 							<path
 								d="M11.5 10.5H9.5C8.67157 10.5 8 11.1716 8 12V20C8 20.8284 8.67157 21.5 9.5 21.5H20.5C21.3284 21.5 22 20.8284 22 20V12C22 11.1716 21.3284 10.5 20.5 10.5H18.5L17.3 8.9C17.1111 8.64819 16.8148 8.5 16.5 8.5H13.5C13.1852 8.5 12.8889 8.64819 12.7 8.9L11.5 10.5Z"
 								stroke="var(--text-color)"
 								stroke-linejoin="round"
 							/>
-							<circle
-								cx="15"
-								cy="16"
-								r="2.5"
-								stroke="var(--text-color)"
-							/>
+							<circle cx="15" cy="16" r="2.5" stroke="var(--text-color)" />
 						</svg>
 						<div class="mt-1">{{ __("Camera") }}</div>
 					</button>
@@ -214,14 +187,8 @@
 					@toggle_image_cropper="toggle_image_cropper(i)"
 				/>
 			</div>
-			<div
-				class="flex align-center"
-				v-if="show_upload_button && currently_uploading === -1"
-			>
-				<button
-					class="btn btn-primary btn-sm margin-right"
-					@click="() => upload_files()"
-				>
+			<div class="flex align-center" v-if="show_upload_button && currently_uploading === -1">
+				<button class="btn btn-primary btn-sm margin-right" @click="() => upload_files()">
 					<span v-if="files.length === 1">
 						{{ __("Upload file") }}
 					</span>
@@ -246,11 +213,7 @@
 			v-if="show_file_browser && !disable_file_browser"
 			@hide-browser="show_file_browser = false"
 		/>
-		<WebLink
-			ref="web_link"
-			v-if="show_web_link"
-			@hide-web-link="show_web_link = false"
-		/>
+		<WebLink ref="web_link" v-if="show_web_link" @hide-web-link="show_web_link = false" />
 	</div>
 </template>
 
@@ -353,9 +316,7 @@ if (props.restrictions.max_file_size == null) {
 	});
 }
 if (props.restrictions.max_number_of_files == null && props.doctype) {
-	props.restrictions.max_number_of_files = frappe.get_meta(
-		props.doctype,
-	)?.max_attachments;
+	props.restrictions.max_number_of_files = frappe.get_meta(props.doctype)?.max_attachments;
 }
 
 // methods
@@ -402,18 +363,19 @@ function toggle_all_private() {
 function show_max_files_number_warning(file) {
 	console.warn(
 		`File skipped because it exceeds the allowed specified limit of ${max_number_of_files} uploads`,
-		file,
+		file
 	);
 	if (props.doctype) {
-		MSG = __(
-			'File "{0}" was skipped because only {1} uploads are allowed for DocType "{2}"',
-			[file.name, max_number_of_files, props.doctype],
-		);
+		MSG = __('File "{0}" was skipped because only {1} uploads are allowed for DocType "{2}"', [
+			file.name,
+			max_number_of_files,
+			props.doctype,
+		]);
 	} else {
-		MSG = __(
-			'File "{0}" was skipped because only {1} uploads are allowed',
-			[file.name, max_number_of_files],
-		);
+		MSG = __('File "{0}" was skipped because only {1} uploads are allowed', [
+			file.name,
+			max_number_of_files,
+		]);
 	}
 	frappe.show_alert({
 		message: MSG,
@@ -430,8 +392,7 @@ function add_files(file_array) {
 				file_obj: file,
 				cropper_file: file,
 				crop_box_data: null,
-				optimize:
-					size_kb > 200 && is_image && !file.type.includes("svg"),
+				optimize: size_kb > 200 && is_image && !file.type.includes("svg"),
 				name: file.name,
 				doc: null,
 				progress: 0,
@@ -495,18 +456,12 @@ function check_restrictions(file) {
 	if (!is_correct_type) {
 		console.warn("File skipped because of invalid file type", file);
 		frappe.show_alert({
-			message: __('File "{0}" was skipped because of invalid file type', [
-				file.name,
-			]),
+			message: __('File "{0}" was skipped because of invalid file type', [file.name]),
 			indicator: "orange",
 		});
 	}
 	if (!valid_file_size) {
-		console.warn(
-			"File skipped because of invalid file size",
-			file.size,
-			file,
-		);
+		console.warn("File skipped because of invalid file size", file.size, file);
 		frappe.show_alert({
 			message: __('File "{0}" was skipped because size exceeds {1} MB', [
 				file.name,
@@ -536,9 +491,7 @@ function upload_files(dialog) {
 	dialog?.get_primary_btn().prop("disabled", true);
 	dialog?.get_secondary_btn().prop("disabled", true);
 
-	return frappe.run_serially(
-		files.value.map((file, i) => () => upload_file(file, i)),
-	);
+	return frappe.run_serially(files.value.map((file, i) => () => upload_file(file, i)));
 }
 function upload_via_file_browser() {
 	let selected_file = file_browser.value.selected_node;
@@ -570,7 +523,7 @@ function return_as_dataurl() {
 		frappe.dom.file_to_base64(file.file_obj).then((dataurl) => {
 			file.dataurl = dataurl;
 			props.on_success && props.on_success(file);
-		}),
+		})
 	);
 	close_dialog.value = true;
 	return Promise.all(promises);
@@ -631,9 +584,7 @@ function upload_file(file, i) {
 
 					try {
 						// Append server messages which are useful hint for perm issues
-						let server_messages = JSON.parse(
-							response._server_messages,
-						);
+						let server_messages = JSON.parse(response._server_messages);
 
 						server_messages.forEach((m) => {
 							m = JSON.parse(m);
@@ -644,8 +595,7 @@ function upload_file(file, i) {
 					}
 				} else if (xhr.status === 413) {
 					file.failed = true;
-					file.error_message =
-						"Size exceeds the maximum allowed file size.";
+					file.error_message = "Size exceeds the maximum allowed file size.";
 				} else {
 					file.failed = true;
 					file.error_message =
@@ -721,9 +671,7 @@ function capture_image() {
 			let filename = `capture_${frappe.datetime
 				.now_datetime()
 				.replaceAll(/[: -]/g, "_")}.png`;
-			url_to_file(data_url, filename, "image/png").then((file) =>
-				add_files([file]),
-			);
+			url_to_file(data_url, filename, "image/png").then((file) => add_files([file]));
 		});
 	});
 }
@@ -755,9 +703,7 @@ function url_to_file(url, filename, mime_type) {
 let upload_complete = computed(() => {
 	return (
 		files.value.length > 0 &&
-		files.value.every(
-			(file) => file.total !== 0 && file.progress === file.total,
-		)
+		files.value.every((file) => file.total !== 0 && file.progress === file.total)
 	);
 });
 
@@ -769,7 +715,7 @@ watch(
 			files.value = [newvalue[newvalue.length - 1]];
 		}
 	},
-	{ deep: true },
+	{ deep: true }
 );
 
 defineExpose({

@@ -21,16 +21,9 @@ frappe.ui.form.get_event_handler_list = function (doctype, fieldname) {
 	return frappe.ui.form.handlers[doctype][fieldname];
 };
 
-frappe.ui.form.on = frappe.ui.form.on_change = function (
-	doctype,
-	fieldname,
-	handler,
-) {
+frappe.ui.form.on = frappe.ui.form.on_change = function (doctype, fieldname, handler) {
 	var add_handler = function (fieldname, handler) {
-		var handler_list = frappe.ui.form.get_event_handler_list(
-			doctype,
-			fieldname,
-		);
+		var handler_list = frappe.ui.form.get_event_handler_list(doctype, fieldname);
 
 		let _handler = (...args) => {
 			try {
@@ -65,10 +58,7 @@ frappe.ui.form.on = frappe.ui.form.on_change = function (
 
 // remove standard event handlers
 frappe.ui.form.off = function (doctype, fieldname, handler) {
-	var handler_list = frappe.ui.form.get_event_handler_list(
-		doctype,
-		fieldname,
-	);
+	var handler_list = frappe.ui.form.get_event_handler_list(doctype, fieldname);
 	if (handler_list.length) {
 		frappe.ui.form.handlers[doctype][fieldname] = [];
 	}
@@ -93,7 +83,7 @@ frappe.ui.form.ScriptManager = class ScriptManager {
 	make(ControllerClass) {
 		this.frm.cscript = extend_cscript(
 			this.frm.cscript,
-			new ControllerClass({ frm: this.frm }),
+			new ControllerClass({ frm: this.frm })
 		);
 	}
 	trigger(event_name, doctype, name) {
@@ -152,9 +142,7 @@ frappe.ui.form.ScriptManager = class ScriptManager {
 	}
 	has_handlers(event_name, doctype) {
 		let handlers = this.get_handlers(event_name, doctype);
-		return (
-			handlers && (handlers.old_style.length || handlers.new_style.length)
-		);
+		return handlers && (handlers.old_style.length || handlers.new_style.length);
 	}
 	get_handlers(event_name, doctype) {
 		// returns list of all functions to be called (old style and new style)
@@ -163,16 +151,10 @@ frappe.ui.form.ScriptManager = class ScriptManager {
 			old_style: [],
 			new_style: [],
 		};
-		if (
-			frappe.ui.form.handlers[doctype] &&
-			frappe.ui.form.handlers[doctype][event_name]
-		) {
-			$.each(
-				frappe.ui.form.handlers[doctype][event_name],
-				function (i, fn) {
-					handlers.new_style.push(fn);
-				},
-			);
+		if (frappe.ui.form.handlers[doctype] && frappe.ui.form.handlers[doctype][event_name]) {
+			$.each(frappe.ui.form.handlers[doctype][event_name], function (i, fn) {
+				handlers.new_style.push(fn);
+			});
 		}
 		if (this.frm.cscript[event_name]) {
 			handlers.old_style.push(event_name);
@@ -204,8 +186,7 @@ frappe.ui.form.ScriptManager = class ScriptManager {
 				frappe.msgprint({
 					title: __("Error in Client Script"),
 					indicator: "orange",
-					message:
-						'<pre class="small"><code>' + e.stack + "</code></pre>",
+					message: '<pre class="small"><code>' + e.stack + "</code></pre>",
 				});
 			}
 		}
@@ -233,11 +214,7 @@ frappe.ui.form.ScriptManager = class ScriptManager {
 				df.read_only == 1 ||
 				df.is_virtual == 1;
 
-			if (
-				is_read_only_field &&
-				df.fetch_from &&
-				df.fetch_from.indexOf(".") != -1
-			) {
+			if (is_read_only_field && df.fetch_from && df.fetch_from.indexOf(".") != -1) {
 				var parts = df.fetch_from.split(".");
 				me.frm.add_fetch(parts[0], parts[1], df.fieldname, df.parent);
 			}
@@ -251,7 +228,7 @@ frappe.ui.form.ScriptManager = class ScriptManager {
 					frappe.meta.get_docfields(field.df.options, me.frm.docname),
 					function (i, df) {
 						setup_add_fetch(df);
-					},
+					}
 				);
 			}
 		});
@@ -288,7 +265,7 @@ frappe.ui.form.ScriptManager = class ScriptManager {
 				current_row.doctype,
 				current_row.name,
 				fieldname,
-				data[0][fieldname],
+				data[0][fieldname]
 			);
 		});
 	}

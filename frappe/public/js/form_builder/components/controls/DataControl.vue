@@ -61,11 +61,7 @@ if (props.df.fieldtype === "Icon") {
 		/>
 
 		<!-- description -->
-		<div
-			v-if="df.description"
-			class="mt-2 description"
-			v-html="df.description"
-		/>
+		<div v-if="df.description" class="mt-2 description" v-html="df.description" />
 
 		<!-- timezone for datetime field -->
 		<div

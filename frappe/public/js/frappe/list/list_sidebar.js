@@ -19,9 +19,7 @@ frappe.views.ListSidebar = class ListSidebar {
 			doctype: this.doctype,
 		});
 
-		this.sidebar = $(
-			'<div class="list-sidebar overlay-sidebar hidden-xs hidden-sm"></div>',
-		)
+		this.sidebar = $('<div class="list-sidebar overlay-sidebar hidden-xs hidden-sm"></div>')
 			.html(sidebar_content)
 			.appendTo(this.page.sidebar.empty());
 
@@ -52,30 +50,18 @@ frappe.views.ListSidebar = class ListSidebar {
 		var show_list_link = false;
 
 		if (frappe.views.calendar[this.doctype]) {
-			this.sidebar
-				.find('.list-link[data-view="Calendar"]')
-				.removeClass("hide");
-			this.sidebar
-				.find('.list-link[data-view="Gantt"]')
-				.removeClass("hide");
+			this.sidebar.find('.list-link[data-view="Calendar"]').removeClass("hide");
+			this.sidebar.find('.list-link[data-view="Gantt"]').removeClass("hide");
 			show_list_link = true;
 		}
 		//show link for kanban view
 		this.sidebar.find('.list-link[data-view="Kanban"]').removeClass("hide");
-		if (
-			this.doctype === "Communication" &&
-			frappe.boot.email_accounts.length
-		) {
-			this.sidebar
-				.find('.list-link[data-view="Inbox"]')
-				.removeClass("hide");
+		if (this.doctype === "Communication" && frappe.boot.email_accounts.length) {
+			this.sidebar.find('.list-link[data-view="Inbox"]').removeClass("hide");
 			show_list_link = true;
 		}
 
-		if (
-			frappe.treeview_settings[this.doctype] ||
-			frappe.get_meta(this.doctype).is_tree
-		) {
+		if (frappe.treeview_settings[this.doctype] || frappe.get_meta(this.doctype).is_tree) {
 			this.sidebar.find(".tree-link").removeClass("hide");
 		}
 
@@ -99,43 +85,30 @@ frappe.views.ListSidebar = class ListSidebar {
 
 		//enable link for Kanban view
 		this.sidebar
-			.find(
-				'.list-link[data-view="Kanban"] a, .list-link[data-view="Inbox"] a',
-			)
+			.find('.list-link[data-view="Kanban"] a, .list-link[data-view="Inbox"] a')
 			.attr("disabled", null)
 			.removeClass("disabled");
 
 		// show image link if image_view
 		if (this.list_view.meta.image_field) {
-			this.sidebar
-				.find('.list-link[data-view="Image"]')
-				.removeClass("hide");
+			this.sidebar.find('.list-link[data-view="Image"]').removeClass("hide");
 			show_list_link = true;
 		}
 
 		if (
 			this.list_view.settings.get_coords_method ||
-			(this.list_view.meta.fields.find(
-				(i) => i.fieldname === "latitude",
-			) &&
-				this.list_view.meta.fields.find(
-					(i) => i.fieldname === "longitude",
-				)) ||
+			(this.list_view.meta.fields.find((i) => i.fieldname === "latitude") &&
+				this.list_view.meta.fields.find((i) => i.fieldname === "longitude")) ||
 			this.list_view.meta.fields.find(
-				(i) =>
-					i.fieldname === "location" && i.fieldtype == "Geolocation",
+				(i) => i.fieldname === "location" && i.fieldtype == "Geolocation"
 			)
 		) {
-			this.sidebar
-				.find('.list-link[data-view="Map"]')
-				.removeClass("hide");
+			this.sidebar.find('.list-link[data-view="Map"]').removeClass("hide");
 			show_list_link = true;
 		}
 
 		if (show_list_link) {
-			this.sidebar
-				.find('.list-link[data-view="List"]')
-				.removeClass("hide");
+			this.sidebar.find('.list-link[data-view="List"]').removeClass("hide");
 		}
 	}
 
@@ -154,8 +127,7 @@ frappe.views.ListSidebar = class ListSidebar {
 							? `List/${r.ref_doctype}/Report`
 							: "query-report";
 
-					var route =
-						r.route || report_type + "/" + (r.title || r.name);
+					var route = r.route || report_type + "/" + (r.title || r.name);
 
 					if (added.indexOf(route) === -1) {
 						// don't repeat
@@ -167,11 +139,7 @@ frappe.views.ListSidebar = class ListSidebar {
 						}
 
 						$(
-							'<li><a href="#' +
-								route +
-								'">' +
-								__(r.title || r.name) +
-								"</a></li>",
+							'<li><a href="#' + route + '">' + __(r.title || r.name) + "</a></li>"
 						).appendTo(dropdown);
 					}
 				}
@@ -186,7 +154,7 @@ frappe.views.ListSidebar = class ListSidebar {
 		// Sort reports alphabetically
 		var reports =
 			Object.values(frappe.boot.user.all_reports).sort((a, b) =>
-				a.title.localeCompare(b.title),
+				a.title.localeCompare(b.title)
 			) || [];
 
 		// from specially tagged reports
@@ -203,18 +171,13 @@ frappe.views.ListSidebar = class ListSidebar {
 
 	setup_kanban_boards() {
 		const $dropdown = this.page.sidebar.find(".kanban-dropdown");
-		frappe.views.KanbanView.setup_dropdown_in_sidebar(
-			this.doctype,
-			$dropdown,
-		);
+		frappe.views.KanbanView.setup_dropdown_in_sidebar(this.doctype, $dropdown);
 	}
 
 	setup_keyboard_shortcuts() {
-		this.sidebar
-			.find(".list-link > a, .list-link > .btn-group > a")
-			.each((i, el) => {
-				frappe.ui.keys.get_shortcut_group(this.page).add($(el));
-			});
+		this.sidebar.find(".list-link > a, .list-link > .btn-group > a").each((i, el) => {
+			frappe.ui.keys.get_shortcut_group(this.page).add($(el));
+		});
 	}
 
 	setup_list_group_by() {
@@ -229,9 +192,7 @@ frappe.views.ListSidebar = class ListSidebar {
 	get_stats() {
 		var me = this;
 
-		let dropdown_options = me.sidebar.find(
-			".list-stats-dropdown .stat-result",
-		);
+		let dropdown_options = me.sidebar.find(".list-stats-dropdown .stat-result");
 		this.set_loading_state(dropdown_options);
 
 		frappe.call({
@@ -250,11 +211,7 @@ frappe.views.ListSidebar = class ListSidebar {
 				let stats = (r.message.stats || {})["_user_tags"] || [];
 				me.render_stat(stats);
 				let stats_dropdown = me.sidebar.find(".list-stats-dropdown");
-				frappe.utils.setup_search(
-					stats_dropdown,
-					".stat-link",
-					".stat-label",
-				);
+				frappe.utils.setup_search(stats_dropdown, ".stat-link", ".stat-label");
 			},
 		});
 	}
@@ -280,10 +237,7 @@ frappe.views.ListSidebar = class ListSidebar {
 				let fieldname = $(e.currentTarget).attr("data-field");
 				let label = $(e.currentTarget).attr("data-label");
 				let condition = "like";
-				let existing =
-					this.list_view.filter_area.filter_list.get_filter(
-						fieldname,
-					);
+				let existing = this.list_view.filter_area.filter_list.get_filter(fieldname);
 				if (existing) {
 					existing.remove();
 				}
@@ -291,13 +245,8 @@ frappe.views.ListSidebar = class ListSidebar {
 					label = "%,%";
 					condition = "not like";
 				}
-				this.list_view.filter_area.add(
-					this.doctype,
-					fieldname,
-					condition,
-					label,
-				);
-			},
+				this.list_view.filter_area.add(this.doctype, fieldname, condition, label);
+			}
 		);
 
 		this.sidebar.find(".list-stats-dropdown .stat-result").html(tag_list);

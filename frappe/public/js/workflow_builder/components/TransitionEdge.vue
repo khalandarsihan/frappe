@@ -1,11 +1,6 @@
 <script setup>
 import { computed, nextTick, watch } from "vue";
-import {
-	getSmoothStepPath,
-	SmoothStepEdge,
-	useVueFlow,
-	EdgeLabelRenderer,
-} from "@vue-flow/core";
+import { getSmoothStepPath, SmoothStepEdge, useVueFlow, EdgeLabelRenderer } from "@vue-flow/core";
 
 let { findEdge, getSelectedNodes } = useVueFlow();
 
@@ -52,7 +47,7 @@ watch(
 		if (target_is_action) return;
 		findEdge(props.id).markerEnd = val ? marker_end_primary : marker_end;
 	},
-	{ immediate: true },
+	{ immediate: true }
 );
 
 function selectAction(target_is_action) {
@@ -83,12 +78,7 @@ export default {
 };
 </script>
 <template>
-	<SmoothStepEdge
-		class="transition-edge"
-		:id="id"
-		:path="d[0]"
-		:markerEnd="markerEnd"
-	/>
+	<SmoothStepEdge class="transition-edge" :id="id" :path="d[0]" :markerEnd="markerEnd" />
 	<EdgeLabelRenderer v-if="markerEnd == 'url(#)'">
 		<div
 			@click.stop="selectAction(true)"

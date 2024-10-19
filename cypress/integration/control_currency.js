@@ -72,10 +72,8 @@ context("Control Currency", () => {
 				.its("frappe")
 				.then((frappe) => {
 					frappe.boot.sysdefaults.currency = test_case.currency;
-					frappe.boot.sysdefaults.currency_precision =
-						test_case.default_precision ?? 2;
-					frappe.boot.sysdefaults.number_format =
-						test_case.number_format ?? "#,###.##";
+					frappe.boot.sysdefaults.currency_precision = test_case.default_precision ?? 2;
+					frappe.boot.sysdefaults.number_format = test_case.number_format ?? "#,###.##";
 				});
 
 			get_dialog_with_currency(test_case.df_options).as("dialog");
@@ -83,10 +81,7 @@ context("Control Currency", () => {
 			cy.get_field(fieldname, "Currency").clear();
 			cy.wait(300);
 			cy.fill_field(fieldname, test_case.input, "Currency").blur();
-			cy.get_field(fieldname, "Currency").should(
-				"have.value",
-				test_case.blur_expected,
-			);
+			cy.get_field(fieldname, "Currency").should("have.value", test_case.blur_expected);
 			cy.hide_dialog();
 		});
 	});

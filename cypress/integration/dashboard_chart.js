@@ -6,18 +6,11 @@ context("Dashboard Chart", () => {
 
 	it("Check filter populate for child table doctype", () => {
 		cy.new_form("Dashboard Chart");
-		cy.get('[data-fieldname="parent_document_type"]').should(
-			"have.css",
-			"display",
-			"none",
-		);
+		cy.get('[data-fieldname="parent_document_type"]').should("have.css", "display", "none");
 
 		cy.get_field("document_type", "Link");
 		cy.fill_field("document_type", "Workspace Link", "Link").focus().blur();
-		cy.get_field("document_type", "Link").should(
-			"have.value",
-			"Workspace Link",
-		);
+		cy.get_field("document_type", "Link").should("have.value", "Workspace Link");
 
 		cy.fill_field("chart_name", "Test Chart", "Data");
 

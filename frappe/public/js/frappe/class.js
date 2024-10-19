@@ -61,7 +61,7 @@ To subclass, use:
 
 								return ret;
 							};
-						})(name, props[name])
+					  })(name, props[name])
 					: props[name];
 		}
 
@@ -72,7 +72,7 @@ To subclass, use:
 					? proto.init // All construction is actually done in the init method
 					: function SubClass() {
 							_super.init.apply(this, arguments);
-						}
+					  }
 				: function EmptyClass() {};
 
 		// Populate our constructed prototype object

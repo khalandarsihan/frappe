@@ -14,7 +14,7 @@ context("Client Script", () => {
 				enabled: 1,
 				script: `console.log('todo form script')`,
 			},
-			true,
+			true
 		);
 		cy.visit("/app/todo/new", {
 			onBeforeLoad(win) {
@@ -34,7 +34,7 @@ context("Client Script", () => {
 				enabled: 1,
 				script: `console.log('todo list script')`,
 			},
-			true,
+			true
 		);
 		cy.visit("/app/todo", {
 			onBeforeLoad(win) {
@@ -54,17 +54,14 @@ context("Client Script", () => {
 				enabled: 0,
 				script: `console.log('todo disabled script')`,
 			},
-			true,
+			true
 		);
 		cy.visit("/app/todo", {
 			onBeforeLoad(win) {
 				cy.spy(win.console, "log").as("consoleLog");
 			},
 		});
-		cy.get("@consoleLog").should(
-			"not.be.calledWith",
-			"todo disabled script",
-		);
+		cy.get("@consoleLog").should("not.be.calledWith", "todo disabled script");
 	});
 
 	it("should run multiple scripts", () => {
@@ -77,7 +74,7 @@ context("Client Script", () => {
 				enabled: 1,
 				script: `console.log('todo form script 1')`,
 			},
-			true,
+			true
 		);
 		cy.insert_doc(
 			"Client Script",
@@ -88,7 +85,7 @@ context("Client Script", () => {
 				enabled: 1,
 				script: `console.log('todo form script 2')`,
 			},
-			true,
+			true
 		);
 		cy.visit("/app/todo/new", {
 			onBeforeLoad(win) {

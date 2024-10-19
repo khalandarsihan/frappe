@@ -9,8 +9,7 @@ frappe.views.CalendarView = class CalendarView extends frappe.views.ListView {
 		const route = frappe.get_route();
 		if (route.length === 3) {
 			const doctype = route[1];
-			const user_settings =
-				frappe.get_user_settings(doctype)["Calendar"] || {};
+			const user_settings = frappe.get_user_settings(doctype)["Calendar"] || {};
 			route.push(user_settings.last_calendar || "default");
 			frappe.route_flags.replace_route = true;
 			frappe.set_route(route);
@@ -79,17 +78,11 @@ frappe.views.CalendarView = class CalendarView extends frappe.views.ListView {
 					const doc = frappe.get_doc("Calendar View", calendar_name);
 					if (!doc) {
 						frappe.show_alert(
-							__(
-								"{0} is not a valid Calendar. Redirecting to default Calendar.",
-								[calendar_name.bold()],
-							),
+							__("{0} is not a valid Calendar. Redirecting to default Calendar.", [
+								calendar_name.bold(),
+							])
 						);
-						frappe.set_route(
-							"List",
-							this.doctype,
-							"Calendar",
-							"default",
-						);
+						frappe.set_route("List", this.doctype, "Calendar", "default");
 						return;
 					}
 					Object.assign(options, {
@@ -179,7 +172,7 @@ frappe.views.Calendar = class Calendar {
 		this.footnote_area = frappe.utils.set_footnote(
 			this.footnote_area,
 			this.$wrapper,
-			__("Select or drag across time slots to create a new event."),
+			__("Select or drag across time slots to create a new event.")
 		);
 		this.footnote_area.css({ "border-top": "0px" });
 
@@ -189,9 +182,7 @@ frappe.views.Calendar = class Calendar {
 	setup_view_mode_button(defaults) {
 		var me = this;
 		$(me.footnote_area).find(".btn-weekend").detach();
-		let btnTitle = defaults.weekends
-			? __("Hide Weekends")
-			: __("Show Weekends");
+		let btnTitle = defaults.weekends ? __("Hide Weekends") : __("Show Weekends");
 		const btn = `<button class="btn btn-default btn-xs btn-weekend">${btnTitle}</button>`;
 		me.footnote_area.append(btn);
 	}
@@ -206,8 +197,8 @@ frappe.views.Calendar = class Calendar {
 			let value = $(this).hasClass("fc-agendaWeek-button")
 				? "agendaWeek"
 				: $(this).hasClass("fc-agendaDay-button")
-					? "agendaDay"
-					: "month";
+				? "agendaDay"
+				: "month";
 			me.set_localStorage_option("cal_defaultView", value);
 		});
 
@@ -227,9 +218,7 @@ frappe.views.Calendar = class Calendar {
 			.addClass("btn btn-default");
 
 		this.$wrapper
-			.find(
-				".fc-month-button, .fc-agendaWeek-button, .fc-agendaDay-button",
-			)
+			.find(".fc-month-button, .fc-agendaWeek-button, .fc-agendaDay-button")
 			.wrapAll('<div class="btn-group" />');
 
 		this.$wrapper
@@ -241,9 +230,7 @@ frappe.views.Calendar = class Calendar {
 			.attr("class", "")
 			.html(frappe.utils.icon("right"));
 
-		this.$wrapper
-			.find(".fc-today-button")
-			.prepend(frappe.utils.icon("today"));
+		this.$wrapper.find(".fc-today-button").prepend(frappe.utils.icon("today"));
 
 		this.$wrapper.find(".fc-day-number").wrap('<div class="fc-day"></div>');
 
@@ -285,9 +272,7 @@ frappe.views.Calendar = class Calendar {
 			},
 			events: function (start, end, timezone, callback) {
 				return frappe.call({
-					method:
-						me.get_events_method ||
-						"frappe.desk.calendar.get_events",
+					method: me.get_events_method || "frappe.desk.calendar.get_events",
 					type: "GET",
 					args: me.get_args(start, end),
 					callback: function (r) {
@@ -324,18 +309,16 @@ frappe.views.Calendar = class Calendar {
 
 				event[me.field_map.start] = me.get_system_datetime(startDate);
 
-				if (me.field_map.end)
-					event[me.field_map.end] = me.get_system_datetime(endDate);
+				if (me.field_map.end) event[me.field_map.end] = me.get_system_datetime(endDate);
 
 				if (me.field_map.allDay) {
-					var all_day =
-						startDate._ambigTime && endDate._ambigTime ? 1 : 0;
+					var all_day = startDate._ambigTime && endDate._ambigTime ? 1 : 0;
 
 					event[me.field_map.allDay] = all_day;
 
 					if (all_day)
 						event[me.field_map.end] = me.get_system_datetime(
-							moment(endDate).subtract(1, "s"),
+							moment(endDate).subtract(1, "s")
 						);
 				}
 
@@ -343,29 +326,19 @@ frappe.views.Calendar = class Calendar {
 			},
 			dayClick: function (date, jsEvent, view) {
 				if (view.name === "month") {
-					const $date_cell = $(
-						"td[data-date=" + date.format("YYYY-MM-DD") + "]",
-					);
+					const $date_cell = $("td[data-date=" + date.format("YYYY-MM-DD") + "]");
 
 					if ($date_cell.hasClass("date-clicked")) {
 						me.$cal.fullCalendar("changeView", "agendaDay");
 						me.$cal.fullCalendar("gotoDate", date);
-						me.$wrapper
-							.find(".date-clicked")
-							.removeClass("date-clicked");
+						me.$wrapper.find(".date-clicked").removeClass("date-clicked");
 
 						// update "active view" btn
-						me.$wrapper
-							.find(".fc-month-button")
-							.removeClass("active");
-						me.$wrapper
-							.find(".fc-agendaDay-button")
-							.addClass("active");
+						me.$wrapper.find(".fc-month-button").removeClass("active");
+						me.$wrapper.find(".fc-agendaDay-button").addClass("active");
 					}
 
-					me.$wrapper
-						.find(".date-clicked")
-						.removeClass("date-clicked");
+					me.$wrapper.find(".date-clicked").removeClass("date-clicked");
 					$date_cell.addClass("date-clicked");
 				}
 				return false;
@@ -441,9 +414,7 @@ frappe.views.Calendar = class Calendar {
 			color_name = this.color_map[this.get_css_class(d)] || "blue";
 
 			if (color_name.startsWith("#")) {
-				color_name = frappe.ui.color.validate_hex(color_name)
-					? color_name
-					: "blue";
+				color_name = frappe.ui.color.validate_hex(color_name) ? color_name : "blue";
 			}
 
 			d.backgroundColor = frappe.ui.color.get(color_name, "extra-light");
@@ -462,8 +433,7 @@ frappe.views.Calendar = class Calendar {
 		var me = this;
 		frappe.model.remove_from_locals(me.doctype, event.name);
 		return frappe.call({
-			method:
-				me.update_event_method || "frappe.desk.calendar.update_event",
+			method: me.update_event_method || "frappe.desk.calendar.update_event",
 			args: me.get_update_args(event),
 			callback: function (r) {
 				if (r.exc) {
@@ -485,8 +455,7 @@ frappe.views.Calendar = class Calendar {
 		args[this.field_map.start] = me.get_system_datetime(event.start);
 
 		if (this.field_map.allDay)
-			args[this.field_map.allDay] =
-				event.start._ambigTime && event.end._ambigTime ? 1 : 0;
+			args[this.field_map.allDay] = event.start._ambigTime && event.end._ambigTime ? 1 : 0;
 
 		if (this.field_map.end) {
 			if (!event.end) {
@@ -497,7 +466,7 @@ frappe.views.Calendar = class Calendar {
 
 			if (args[this.field_map.allDay]) {
 				args[this.field_map.end] = me.get_system_datetime(
-					moment(event.end).subtract(1, "s"),
+					moment(event.end).subtract(1, "s")
 				);
 			}
 		}
@@ -510,9 +479,7 @@ frappe.views.Calendar = class Calendar {
 	fix_end_date_for_event_render(event) {
 		if (event.allDay) {
 			// We use inclusive end dates. This workaround fixes the rendering of events
-			event.start = event.start
-				? $.fullCalendar.moment(event.start).stripTime()
-				: null;
+			event.start = event.start ? $.fullCalendar.moment(event.start).stripTime() : null;
 			event.end = event.end
 				? $.fullCalendar.moment(event.end).add(1, "day").stripTime()
 				: null;

@@ -29,7 +29,7 @@ frappe.help.show_video = function (youtube_id, title) {
 	});
 
 	let video = $(
-		`<div class="video-player" data-plyr-provider="youtube" data-plyr-embed-id="${youtube_id}"></div>`,
+		`<div class="video-player" data-plyr-provider="youtube" data-plyr-embed-id="${youtube_id}"></div>`
 	);
 	video.appendTo(dialog.body);
 

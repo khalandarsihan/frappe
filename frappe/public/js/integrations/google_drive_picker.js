@@ -17,9 +17,7 @@ export default class GoogleDrivePicker {
 		inject_script("https://apis.google.com/js/api.js").then(() => {
 			gapi.load("client:picker", {
 				callback: () => {
-					gapi.client.load(
-						"https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
-					);
+					gapi.client.load("https://www.googleapis.com/discovery/v1/apis/drive/v3/rest");
 				},
 			});
 		});

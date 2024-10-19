@@ -66,10 +66,8 @@ frappe.ui.FilterGroup = class {
 			if (this.wrapper && this.wrapper.is(":visible")) {
 				const in_datepicker =
 					$(e.target).is(".datepicker--cell") ||
-					$(e.target).closest(".datepicker--nav-title").length !==
-						0 ||
-					$(e.target).parents(".datepicker--nav-action").length !==
-						0 ||
+					$(e.target).closest(".datepicker--nav-title").length !== 0 ||
+					$(e.target).parents(".datepicker--nav-action").length !== 0 ||
 					$(e.target).parents(".datepicker").length !== 0 ||
 					$(e.target).is(".datepicker--button");
 
@@ -132,23 +130,19 @@ frappe.ui.FilterGroup = class {
 	update_filter_button() {
 		const filters_applied = this.filters.length > 0;
 		const button_label = filters_applied
-			? __("Filters {0}", [
-					`<span class="filter-label">${this.filters.length}</span>`,
-				])
+			? __("Filters {0}", [`<span class="filter-label">${this.filters.length}</span>`])
 			: __("Filter");
 
 		this.filter_button
 			.toggleClass("btn-default", !filters_applied)
 			.toggleClass("btn-primary-light", filters_applied);
 
-		this.filter_button
-			.find(".filter-icon")
-			.toggleClass("active", filters_applied);
+		this.filter_button.find(".filter-icon").toggleClass("active", filters_applied);
 
 		this.filter_button.find(".button-label").html(button_label);
 		this.filter_button.attr(
 			"title",
-			`${this.filters.length} Filter${this.filters.length > 1 ? "s" : ""} Applied`,
+			`${this.filters.length} Filter${this.filters.length > 1 ? "s" : ""} Applied`
 		);
 	}
 
@@ -165,9 +159,7 @@ frappe.ui.FilterGroup = class {
 			this.hide_popover();
 		});
 
-		this.wrapper
-			.find(".apply-filters")
-			.on("click", () => this.hide_popover());
+		this.wrapper.find(".apply-filters").on("click", () => this.hide_popover());
 	}
 
 	add_filters(filters) {
@@ -256,8 +248,7 @@ frappe.ui.FilterGroup = class {
 	}
 
 	get_filter_value(fieldname) {
-		let filter_obj =
-			this.filters.find((f) => f.fieldname == fieldname) || {};
+		let filter_obj = this.filters.find((f) => f.fieldname == fieldname) || {};
 		return filter_obj.value;
 	}
 
@@ -268,15 +259,9 @@ frappe.ui.FilterGroup = class {
 			.some((f) => {
 				let f_value = f.get_value();
 				if (filter_value.length === 2) {
-					return (
-						filter_value[0] === f_value[0] &&
-						filter_value[1] === f_value[1]
-					);
+					return filter_value[0] === f_value[0] && filter_value[1] === f_value[1];
 				}
-				return frappe.utils.arrays_equal(
-					f_value.slice(0, 4),
-					filter_value.slice(0, 4),
-				);
+				return frappe.utils.arrays_equal(f_value.slice(0, 4), filter_value.slice(0, 4));
 			});
 	}
 
@@ -290,8 +275,7 @@ frappe.ui.FilterGroup = class {
 
 	update_filters() {
 		// remove hidden filters and undefined filters
-		const filter_exists = (f) =>
-			![undefined, null].includes(f.get_selected_value());
+		const filter_exists = (f) => ![undefined, null].includes(f.get_selected_value());
 		this.filters.map((f) => !filter_exists(f) && f.remove());
 		this.filters = this.filters.filter((f) => filter_exists(f) && f.field);
 		this.update_filter_button();
@@ -357,8 +341,7 @@ frappe.ui.FilterGroup = class {
 	}
 
 	add(filters, refresh = true) {
-		if (!filters || (Array.isArray(filters) && filters.length === 0))
-			return Promise.resolve();
+		if (!filters || (Array.isArray(filters) && filters.length === 0)) return Promise.resolve();
 
 		if (typeof filters[0] === "string") {
 			// passed in the format of doctype, field, condition, value
@@ -370,8 +353,7 @@ frappe.ui.FilterGroup = class {
 			return !this.exists(f);
 		});
 
-		const { non_standard_filters, promise } =
-			this.set_standard_filter(filters);
+		const { non_standard_filters, promise } = this.set_standard_filter(filters);
 
 		return promise
 			.then(() => {

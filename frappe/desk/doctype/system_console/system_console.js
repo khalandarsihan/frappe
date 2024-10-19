@@ -26,10 +26,7 @@ frappe.ui.form.on("System Console", {
 			window.localStorage.getItem("system_console_type")
 		) {
 			frm.set_value("type", localStorage.getItem("system_console_type"));
-			frm.set_value(
-				"console",
-				localStorage.getItem("system_console_code"),
-			);
+			frm.set_value("console", localStorage.getItem("system_console_code"));
 			frm.set_value("output", "");
 			window.localStorage.removeItem("system_console_code");
 			window.localStorage.removeItem("system_console_type");
@@ -58,20 +55,14 @@ frappe.ui.form.on("System Console", {
 		}
 
 		let result = JSON.parse(frm.doc.output);
-		frm.set_value(
-			"output",
-			`${result.length} ${result.length == 1 ? "row" : "rows"}`,
-		);
+		frm.set_value("output", `${result.length} ${result.length == 1 ? "row" : "rows"}`);
 
 		if (result.length) {
 			let columns = Object.keys(result[0]);
-			frm.sql_output = new DataTable(
-				frm.get_field("sql_output").$wrapper.get(0),
-				{
-					columns,
-					data: result,
-				},
-			);
+			frm.sql_output = new DataTable(frm.get_field("sql_output").$wrapper.get(0), {
+				columns,
+				data: result,
+			});
 		}
 	},
 
@@ -81,7 +72,7 @@ frappe.ui.form.on("System Console", {
 			frm.events.refresh_processlist(frm);
 			frm.processlist_interval = setInterval(
 				() => frm.events.refresh_processlist(frm),
-				5000,
+				5000
 			);
 		} else {
 			if (frm.processlist_interval) {
@@ -95,9 +86,7 @@ frappe.ui.form.on("System Console", {
 	refresh_processlist: function (frm) {
 		let timestamp = new Date();
 		frappe
-			.call(
-				"frappe.desk.doctype.system_console.system_console.show_processlist",
-			)
+			.call("frappe.desk.doctype.system_console.system_console.show_processlist")
 			.then((r) => {
 				let rows = "";
 				for (let row of r.message) {

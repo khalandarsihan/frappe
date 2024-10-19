@@ -10,17 +10,11 @@ frappe.ui.form.ControlMultiSelect = class ControlMultiSelect extends (
 			filter: function (text, input) {
 				let d = this.get_item(text.value);
 				if (!d) {
-					return Awesomplete.FILTER_CONTAINS(
-						text,
-						input.match(/[^,]*$/)[0],
-					);
+					return Awesomplete.FILTER_CONTAINS(text, input.match(/[^,]*$/)[0]);
 				}
 
 				let getMatch = (value) =>
-					Awesomplete.FILTER_CONTAINS(
-						value,
-						input.match(/[^,]*$/)[0],
-					);
+					Awesomplete.FILTER_CONTAINS(value, input.match(/[^,]*$/)[0]);
 
 				// match typed input with label or value or description
 				let v = getMatch(d.label);
@@ -44,11 +38,7 @@ frappe.ui.form.ControlMultiSelect = class ControlMultiSelect extends (
 	get_value() {
 		let data = super.get_value();
 		// find value of label from option list and return actual value string
-		if (
-			this.df.options &&
-			this.df.options.length &&
-			this.df.options[0].label
-		) {
+		if (this.df.options && this.df.options.length && this.df.options[0].label) {
 			data = data.split(",").map((op) => op.trim());
 			data = data
 				.map((val) => {
@@ -64,11 +54,7 @@ frappe.ui.form.ControlMultiSelect = class ControlMultiSelect extends (
 	set_formatted_input(value) {
 		if (!value) return;
 		// find label of value from option list and set from it as input
-		if (
-			this.df.options &&
-			this.df.options.length &&
-			this.df.options[0].label
-		) {
+		if (this.df.options && this.df.options.length && this.df.options[0].label) {
 			value = value
 				.split(",")
 				.map((d) => d.trim())
@@ -115,9 +101,7 @@ frappe.ui.form.ControlMultiSelect = class ControlMultiSelect extends (
 
 		// remove last comma and convert into array
 		let value_arr = value.replace(/,\s*$/, "").split(",");
-		let include_all_values = value_arr.every((val) =>
-			valid_values.includes(val),
-		);
+		let include_all_values = value_arr.every((val) => valid_values.includes(val));
 
 		if (include_all_values) {
 			return value;

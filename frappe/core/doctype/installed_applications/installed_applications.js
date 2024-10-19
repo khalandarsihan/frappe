@@ -32,9 +32,7 @@ frappe.ui.form.on("Installed Applications", {
 				},
 			],
 			primary_action: function () {
-				const new_order = this.get_values()["apps"].map(
-					(row) => row.app_name,
-				);
+				const new_order = this.get_values()["apps"].map((row) => row.app_name);
 				frappe.call({
 					method: "frappe.core.doctype.installed_applications.installed_applications.update_installed_apps_order",
 					freeze: true,
@@ -49,7 +47,7 @@ frappe.ui.form.on("Installed Applications", {
 
 		frappe
 			.xcall(
-				"frappe.core.doctype.installed_applications.installed_applications.get_installed_app_order",
+				"frappe.core.doctype.installed_applications.installed_applications.get_installed_app_order"
 			)
 			.then((data) => {
 				data.forEach((app) => {
@@ -62,9 +60,7 @@ frappe.ui.form.on("Installed Applications", {
 				// hack: change checkboxes to drag handles.
 				let grid = $(dialog.fields_dict.apps.grid.parent);
 				grid.find(".grid-row-check:first").remove() &&
-					grid
-						.find(".grid-row-check")
-						.replaceWith(frappe.utils.icon("menu"));
+					grid.find(".grid-row-check").replaceWith(frappe.utils.icon("menu"));
 				dialog.show();
 			});
 	},

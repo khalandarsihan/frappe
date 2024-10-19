@@ -14,9 +14,7 @@ frappe.ui.color = {
 		if (color_names.includes(color_name)) {
 			return frappe.ui.color_map[color_name];
 		} else {
-			console.warn(
-				`'color_name' can be one of ${color_names} and not ${color_name}`,
-			);
+			console.warn(`'color_name' can be one of ${color_names} and not ${color_name}`);
 		}
 	},
 	get_color_map() {
@@ -36,7 +34,7 @@ frappe.ui.color = {
 		let color_map = {};
 		colors.forEach((color) => {
 			color_map[color] = shades.map((shade) =>
-				style.getPropertyValue(`--${color}-${shade}`).trim(),
+				style.getPropertyValue(`--${color}-${shade}`).trim()
 			);
 		});
 		return color_map;
@@ -53,16 +51,11 @@ frappe.ui.color = {
 			const color = this.get_color(color_name);
 			return color ? color[shades[shade]] : color_name;
 		} else {
-			console.warn(
-				`'shade' can be one of ${Object.keys(shades)} and not ${shade}`,
-			);
+			console.warn(`'shade' can be one of ${Object.keys(shades)} and not ${shade}`);
 		}
 	},
 	all: function () {
-		return Object.values(frappe.ui.color_map).reduce(
-			(acc, curr) => acc.concat(curr),
-			[],
-		);
+		return Object.values(frappe.ui.color_map).reduce((acc, curr) => acc.concat(curr), []);
 	},
 	names: function () {
 		return Object.keys(frappe.ui.color_map);

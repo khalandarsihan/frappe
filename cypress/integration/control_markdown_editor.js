@@ -11,12 +11,12 @@ context("Control Markdown Editor", () => {
 			"cypress/fixtures/sample_image.jpg",
 			{
 				action: "drag-drop",
-			},
+			}
 		);
 		cy.click_modal_primary_button("Upload");
 		cy.get_field("main_section_md", "Markdown Editor").should(
 			"contain",
-			"![](/private/files/sample_image",
+			"![](/private/files/sample_image"
 		);
 	});
 });

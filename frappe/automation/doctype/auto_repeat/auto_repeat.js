@@ -32,10 +32,9 @@ frappe.ui.form.on("Auto Repeat", {
 		if (frm.is_new()) {
 			let customize_form_link = `<a href="/app/customize-form">${__("Customize Form")}</a>`;
 			frm.dashboard.set_headline(
-				__(
-					'To configure Auto Repeat, enable "Allow Auto Repeat" from {0}.',
-					[customize_form_link],
-				),
+				__('To configure Auto Repeat, enable "Allow Auto Repeat" from {0}.', [
+					customize_form_link,
+				])
 			);
 		}
 
@@ -45,7 +44,7 @@ frappe.ui.form.on("Auto Repeat", {
 			frm.add_custom_button(label, () =>
 				frappe.set_route("List", frm.doc.reference_doctype, {
 					auto_repeat: frm.doc.name,
-				}),
+				})
 			);
 		}
 
@@ -72,10 +71,7 @@ frappe.ui.form.on("Auto Repeat", {
 	template: function (frm) {
 		if (frm.doc.template) {
 			frappe.model.with_doc("Email Template", frm.doc.template, () => {
-				let email_template = frappe.get_doc(
-					"Email Template",
-					frm.doc.template,
-				);
+				let email_template = frappe.get_doc("Email Template", frm.doc.template);
 				frm.set_value("subject", email_template.subject);
 				frm.set_value("message", email_template.response);
 				frm.refresh_field("subject");
@@ -105,10 +101,7 @@ frappe.ui.form.on("Auto Repeat", {
 				},
 			});
 		} else {
-			frappe.msgprint(
-				__("Please setup a message first"),
-				__("Message not setup"),
-			);
+			frappe.msgprint(__("Please setup a message first"), __("Message not setup"));
 		}
 	},
 });
@@ -121,7 +114,7 @@ frappe.auto_repeat.render_schedule = function (frm) {
 				frappe.render_template("auto_repeat_schedule", {
 					schedule_details: r.message || [],
 				}),
-				__("Auto Repeat Schedule"),
+				__("Auto Repeat Schedule")
 			);
 			frm.dashboard.show();
 		});

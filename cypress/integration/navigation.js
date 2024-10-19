@@ -13,7 +13,7 @@ context("Navigation", () => {
 				script: "console.log('ran')",
 				enabled: 0,
 			},
-			true,
+			true
 		);
 		cy.visit(`/app/client-script/${encodeURIComponent("ABC#123")}`);
 		cy.title().should("eq", "ABC#123");
@@ -27,10 +27,7 @@ context("Navigation", () => {
 		cy.clear_filters();
 		cy.call("logout");
 		cy.reload().as("reload");
-		cy.get("@reload")
-			.get(".page-card .btn-primary")
-			.contains("Login")
-			.click();
+		cy.get("@reload").get(".page-card .btn-primary").contains("Login").click();
 		cy.location("pathname").should("eq", "/login");
 		cy.login();
 		cy.reload().as("reload");

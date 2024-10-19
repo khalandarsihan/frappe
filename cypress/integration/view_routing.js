@@ -103,9 +103,7 @@ context("View", () => {
 	});
 
 	it("Route to File View", () => {
-		cy.intercept("POST", "/api/method/frappe.desk.reportview.get").as(
-			"list_loaded",
-		);
+		cy.intercept("POST", "/api/method/frappe.desk.reportview.get").as("list_loaded");
 		cy.visit("app/file");
 		cy.wait("@list_loaded");
 		cy.window()

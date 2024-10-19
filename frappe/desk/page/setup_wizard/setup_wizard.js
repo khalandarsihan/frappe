@@ -20,9 +20,7 @@ frappe.setup = {
 	},
 
 	remove_slide: function (slide_name) {
-		frappe.setup.slides = frappe.setup.slides.filter(
-			(slide) => slide.name !== slide_name,
-		);
+		frappe.setup.slides = frappe.setup.slides.filter((slide) => slide.name !== slide_name);
 	},
 
 	run_event: function (event) {
@@ -203,15 +201,9 @@ frappe.setup.SetupWizard = class SetupWizard extends frappe.ui.Slides {
 	}
 
 	post_setup_success() {
-		this.set_setup_complete_message(
-			__("Setup Complete"),
-			__("Refreshing..."),
-		);
+		this.set_setup_complete_message(__("Setup Complete"), __("Refreshing..."));
 		if (frappe.setup.welcome_page) {
-			localStorage.setItem(
-				"session_last_route",
-				frappe.setup.welcome_page,
-			);
+			localStorage.setItem("session_last_route", frappe.setup.welcome_page);
 		}
 		setTimeout(function () {
 			// Reload
@@ -224,8 +216,8 @@ frappe.setup.SetupWizard = class SetupWizard extends frappe.ui.Slides {
 		fail_msg = fail_msg
 			? fail_msg
 			: frappe.last_response.setup_wizard_failure_message
-				? frappe.last_response.setup_wizard_failure_message
-				: __("Failed to complete setup");
+			? frappe.last_response.setup_wizard_failure_message
+			: __("Failed to complete setup");
 
 		this.update_setup_message("Could not start up: " + fail_msg);
 
@@ -240,9 +232,7 @@ frappe.setup.SetupWizard = class SetupWizard extends frappe.ui.Slides {
 			if (data.stage_status) {
 				// .html('Process '+ data.progress[0] + ' of ' + data.progress[1] + ': ' + data.stage_status);
 				this.update_setup_message(data.stage_status);
-				this.set_setup_load_percent(
-					((data.progress[0] + 1) / data.progress[1]) * 100,
-				);
+				this.set_setup_load_percent(((data.progress[0] + 1) / data.progress[1]) * 100);
 			}
 			if (data.fail_msg) {
 				this.abort_setup(data.fail_msg);
@@ -264,8 +254,7 @@ frappe.setup.SetupWizard = class SetupWizard extends frappe.ui.Slides {
 				let active_domains = frappe.setup.domains;
 				if (
 					!slide.domains ||
-					slide.domains.filter((d) => active_domains.includes(d))
-						.length > 0
+					slide.domains.filter((d) => active_domains.includes(d)).length > 0
 				) {
 					filtered_slides.push(slide);
 				}
@@ -282,7 +271,7 @@ frappe.setup.SetupWizard = class SetupWizard extends frappe.ui.Slides {
 
 		this.$working_state = this.get_message(
 			__("Setting up your system"),
-			__("Starting Frappe ..."),
+			__("Starting Frappe ...")
 		).appendTo(this.parent);
 
 		this.attach_abort_button();
@@ -293,7 +282,7 @@ frappe.setup.SetupWizard = class SetupWizard extends frappe.ui.Slides {
 
 	attach_abort_button() {
 		this.$abort_btn = $(
-			`<button class='btn btn-secondary btn-xs btn-abort text-muted'>${__("Retry")}</button>`,
+			`<button class='btn btn-secondary btn-xs btn-abort text-muted'>${__("Retry")}</button>`
 		);
 		this.$working_state.find(".content").append(this.$abort_btn);
 
@@ -421,9 +410,7 @@ frappe.setup.slides_settings = [
 			},
 			{
 				fieldname: "enable_telemetry",
-				label: __(
-					"Allow sending usage data for improving applications",
-				),
+				label: __("Allow sending usage data for improving applications"),
 				fieldtype: "Check",
 				default: cint(frappe.telemetry.can_enable()),
 				depends_on: "eval:frappe.telemetry.can_enable()",
@@ -439,7 +426,7 @@ frappe.setup.slides_settings = [
 			if (!slide.get_value("language")) {
 				let session_language =
 					frappe.setup.utils.get_language_name_from_code(
-						frappe.boot.lang || navigator.language,
+						frappe.boot.lang || navigator.language
 					) || "English";
 				let language_field = slide.get_field("language");
 
@@ -473,11 +460,7 @@ frappe.setup.slides_settings = [
 			},
 			{
 				fieldname: "email",
-				label:
-					__("Email Address") +
-					" (" +
-					__("Will be your login ID") +
-					")",
+				label: __("Email Address") + " (" + __("Will be your login ID") + ")",
 				fieldtype: "Data",
 				options: "Email",
 			},
@@ -497,7 +480,7 @@ frappe.setup.slides_settings = [
 				const { first_name, last_name, email } = frappe.boot.user;
 				if (first_name || last_name) {
 					slide.form.fields_dict.full_name.set_input(
-						[first_name, last_name].join(" ").trim(),
+						[first_name, last_name].join(" ").trim()
 					);
 				}
 				slide.form.fields_dict.email.set_input(email);
@@ -515,9 +498,7 @@ frappe.setup.slides_settings = [
 
 		setup_fields: function (slide) {
 			if (frappe.setup.data.full_name) {
-				slide.form.fields_dict.full_name.set_input(
-					frappe.setup.data.full_name,
-				);
+				slide.form.fields_dict.full_name.set_input(frappe.setup.data.full_name);
 			}
 			if (frappe.setup.data.email) {
 				let email = frappe.setup.data.email;
@@ -579,9 +560,7 @@ frappe.setup.utils = {
 			.get_input("currency")
 			.empty()
 			.add_options(
-				frappe.utils.unique(
-					$.map(data.country_info, (opts) => opts.currency).sort(),
-				),
+				frappe.utils.unique($.map(data.country_info, (opts) => opts.currency).sort())
 			);
 
 		slide.get_input("timezone").empty().add_options(data.all_timezones);
@@ -626,9 +605,7 @@ frappe.setup.utils = {
 	},
 
 	get_language_name_from_code: function (language_code) {
-		return (
-			frappe.setup.data.lang.codes_to_names[language_code] || "English"
-		);
+		return frappe.setup.data.lang.codes_to_names[language_code] || "English";
 	},
 
 	bind_region_events: function (slide) {
@@ -648,9 +625,7 @@ frappe.setup.utils = {
 			// add country specific timezones first
 			const timezone_list = data.country_info[country].timezones || [];
 			$timezone.add_options(timezone_list.sort());
-			slide
-				.get_field("currency")
-				.set_input(data.country_info[country].currency);
+			slide.get_field("currency").set_input(data.country_info[country].currency);
 			slide.get_field("currency").$input.trigger("change");
 
 			// add all timezones at the end, so that user has the option to change it to any timezone
@@ -690,13 +665,10 @@ const TZ_BACKWARD_COMPATBILITY_MAP = {
 function guess_country(country_info) {
 	try {
 		let system_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-		system_timezone =
-			TZ_BACKWARD_COMPATBILITY_MAP[system_timezone] || system_timezone;
+		system_timezone = TZ_BACKWARD_COMPATBILITY_MAP[system_timezone] || system_timezone;
 
 		for (let [country, info] of Object.entries(country_info)) {
-			let possible_timezones = (info.timezones || []).filter(
-				(t) => t == system_timezone,
-			);
+			let possible_timezones = (info.timezones || []).filter((t) => t == system_timezone);
 			if (possible_timezones.length) return country;
 		}
 	} catch (e) {

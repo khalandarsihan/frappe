@@ -30,11 +30,10 @@ watch(
 		if (val) store.workflow.selected = props.node;
 
 		let connected_edges = edges.value.filter(
-			(edge) =>
-				edge.source === props.node.id || edge.target === props.node.id,
+			(edge) => edge.source === props.node.id || edge.target === props.node.id
 		);
 		connected_edges.forEach((edge) => (edge.selected = val));
-	},
+	}
 );
 
 let label = computed(() => findNode(props.node.id)?.data?.action);
@@ -44,7 +43,7 @@ watch(
 	() => {
 		store.ref_history.commit();
 	},
-	{ deep: true },
+	{ deep: true }
 );
 </script>
 

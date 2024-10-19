@@ -11,10 +11,7 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 			this.calendar_settings = frappe.views.calendar[this.doctype] || {};
 
 			if (typeof this.calendar_settings.gantt == "object") {
-				Object.assign(
-					this.calendar_settings,
-					this.calendar_settings.gantt,
-				);
+				Object.assign(this.calendar_settings, this.calendar_settings.gantt);
 			}
 
 			if (this.calendar_settings.order_by) {
@@ -22,8 +19,7 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 				this.sort_order = "asc";
 			} else {
 				this.sort_by =
-					this.view_user_settings.sort_by ||
-					this.calendar_settings.field_map.start;
+					this.view_user_settings.sort_by || this.calendar_settings.field_map.start;
 				this.sort_order = this.view_user_settings.sort_order || "asc";
 			}
 		});
@@ -54,11 +50,7 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 			var label;
 			if (meta.title_field) {
 				label = item.progress
-					? __("{0} ({1}) - {2}%", [
-							item[meta.title_field],
-							item.name,
-							item.progress,
-						])
+					? __("{0} ({1}) - {2}%", [item[meta.title_field], item.name, item.progress])
 					: __("{0} ({1})", [item[meta.title_field], item.name]);
 			} else {
 				label = item[field_map.title];
@@ -96,8 +88,7 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 
 	render_gantt() {
 		const me = this;
-		const gantt_view_mode =
-			this.view_user_settings.gantt_view_mode || "Day";
+		const gantt_view_mode = this.view_user_settings.gantt_view_mode || "Day";
 		const field_map = this.calendar_settings.field_map;
 		const date_format = "YYYY-MM-DD";
 
@@ -149,9 +140,9 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 				var item = me.get_item(task.id);
 
 				var html = `<div class="title">${task.name}</div>
-					<div class="subtitle">${moment(task._start).format("MMM D")} - ${moment(
-						task._end,
-					).format("MMM D")}</div>`;
+					<div class="subtitle">${moment(task._start).format("MMM D")} - ${moment(task._end).format(
+					"MMM D"
+				)}</div>`;
 
 				// custom html in doctype settings
 				var custom = me.settings.gantt_custom_popup_html;
@@ -174,8 +165,7 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 		if ($btn_group.length > 0) return;
 
 		const view_modes = this.gantt.options.view_modes || [];
-		const active_class = (view_mode) =>
-			this.gantt.view_is(view_mode) ? "btn-info" : "";
+		const active_class = (view_mode) => (this.gantt.view_is(view_mode) ? "btn-info" : "");
 		const html = `<div class="btn-group gantt-view-mode">
 				${view_modes
 					.map(
@@ -183,7 +173,7 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 						class="btn btn-default btn-sm btn-view-mode ${active_class(value)}"
 						data-value="${value}">
 						${__(value)}
-					</button>`,
+					</button>`
 					)
 					.join("")}
 			</div>`;
@@ -213,8 +203,7 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 			.map((c) => {
 				const class_name = c.replace("#", "");
 				const bar_color = "#" + c.substr(6);
-				const progress_color =
-					frappe.ui.color.get_contrast_color(bar_color);
+				const progress_color = frappe.ui.color.get_contrast_color(bar_color);
 				return `
 				.gantt .bar-wrapper.${class_name} .bar {
 					fill: ${bar_color};

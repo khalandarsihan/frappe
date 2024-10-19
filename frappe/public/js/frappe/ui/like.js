@@ -43,9 +43,7 @@ frappe.ui.toggle_like = function ($btn, doctype, name, callback) {
 				}
 
 				if (add === "No" && liked_by.includes(frappe.session.user)) {
-					liked_by = liked_by.filter(
-						(user) => user !== frappe.session.user,
-					);
+					liked_by = liked_by.filter((user) => user !== frappe.session.user);
 				}
 
 				doc._liked_by = JSON.stringify(liked_by);
@@ -59,9 +57,7 @@ frappe.ui.toggle_like = function ($btn, doctype, name, callback) {
 };
 
 frappe.ui.click_toggle_like = function () {
-	console.warn(
-		"`frappe.ui.click_toggle_like` is deprecated and has no effect.",
-	);
+	console.warn("`frappe.ui.click_toggle_like` is deprecated and has no effect.");
 };
 
 frappe.ui.setup_like_popover = ($parent, selector) => {
@@ -80,9 +76,7 @@ frappe.ui.setup_like_popover = ($parent, selector) => {
 				<div class="popover-body popover-content"></div>
 			</div>`,
 			content: () => {
-				let liked_by = target_element
-					.parents(".liked-by")
-					.attr("data-liked-by");
+				let liked_by = target_element.parents(".liked-by").attr("data-liked-by");
 				liked_by = liked_by ? decodeURI(liked_by) : "[]";
 				liked_by = JSON.parse(liked_by);
 

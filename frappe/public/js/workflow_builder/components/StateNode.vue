@@ -27,7 +27,7 @@ watch(
 	() => findNode(props.node.id)?.selected,
 	(val) => {
 		if (val) store.workflow.selected = props.node;
-	},
+	}
 );
 
 let label = computed(() => findNode(props.node.id)?.data?.state);
@@ -37,7 +37,7 @@ watch(
 	() => {
 		store.ref_history.commit();
 	},
-	{ deep: true },
+	{ deep: true }
 );
 </script>
 

@@ -43,12 +43,9 @@ frappe.ui.form.on("DocType Layout", {
 				window.open(`/app/${frappe.router.slug(frm.doc.name)}`);
 			});
 
-			frm.add_custom_button(
-				__("Sync {0} Fields", [frm.doc.name]),
-				async () => {
-					await frm.events.sync_fields(frm, true);
-				},
-			);
+			frm.add_custom_button(__("Sync {0} Fields", [frm.doc.name]), async () => {
+				await frm.events.sync_fields(frm, true);
+			});
 		}
 	},
 
@@ -89,13 +86,13 @@ frappe.ui.form.on("DocType Layout", {
 
 			if (addedFields.length) {
 				message += `The following fields have been added:<br><br><ul>${getChangedMessage(
-					addedFields,
+					addedFields
 				)}</ul>`;
 			}
 
 			if (removedFields.length) {
 				message += `The following fields have been removed:<br><br><ul>${getChangedMessage(
-					removedFields,
+					removedFields
 				)}</ul>`;
 			}
 

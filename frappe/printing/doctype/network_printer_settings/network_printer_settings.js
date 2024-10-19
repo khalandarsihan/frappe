@@ -21,11 +21,7 @@ frappe.ui.form.on("Network Printer Settings", {
 					port: frm.doc.port,
 				},
 				callback: function (data) {
-					frm.set_df_property(
-						"printer_name",
-						"options",
-						[""].concat(data.message),
-					);
+					frm.set_df_property("printer_name", "options", [""].concat(data.message));
 				},
 			});
 		}

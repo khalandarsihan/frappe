@@ -10,21 +10,16 @@ frappe.ready(function () {
 	web_form_doc.is_list ? show_list() : show_form();
 
 	function show_login_prompt() {
-		if (frappe.session.user != "Guest" || !web_form_doc.login_required)
-			return;
+		if (frappe.session.user != "Guest" || !web_form_doc.login_required) return;
 		const login_required = new frappe.ui.Dialog({
 			title: __("Not Permitted"),
 			primary_action_label: __("Login"),
 			primary_action: () => {
-				window.location.replace(
-					"/login?redirect-to=" + window.location.pathname,
-				);
+				window.location.replace("/login?redirect-to=" + window.location.pathname);
 			},
 		});
 		login_required.show();
-		login_required.set_message(
-			__("You are not permitted to access this page without login."),
-		);
+		login_required.set_message(__("You are not permitted to access this page without login."));
 	}
 
 	function show_list() {
@@ -61,9 +56,7 @@ frappe.ready(function () {
 	function setup_fields(web_form_doc, doc_data) {
 		web_form_doc.web_form_fields.forEach((df) => {
 			df.is_web_form = true;
-			df.read_only =
-				df.read_only ||
-				(!web_form_doc.is_new && !web_form_doc.in_edit_mode);
+			df.read_only = df.read_only || (!web_form_doc.is_new && !web_form_doc.in_edit_mode);
 			if (df.fieldtype === "Table") {
 				df.get_data = () => {
 					let data = [];

@@ -26,12 +26,7 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 		const data_fields = this.get_data_fields();
 		const child_selection_fields = this.get_child_selection_fields();
 
-		return [
-			...primary_fields,
-			...result_fields,
-			...data_fields,
-			...child_selection_fields,
-		];
+		return [...primary_fields, ...result_fields, ...data_fields, ...child_selection_fields];
 	}
 
 	get_result_fields() {
@@ -86,9 +81,7 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 
 	make() {
 		let doctype_plural = __(this.doctype).plural();
-		let title = __("Select {0}", [
-			this.for_select ? __("value") : doctype_plural,
-		]);
+		let title = __("Select {0}", [this.for_select ? __("value") : doctype_plural]);
 
 		this.dialog = new frappe.ui.Dialog({
 			title: title,
@@ -140,8 +133,7 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 		if (Array.isArray(this.setters)) {
 			for (let df of this.setters) {
 				frappe.route_options[df.fieldname] =
-					this.dialog.fields_dict[df.fieldname].get_value() ||
-					undefined;
+					this.dialog.fields_dict[df.fieldname].get_value() || undefined;
 			}
 		} else {
 			Object.keys(this.setters).forEach((setter) => {
@@ -173,9 +165,7 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 	}
 
 	is_child_selection_enabled() {
-		return this.dialog.fields_dict[
-			"allow_child_item_selection"
-		]?.get_value();
+		return this.dialog.fields_dict["allow_child_item_selection"]?.get_value();
 	}
 
 	toggle_child_selection() {
@@ -196,12 +186,8 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 			setTimeout(() => {
 				this.child_datatable.rowmanager.checkMap = [];
 				this.child_datatable.refresh(this.get_child_datatable_rows());
-				this.$child_wrapper
-					.find(".dt-scrollable")
-					.css("height", "300px");
-				this.$child_wrapper
-					.find(".dt-scrollable")
-					.css("overflow-y", "scroll");
+				this.$child_wrapper.find(".dt-scrollable").css("height", "300px");
+				this.$child_wrapper.find(".dt-scrollable").css("overflow-y", "scroll");
 			}, 500);
 		}
 	}
@@ -228,24 +214,20 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 	setup_child_datatable() {
 		const header_columns = this.get_child_datatable_columns();
 		const rows = this.get_child_datatable_rows();
-		this.$child_wrapper =
-			this.dialog.fields_dict.child_selection_area.$wrapper;
+		this.$child_wrapper = this.dialog.fields_dict.child_selection_area.$wrapper;
 		this.$child_wrapper.addClass("my-3");
 
-		this.child_datatable = new frappe.DataTable(
-			this.$child_wrapper.get(0),
-			{
-				columns: header_columns,
-				data: rows,
-				layout: "fluid",
-				inlineFilters: true,
-				serialNoColumn: false,
-				checkboxColumn: true,
-				cellHeight: 35,
-				noDataMessage: __("No Data"),
-				disableReorderColumn: true,
-			},
-		);
+		this.child_datatable = new frappe.DataTable(this.$child_wrapper.get(0), {
+			columns: header_columns,
+			data: rows,
+			layout: "fluid",
+			inlineFilters: true,
+			serialNoColumn: false,
+			checkboxColumn: true,
+			cellHeight: 35,
+			noDataMessage: __("No Data"),
+			disableReorderColumn: true,
+		});
 		this.$child_wrapper.find(".dt-scrollable").css("height", "300px");
 	}
 
@@ -295,7 +277,7 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 		if (this.allow_child_item_selection) {
 			this.child_doctype = frappe.meta.get_docfield(
 				this.doctype,
-				this.child_fieldname,
+				this.child_fieldname
 			).options;
 			columns[0].push({
 				fieldtype: "Check",
@@ -370,20 +352,15 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 
 		this.$results.on("click", ".list-item--head :checkbox", (e) => {
 			let checked = $(e.target).is(":checked");
-			this.$results
-				.find(".list-item-container .list-row-check")
-				.each(function () {
-					$(this).prop("checked", checked);
-					const name = $(this)
-						.closest(".list-item-container")
-						.attr("data-item-name")
-						.trim();
-					if (checked) {
-						me.selected_fields.add(name);
-					} else {
-						me.selected_fields.delete(name);
-					}
-				});
+			this.$results.find(".list-item-container .list-row-check").each(function () {
+				$(this).prop("checked", checked);
+				const name = $(this).closest(".list-item-container").attr("data-item-name").trim();
+				if (checked) {
+					me.selected_fields.add(name);
+				} else {
+					me.selected_fields.delete(name);
+				}
+			});
 		});
 
 		this.$parent.find(".input-with-feedback").on("change", () => {
@@ -408,17 +385,13 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 						me.empty_list();
 						me.get_results();
 					}
-				}, 300),
+				}, 300)
 			);
 		});
 	}
 
 	get_parent_name_of_selected_children() {
-		if (
-			!this.child_datatable ||
-			!this.child_datatable.datamanager.rows.length
-		)
-			return [];
+		if (!this.child_datatable || !this.child_datatable.datamanager.rows.length) return [];
 
 		let parent_names = this.child_datatable.rowmanager.checkMap.reduce(
 			(parent_names, checked, index) => {
@@ -430,18 +403,14 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 				}
 				return parent_names;
 			},
-			[],
+			[]
 		);
 
 		return parent_names;
 	}
 
 	get_selected_child_names() {
-		if (
-			!this.child_datatable ||
-			!this.child_datatable.datamanager.rows.length
-		)
-			return [];
+		if (!this.child_datatable || !this.child_datatable.datamanager.rows.length) return [];
 
 		let checked_names = this.child_datatable.rowmanager.checkMap.reduce(
 			(checked_names, checked, index) => {
@@ -451,7 +420,7 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 				}
 				return checked_names;
 			},
-			[],
+			[]
 		);
 
 		return checked_names;
@@ -462,9 +431,7 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 		return this.$results
 			.find(".list-item-container")
 			.map(function () {
-				if (
-					$(this).find(".list-row-check:checkbox:checked").length > 0
-				) {
+				if ($(this).find(".list-row-check:checkbox:checked").length > 0) {
 					return $(this).attr("data-item-name");
 				}
 			})
@@ -478,8 +445,7 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 	}
 
 	get_datatable_columns() {
-		if (this.get_query && this.get_query().query && this.columns)
-			return this.columns;
+		if (this.get_query && this.get_query().query && this.columns) return this.columns;
 
 		if (Array.isArray(this.setters))
 			return ["name", ...this.setters.map((df) => df.fieldname)];
@@ -498,18 +464,16 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 				${
 					head
 						? `<span class="ellipsis text-muted" title="${__(
-								frappe.model.unscrub(column),
-							)}">${__(frappe.model.unscrub(column))}</span>`
+								frappe.model.unscrub(column)
+						  )}">${__(frappe.model.unscrub(column))}</span>`
 						: column !== "name"
-							? `<span class="ellipsis result-row" title="${__(
-									result[column] || "",
-								)}">${__(result[column] || "")}</span>`
-							: `<a href="${
-									"/app/" +
-										frappe.router.slug(me.doctype) +
-										"/" +
-										result[column] || ""
-								}" class="list-id ellipsis" title="${__(result[column] || "")}">
+						? `<span class="ellipsis result-row" title="${__(
+								result[column] || ""
+						  )}">${__(result[column] || "")}</span>`
+						: `<a href="${
+								"/app/" + frappe.router.slug(me.doctype) + "/" + result[column] ||
+								""
+						  }" class="list-id ellipsis" title="${__(result[column] || "")}">
 							${__(result[column] || "")}</a>`
 				}
 			</div>`;
@@ -518,8 +482,8 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 		let $row = $(`<div class="list-item">
 			<div class="list-item__content" style="flex: 0 0 10px;">
 				<input type="checkbox" class="list-row-check" data-item-name="${result.name}" ${
-					result.checked ? "checked" : ""
-				}>
+			result.checked ? "checked" : ""
+		}>
 			</div>
 			${contents}
 		</div>`);
@@ -527,8 +491,8 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 		head
 			? $row.addClass("list-item--head")
 			: ($row = $(
-					`<div class="list-item-container" data-item-name="${result.name}"></div>`,
-				).append($row));
+					`<div class="list-item-container" data-item-name="${result.name}"></div>`
+			  ).append($row));
 
 		return $row;
 	}
@@ -558,10 +522,7 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 		this.$results.find(".list-item--head").css("z-index", 1);
 
 		if (frappe.flags.auto_scroll) {
-			this.$results.animate(
-				{ scrollTop: me.$results.prop("scrollHeight") },
-				500,
-			);
+			this.$results.animate({ scrollTop: me.$results.prop("scrollHeight") }, 500);
 		}
 	}
 
@@ -589,18 +550,14 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 		if ($.isArray(this.setters)) {
 			for (let df of this.setters) {
 				filters[df.fieldname] =
-					me.dialog.fields_dict[df.fieldname].get_value() ||
-					undefined;
+					me.dialog.fields_dict[df.fieldname].get_value() || undefined;
 				me.args[df.fieldname] = filters[df.fieldname];
 				filter_fields.push(df.fieldname);
 			}
 		} else {
 			Object.keys(this.setters).forEach(function (setter) {
 				var value = me.dialog.fields_dict[setter].get_value();
-				if (
-					me.dialog.fields_dict[setter].df.fieldtype == "Data" &&
-					value
-				) {
+				if (me.dialog.fields_dict[setter].df.fieldtype == "Data" && value) {
 					filters[setter] = ["like", "%" + value + "%"];
 				} else {
 					filters[setter] = value || undefined;
@@ -637,8 +594,7 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 			no_spinner: true,
 			args: args,
 		});
-		const more =
-			res.message.length && res.message.length > this.page_length ? 1 : 0;
+		const more = res.message.length && res.message.length > this.page_length ? 1 : 0;
 
 		return [res.message, more];
 	}

@@ -2,20 +2,11 @@
 	<div class="file-preview">
 		<div class="file-icon">
 			<img v-if="is_image" :src="src" :alt="file.name" />
-			<div
-				class="fallback"
-				v-else
-				v-html="frappe.utils.icon('file', 'md')"
-			></div>
+			<div class="fallback" v-else v-html="frappe.utils.icon('file', 'md')"></div>
 		</div>
 		<div>
 			<div>
-				<a
-					class="flex"
-					:href="file.doc.file_url"
-					v-if="file.doc"
-					target="_blank"
-				>
+				<a class="flex" :href="file.doc.file_url" v-if="file.doc" target="_blank">
 					<span class="file-name">{{ file.name }}</span>
 				</a>
 				<span class="file-name" v-else>{{ file.name }}</span>
@@ -58,14 +49,8 @@
 				:progress="progress"
 				:stroke="3"
 			/>
-			<div
-				v-if="uploaded"
-				v-html="frappe.utils.icon('solid-success', 'lg')"
-			></div>
-			<div
-				v-if="file.failed"
-				v-html="frappe.utils.icon('solid-error', 'lg')"
-			></div>
+			<div v-if="uploaded" v-html="frappe.utils.icon('solid-success', 'lg')"></div>
+			<div v-if="file.failed" v-html="frappe.utils.icon('solid-error', 'lg')"></div>
 			<div class="file-action-buttons">
 				<button
 					v-if="is_cropable"
@@ -89,12 +74,7 @@ import { ref, onMounted, computed } from "vue";
 import ProgressRing from "./ProgressRing.vue";
 
 // emits
-let emit = defineEmits([
-	"toggle_optimize",
-	"toggle_private",
-	"toggle_image_cropper",
-	"remove",
-]);
+let emit = defineEmits(["toggle_optimize", "toggle_private", "toggle_image_cropper", "remove"]);
 
 // props
 const props = defineProps({

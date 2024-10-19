@@ -21,20 +21,17 @@ frappe.listview_settings["Email Queue"] = {
 };
 
 function show_toggle_sending_button(list_view) {
-	if (!has_common(frappe.user_roles, ["Administrator", "System Manager"]))
-		return;
+	if (!has_common(frappe.user_roles, ["Administrator", "System Manager"])) return;
 
 	const sending_disabled = cint(frappe.sys_defaults.suspend_email_queue);
-	const label = sending_disabled
-		? __("Resume Sending")
-		: __("Suspend Sending");
+	const label = sending_disabled ? __("Resume Sending") : __("Suspend Sending");
 
 	list_view.page.add_inner_button(label, async () => {
 		await frappe.xcall(
 			"frappe.email.doctype.email_queue.email_queue.toggle_sending",
 
 			// enable if disabled
-			{ enable: sending_disabled },
+			{ enable: sending_disabled }
 		);
 
 		// set new value for suspend_email_queue in sys_defaults

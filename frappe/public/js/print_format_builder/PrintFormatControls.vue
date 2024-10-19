@@ -4,11 +4,7 @@
 			<div class="sidebar-menu">
 				<div class="sidebar-label">{{ __("Page Margins") }}</div>
 				<div class="margin-controls">
-					<div
-						class="form-group"
-						v-for="df in margins"
-						:key="df.fieldname"
-					>
+					<div class="form-group" v-for="df in margins" :key="df.fieldname">
 						<div class="clearfix">
 							<label class="control-label">
 								{{ df.label }}
@@ -21,13 +17,7 @@
 									class="form-control form-control-sm"
 									:value="print_format[df.fieldname]"
 									min="0"
-									@change="
-										(e) =>
-											update_margin(
-												df.fieldname,
-												e.target.value,
-											)
-									"
+									@change="(e) => update_margin(df.fieldname, e.target.value)"
 								/>
 							</div>
 						</div>
@@ -43,10 +33,7 @@
 								class="form-control form-control-sm"
 								v-model="print_format.font"
 							>
-								<option
-									v-for="font in google_fonts"
-									:value="font"
-								>
+								<option v-for="font in google_fonts" :value="font">
 									{{ font }}
 								</option>
 							</select>
@@ -65,10 +52,7 @@
 								placeholder="12, 13, 14"
 								:value="print_format.font_size"
 								@change="
-									(e) =>
-										(print_format.font_size = parseFloat(
-											e.target.value,
-										))
+									(e) => (print_format.font_size = parseFloat(e.target.value))
 								"
 							/>
 						</div>

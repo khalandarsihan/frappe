@@ -13,9 +13,7 @@ frappe.ui.form.Footer = class FormFooter {
 		});
 	}
 	make() {
-		this.wrapper = $(frappe.render_template("form_footer", {})).appendTo(
-			this.parent,
-		);
+		this.wrapper = $(frappe.render_template("form_footer", {})).appendTo(this.parent);
 		this.wrapper.find(".btn-save").click(() => {
 			this.frm.save("Save", null, this);
 		});
@@ -31,10 +29,7 @@ frappe.ui.form.Footer = class FormFooter {
 				fieldname: "comment",
 			},
 			on_submit: (comment) => {
-				if (
-					strip_html(comment).trim() != "" ||
-					comment.includes("img")
-				) {
+				if (strip_html(comment).trim() != "" || comment.includes("img")) {
 					this.frm.comment_box.disable();
 					frappe
 						.xcall("frappe.desk.form.utils.add_comment", {
@@ -46,9 +41,7 @@ frappe.ui.form.Footer = class FormFooter {
 						})
 						.then((comment) => {
 							let comment_item =
-								this.frm.timeline.get_comment_timeline_item(
-									comment,
-								);
+								this.frm.timeline.get_comment_timeline_item(comment);
 							this.frm.comment_box.set_value("");
 							frappe.utils.play_sound("click");
 							this.frm.timeline.add_timeline_item(comment_item);

@@ -1,8 +1,7 @@
 frappe.ui.LinkPreview = class {
 	constructor() {
 		this.popovers_list = [];
-		this.LINK_CLASSES =
-			'a[data-doctype], input[data-fieldtype="Link"], .popover';
+		this.LINK_CLASSES = 'a[data-doctype], input[data-fieldtype="Link"], .popover';
 		this.popover_timeout = null;
 		this.setup_events();
 	}
@@ -27,9 +26,7 @@ frappe.ui.LinkPreview = class {
 	identify_doc() {
 		if (this.is_link) {
 			this.doctype = this.element.attr("data-doctype");
-			this.name = frappe.utils.unescape_html(
-				this.element.attr("data-name"),
-			);
+			this.name = frappe.utils.unescape_html(this.element.attr("data-name"));
 			this.href = this.element.attr("href");
 		} else {
 			this.href = this.element
@@ -211,7 +208,7 @@ frappe.ui.LinkPreview = class {
 		let avatar_html = frappe.get_avatar(
 			"avatar-medium",
 			preview_data.preview_title,
-			preview_data.preview_image,
+			preview_data.preview_image
 		);
 
 		return `<div class="preview-image">

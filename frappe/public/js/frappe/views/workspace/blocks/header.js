@@ -45,7 +45,7 @@ export default class Header extends Block {
 				"drag-handle",
 				__("Drag"),
 				null,
-				$widget_control,
+				$widget_control
 			);
 
 			return this.wrapper;
@@ -136,9 +136,7 @@ export default class Header extends Block {
 			tag.contentEditable = true;
 		}
 
-		tag.dataset.placeholder = this.api.i18n.t(
-			this._settings.placeholder || "",
-		);
+		tag.dataset.placeholder = this.api.i18n.t(this._settings.placeholder || "");
 
 		return tag;
 	}

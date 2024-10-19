@@ -4,14 +4,7 @@ import { get_columns_for_picker } from "./data_exporter";
 frappe.provide("frappe.data_import");
 
 frappe.data_import.ImportPreview = class ImportPreview {
-	constructor({
-		wrapper,
-		doctype,
-		preview_data,
-		frm,
-		import_log,
-		events = {},
-	}) {
+	constructor({ wrapper, doctype, preview_data, frm, import_log, events = {} }) {
 		this.wrapper = wrapper;
 		this.doctype = doctype;
 		this.preview_data = preview_data;
@@ -81,8 +74,7 @@ frappe.data_import.ImportPreview = class ImportPreview {
 				</span>`;
 				return {
 					id: frappe.utils.get_random(6),
-					name:
-						col.header_title || (df ? df.label : "Untitled Column"),
+					name: col.header_title || (df ? df.label : "Untitled Column"),
 					content: column_title,
 					skip_import: true,
 					editable: false,
@@ -151,8 +143,7 @@ frappe.data_import.ImportPreview = class ImportPreview {
 			disableReorderColumn: true,
 		});
 
-		let { max_rows_exceeded, max_rows_in_preview, total_number_of_rows } =
-			this.preview_data;
+		let { max_rows_exceeded, max_rows_in_preview, total_number_of_rows } = this.preview_data;
 		if (max_rows_exceeded) {
 			let parts = [max_rows_in_preview, total_number_of_rows];
 			this.wrapper.find(".table-message").html(`
@@ -188,10 +179,7 @@ frappe.data_import.ImportPreview = class ImportPreview {
 			.join(",");
 		this.datatable.style.setStyle(row_classes, {
 			pointerEvents: "none",
-			backgroundColor: frappe.ui.color.get_color_shade(
-				"gray",
-				"extra-light",
-			),
+			backgroundColor: frappe.ui.color.get_color_shade("gray", "extra-light"),
 			color: frappe.ui.color.get_color_shade("gray", "dark"),
 		});
 	}
@@ -206,8 +194,7 @@ frappe.data_import.ImportPreview = class ImportPreview {
 			{
 				label: __("Export Errored Rows"),
 				handler: "export_errored_rows",
-				condition:
-					this.import_log.filter((log) => !log.success).length > 0,
+				condition: this.import_log.filter((log) => !log.success).length > 0,
 			},
 			{
 				label: __("Show Warnings"),
@@ -281,12 +268,7 @@ frappe.data_import.ImportPreview = class ImportPreview {
 							label: __("Don't Import"),
 							value: "Don't Import",
 						},
-					].concat(
-						get_fields_as_options(
-							this.doctype,
-							column_picker_fields,
-						),
-					),
+					].concat(get_fields_as_options(this.doctype, column_picker_fields)),
 					default: fieldname || "Don't Import",
 					change() {
 						changed.push(i);
@@ -338,10 +320,7 @@ frappe.data_import.ImportPreview = class ImportPreview {
 	is_row_imported(row) {
 		let serial_no = row[0].content;
 		return this.import_log.find((log) => {
-			return (
-				log.success &&
-				JSON.parse(log.row_indexes || "[]").includes(serial_no)
-			);
+			return log.success && JSON.parse(log.row_indexes || "[]").includes(serial_no);
 		});
 	}
 };
@@ -368,6 +347,6 @@ function get_fields_as_options(doctype, column_map) {
 					description: value,
 				};
 			});
-		}),
+		})
 	);
 }

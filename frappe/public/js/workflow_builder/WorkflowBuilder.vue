@@ -9,12 +9,7 @@ import Sidebar from "./components/Sidebar.vue";
 import { useStore } from "./store";
 import { validate_transitions } from "./utils";
 import { ref, computed, nextTick, onMounted, watch } from "vue";
-import {
-	onClickOutside,
-	useMagicKeys,
-	whenever,
-	useActiveElement,
-} from "@vueuse/core";
+import { onClickOutside, useMagicKeys, whenever, useActiveElement } from "@vueuse/core";
 
 let store = useStore();
 
@@ -45,20 +40,17 @@ let main = ref(null);
 onClickOutside(main, loose_focus);
 
 // cmd/ctrl + s to save the form
-const { meta_s, ctrl_s, Backspace, meta_backspace, ctrl_backspace } =
-	useMagicKeys();
+const { meta_s, ctrl_s, Backspace, meta_backspace, ctrl_backspace } = useMagicKeys();
 whenever(
 	() => meta_s.value || ctrl_s.value,
 	() => {
 		store.save_changes();
-	},
+	}
 );
 
 const activeElement = useActiveElement();
 const notUsingInput = computed(
-	() =>
-		activeElement.value?.tagName !== "INPUT" &&
-		activeElement.value?.tagName !== "TEXTAREA",
+	() => activeElement.value?.tagName !== "INPUT" && activeElement.value?.tagName !== "TEXTAREA"
 );
 
 whenever(
@@ -77,9 +69,8 @@ whenever(
 					connected_nodes = nodes.value
 						.filter(
 							(node) =>
-								node.data.from_id ==
-									store.workflow.selected.id ||
-								node.data.to_id == store.workflow.selected.id,
+								node.data.from_id == store.workflow.selected.id ||
+								node.data.to_id == store.workflow.selected.id
 						)
 						.map((node) => node.id);
 					removeNodes(connected_nodes);
@@ -88,7 +79,7 @@ whenever(
 				nextTick(() => store.ref_history.commit());
 			}
 		}
-	},
+	}
 );
 
 onNodeDragStop(() => {
@@ -106,7 +97,7 @@ onConnect((edge) => {
 			frappe.throw({
 				title: "Invalid Transition",
 				message: error,
-			}),
+			})
 		);
 		return;
 	}
@@ -127,9 +118,7 @@ onConnect((edge) => {
 	let action_ids = nodes.value
 		.filter((node) => node.type == "action")
 		.map((node) => parseInt(node.id.replace("action-", "")));
-	let action_id = action_ids.length
-		? (Math.max(...action_ids) + 1).toString()
-		: "1";
+	let action_id = action_ids.length ? (Math.max(...action_ids) + 1).toString() : "1";
 
 	const action_node = {
 		id: "action-" + action_id,
@@ -184,7 +173,7 @@ onConnect((edge) => {
 					store.ref_history.commit();
 				}
 			},
-			{ deep: true, flush: "post" },
+			{ deep: true, flush: "post" }
 		);
 	});
 });
@@ -200,10 +189,8 @@ onEdgeUpdateEnd(({ edge }) => {
 
 onEdgeUpdate(({ edge, connection }) => {
 	if (
-		(connection.source == edge.source &&
-			connection.target != edge.target) ||
-		(connection.source != edge.source &&
-			connection.target == edge.target) ||
+		(connection.source == edge.source && connection.target != edge.target) ||
+		(connection.source != edge.source && connection.target == edge.target) ||
 		connection.source === connection.target
 	)
 		return;
@@ -231,12 +218,8 @@ function onDrop(event) {
 		y: event.clientY - top,
 	});
 
-	let state_ids = nodes.value
-		.filter((node) => node.type == "state")
-		.map((node) => node.id);
-	let state_id = state_ids.length
-		? (Math.max(...state_ids) + 1).toString()
-		: "1";
+	let state_ids = nodes.value.filter((node) => node.type == "state").map((node) => node.id);
+	let state_id = state_ids.length ? (Math.max(...state_ids) + 1).toString() : "1";
 	const new_state = {
 		id: state_id,
 		type: "state",
@@ -266,7 +249,7 @@ function onDrop(event) {
 					store.ref_history.commit();
 				}
 			},
-			{ deep: true, flush: "post" },
+			{ deep: true, flush: "post" }
 		);
 	});
 }
@@ -295,11 +278,7 @@ onMounted(() => store.fetch());
 		<div class="sidebar-container" @click.stop>
 			<Sidebar />
 		</div>
-		<div
-			class="workflow-container"
-			@drop="onDrop"
-			@click.stop="loose_focus"
-		>
+		<div class="workflow-container" @drop="onDrop" @click.stop="loose_focus">
 			<VueFlow
 				v-model="store.workflow.elements"
 				connection-mode="loose"
@@ -319,15 +298,8 @@ onMounted(() => store.fetch());
 					</div>
 				</Panel>
 				<Panel :position="PanelPosition.BottomLeft">
-					<button class="btn btn-sm btn-default mr-2" @click="zoomIn">
-						+
-					</button>
-					<button
-						class="btn btn-sm btn-default mr-2"
-						@click="zoomOut"
-					>
-						-
-					</button>
+					<button class="btn btn-sm btn-default mr-2" @click="zoomIn">+</button>
+					<button class="btn btn-sm btn-default mr-2" @click="zoomOut">-</button>
 					<button class="btn btn-sm btn-default" @click="fitView()">
 						{{ __("Fit") }}
 					</button>

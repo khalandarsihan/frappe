@@ -17,9 +17,7 @@
 			<div
 				:class="[
 					'section-header',
-					section.df.label || section.df.collapsible
-						? 'has-label'
-						: '',
+					section.df.label || section.df.collapsible ? 'has-label' : '',
 					collapsed ? 'collapsed' : '',
 				]"
 				:hidden="!section.df.label && store.read_only"
@@ -33,19 +31,10 @@
 					<div
 						v-if="section.df.collapsible"
 						class="collapse-indicator"
-						v-html="
-							frappe.utils.icon(
-								collapsed ? 'down' : 'up-line',
-								'sm',
-							)
-						"
+						v-html="frappe.utils.icon(collapsed ? 'down' : 'up-line', 'sm')"
 					></div>
 				</div>
-				<Dropdown
-					v-if="!store.read_only"
-					:options="options"
-					@click.stop
-				/>
+				<Dropdown v-if="!store.read_only" :options="options" @click.stop />
 			</div>
 			<div v-if="section.df.description" class="section-description">
 				{{ section.df.description }}
@@ -71,9 +60,7 @@
 						<Column
 							:section="section"
 							:column="element"
-							:data-is-user-generated="
-								store.is_user_generated_field(element)
-							"
+							:data-is-user-generated="store.is_user_generated_field(element)"
 						/>
 					</template>
 				</draggable>
@@ -111,9 +98,7 @@ whenever(Backspace, (value) => {
 const hovered = ref(false);
 const collapsed = ref(false);
 const selected = computed(() => store.selected(props.section.df.name));
-const column = computed(
-	() => props.section.columns[props.section.columns.length - 1],
-);
+const column = computed(() => props.section.columns[props.section.columns.length - 1]);
 
 // section
 function add_section_below() {
@@ -123,17 +108,13 @@ function add_section_below() {
 
 function is_section_empty() {
 	return !props.section.columns.some(
-		(column) =>
-			(store.is_customize_form && !column.df.is_custom_field) ||
-			column.fields.length,
+		(column) => (store.is_customize_form && !column.df.is_custom_field) || column.fields.length
 	);
 }
 
 function remove_section() {
 	if (store.is_customize_form && props.section.df.is_custom_field == 0) {
-		frappe.msgprint(
-			__("Cannot delete standard field. You can hide it if you want"),
-		);
+		frappe.msgprint(__("Cannot delete standard field. You can hide it if you want"));
 		throw "cannot delete standard field";
 	} else if (store.has_standard_field(props.section)) {
 		delete_section();
@@ -145,12 +126,12 @@ function remove_section() {
 			__(
 				"Are you sure you want to delete the section? All the columns along with fields in the section will be moved to the previous section.",
 				null,
-				"Confirmation dialog message",
+				"Confirmation dialog message"
 			),
 			() => delete_section(),
 			__("Delete section", null, "Button text"),
 			() => delete_section(true),
-			__("Delete entire section with fields", null, "Button text"),
+			__("Delete entire section with fields", null, "Button text")
 		);
 	}
 }
@@ -164,10 +145,7 @@ function delete_section(with_children) {
 			let prev_section = sections[index - 1];
 			if (!is_section_empty()) {
 				// move all columns from current section to previous section
-				prev_section.columns = [
-					...prev_section.columns,
-					...props.section.columns,
-				];
+				prev_section.columns = [...prev_section.columns, ...props.section.columns];
 			}
 		} else if (index == 0 && !is_section_empty()) {
 			// create a new section and push columns to it
@@ -193,12 +171,7 @@ function select_section() {
 }
 
 function move_sections_to_tab() {
-	let new_tab = move_children_to_parent(
-		props,
-		"tab",
-		"section",
-		store.form.layout,
-	);
+	let new_tab = move_children_to_parent(props, "tab", "section", store.form.layout);
 
 	// activate tab
 	store.form.active_tab = new_tab;
@@ -214,14 +187,9 @@ function add_column() {
 
 function remove_column() {
 	if (store.is_customize_form && column.value.df.is_custom_field == 0) {
-		frappe.msgprint(
-			__("Cannot delete standard field. You can hide it if you want"),
-		);
+		frappe.msgprint(__("Cannot delete standard field. You can hide it if you want"));
 		throw "cannot delete standard field";
-	} else if (
-		column.value.fields.length == 0 ||
-		store.has_standard_field(column.value)
-	) {
+	} else if (column.value.fields.length == 0 || store.has_standard_field(column.value)) {
 		delete_column();
 	} else {
 		confirm_dialog(
@@ -229,12 +197,12 @@ function remove_column() {
 			__(
 				"Are you sure you want to delete the column? All the fields in the column will be moved to the previous column.",
 				null,
-				"Confirmation dialog message",
+				"Confirmation dialog message"
 			),
 			() => delete_column(),
 			__("Delete column", null, "Button text"),
 			() => delete_column(true),
-			__("Delete entire column with fields", null, "Button text"),
+			__("Delete entire column with fields", null, "Button text")
 		);
 	}
 }
@@ -261,10 +229,7 @@ function delete_column(with_children) {
 	if (!with_children) {
 		if (index > 0) {
 			let prev_column = columns[index - 1];
-			prev_column.fields = [
-				...prev_column.fields,
-				...column.value.fields,
-			];
+			prev_column.fields = [...prev_column.fields, ...column.value.fields];
 		} else {
 			if (column.value.fields.length == 0) {
 				// set next column as first column
@@ -272,9 +237,7 @@ function delete_column(with_children) {
 				if (next_column) {
 					next_column.is_first = true;
 				} else {
-					frappe.msgprint(
-						__("Section must have at least one column"),
-					);
+					frappe.msgprint(__("Section must have at least one column"));
 					throw "section must have at least one column";
 				}
 			} else {
@@ -329,9 +292,7 @@ const options = computed(() => {
 	if (props.tab.sections.indexOf(props.section) > 0) {
 		groups[0].items.push({
 			label: __("Move sections to new tab"),
-			tooltip: __(
-				"Move current and all subsequent sections to a new tab",
-			),
+			tooltip: __("Move current and all subsequent sections to a new tab"),
 			onClick: move_sections_to_tab,
 		});
 	}

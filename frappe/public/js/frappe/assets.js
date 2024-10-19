@@ -39,15 +39,11 @@ class AssetManager {
 		}
 
 		if (localStorage._last_load) {
-			let not_updated_since =
-				new Date() - new Date(localStorage._last_load);
+			let not_updated_since = new Date() - new Date(localStorage._last_load);
 			// Evict cache every 2 days
 			// Evict cache if page is reloaded within 10 seconds. Which could be user trying to
 			// refresh if things feel broken.
-			if (
-				(not_updated_since < 5000 && is_reload()) ||
-				not_updated_since > 2 * 86400000
-			) {
+			if ((not_updated_since < 5000 && is_reload()) || not_updated_since > 2 * 86400000) {
 				this.clear_local_storage();
 			}
 		} else {
@@ -60,18 +56,13 @@ class AssetManager {
 	init_local_storage() {
 		localStorage._last_load = new Date();
 		localStorage._version_number = window._version_number;
-		if (frappe.boot)
-			localStorage.metadata_version = frappe.boot.metadata_version;
+		if (frappe.boot) localStorage.metadata_version = frappe.boot.metadata_version;
 	}
 
 	clear_local_storage() {
-		[
-			"_last_load",
-			"_version_number",
-			"metadata_version",
-			"page_info",
-			"last_visited",
-		].forEach((key) => localStorage.removeItem(key));
+		["_last_load", "_version_number", "metadata_version", "page_info", "last_visited"].forEach(
+			(key) => localStorage.removeItem(key)
+		);
 
 		// clear assets
 		for (let key in localStorage) {
@@ -98,9 +89,7 @@ class AssetManager {
 		let me = this;
 
 		const version_string =
-			frappe.boot.developer_mode || window.dev_server
-				? Date.now()
-				: window._version_number;
+			frappe.boot.developer_mode || window.dev_server ? Date.now() : window._version_number;
 
 		let fetched_assets = {};
 		async function fetch_item(path) {

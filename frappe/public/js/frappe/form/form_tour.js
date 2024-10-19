@@ -17,9 +17,7 @@ frappe.ui.form.FormTour = class FormTour {
 			onHighlighted: (step) => {
 				// if last step is to save, then attach a listener to save button
 				if (step.options.is_save_step) {
-					$(step.options.element).one("click", () =>
-						this.driver.reset(),
-					);
+					$(step.options.element).one("click", () => this.driver.reset());
 					this.driver.overlay.refresh();
 				}
 
@@ -37,15 +35,9 @@ frappe.ui.form.FormTour = class FormTour {
 		if (tour_name) {
 			this.tour = await frappe.db.get_doc("Form Tour", tour_name);
 		} else {
-			const doctype_tour_exists = await frappe.db.exists(
-				"Form Tour",
-				this.frm.doctype,
-			);
+			const doctype_tour_exists = await frappe.db.exists("Form Tour", this.frm.doctype);
 			if (doctype_tour_exists) {
-				this.tour = await frappe.db.get_doc(
-					"Form Tour",
-					this.frm.doctype,
-				);
+				this.tour = await frappe.db.get_doc("Form Tour", this.frm.doctype);
 			} else {
 				this.tour = { steps: frappe.tour[this.frm.doctype] };
 			}
@@ -96,8 +88,7 @@ frappe.ui.form.FormTour = class FormTour {
 			const on_prev = () => {
 				if (!this.driver.hasPreviousStep()) return;
 				let field =
-					this.driver.steps[this.driver.currentStep - 1]?.options
-						.element.fieldobj;
+					this.driver.steps[this.driver.currentStep - 1]?.options.element.fieldobj;
 				if (field?.tab && !field.tab.is_active()) {
 					field.tab.set_active();
 					this.driver.reset(true);
@@ -113,8 +104,7 @@ frappe.ui.form.FormTour = class FormTour {
 
 			if (step.fieldtype == "Table") this.handle_table_step(step);
 			if (step.is_table_field) this.handle_child_table_step(step);
-			if (step.fieldtype == "Attach Image")
-				this.handle_attach_image_steps(step);
+			if (step.fieldtype == "Attach Image") this.handle_attach_image_steps(step);
 		});
 
 		if (this.tour.save_on_complete && this.frm.is_dirty()) {
@@ -123,23 +113,12 @@ frappe.ui.form.FormTour = class FormTour {
 	}
 
 	is_next_condition_satisfied(step) {
-		const form = step.is_table_field
-			? this.frm.cur_grid.grid_form
-			: this.frm;
-		return form.layout.evaluate_depends_on_value(
-			step.next_step_condition || true,
-		);
+		const form = step.is_table_field ? this.frm.cur_grid.grid_form : this.frm;
+		return form.layout.evaluate_depends_on_value(step.next_step_condition || true);
 	}
 
 	get_step(step_info, on_next, on_prev) {
-		const {
-			name,
-			fieldname,
-			title,
-			description,
-			position,
-			is_table_field,
-		} = step_info;
+		const { name, fieldname, title, description, position, is_table_field } = step_info;
 		let element = `.frappe-control[data-fieldname='${fieldname}']`;
 
 		const field = this.frm.get_field(fieldname);
@@ -199,8 +178,7 @@ frappe.ui.form.FormTour = class FormTour {
 
 			const curr_step = step_info;
 			const next_step = this.tour.steps[curr_step.idx];
-			const is_next_field_in_curr_table =
-				next_step.parent_fieldname == curr_step.fieldname;
+			const is_next_field_in_curr_table = next_step.parent_fieldname == curr_step.fieldname;
 
 			if (!is_next_field_in_curr_table) return;
 
@@ -209,9 +187,7 @@ frappe.ui.form.FormTour = class FormTour {
 			if (table_has_rows) {
 				// table already has rows
 				// then just edit the first one on next step
-				const curr_driver_step = this.driver_steps.find(
-					(s) => s.name == curr_step.name,
-				);
+				const curr_driver_step = this.driver_steps.find((s) => s.name == curr_step.name);
 				curr_driver_step.onNext = () => {
 					if (this.is_next_condition_satisfied(curr_step)) {
 						this.expand_row_and_proceed(curr_step, curr_step.idx);
@@ -260,9 +236,7 @@ frappe.ui.form.FormTour = class FormTour {
 		const $close_row = ".grid-row-open .grid-collapse-row";
 		$($close_row).one("click", () => {
 			const next_step = this.get_next_step();
-			const next_element = next_step.options.is_save_step
-				? null
-				: next_step.node;
+			const next_element = next_step.options.is_save_step ? null : next_step.node;
 
 			frappe.utils.scroll_to(next_element, true, 150, null, () => {
 				this.driver.moveNext();
@@ -333,15 +307,14 @@ frappe.ui.form.FormTour = class FormTour {
 		frappe.ui.form.on(
 			this.frm.doctype,
 			"after_save",
-			() => this.on_finish && this.on_finish(),
+			() => this.on_finish && this.on_finish()
 		);
 	}
 
 	handle_attach_image_steps() {
 		$(".btn-attach").one("click", () => {
 			setTimeout(() => {
-				const modal_element =
-					$(".file-uploader").closest(".modal-content");
+				const modal_element = $(".file-uploader").closest(".modal-content");
 				const attach_dialog_step = {
 					element: modal_element[0],
 					allowClose: false,
@@ -354,11 +327,7 @@ frappe.ui.form.FormTour = class FormTour {
 					},
 				};
 
-				this.driver_steps.splice(
-					this.driver.currentStep + 1,
-					0,
-					attach_dialog_step,
-				);
+				this.driver_steps.splice(this.driver.currentStep + 1, 0, attach_dialog_step);
 				this.update_driver_steps(); // need to define again, since driver.js only considers steps which are inside DOM
 				this.driver.moveNext();
 				this.driver.overlay.refresh();

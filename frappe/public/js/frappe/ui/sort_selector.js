@@ -15,9 +15,7 @@ frappe.ui.SortSelector = class SortSelector {
 	make() {
 		this.prepare_args();
 		this.parent.find(".sort-selector").remove();
-		this.wrapper = $(
-			frappe.render_template("sort_selector", this.args),
-		).appendTo(this.parent);
+		this.wrapper = $(frappe.render_template("sort_selector", this.args)).appendTo(this.parent);
 		this.bind_events();
 	}
 	bind_events() {
@@ -25,8 +23,7 @@ frappe.ui.SortSelector = class SortSelector {
 
 		// order
 		this.wrapper.find(".btn-order").on("click", function () {
-			const order =
-				$(this).attr("data-value") === "desc" ? "asc" : "desc";
+			const order = $(this).attr("data-value") === "desc" ? "asc" : "desc";
 			me.set_value(me.sort_by, order);
 			(me.onchange || me.change)(me.sort_by, me.sort_order);
 		});
@@ -48,10 +45,8 @@ frappe.ui.SortSelector = class SortSelector {
 		}
 		if (this.sort_order !== sort_order) {
 			this.sort_order = sort_order;
-			const title =
-				sort_order === "desc" ? __("ascending") : __("descending");
-			const icon_name =
-				sort_order === "asc" ? "sort-ascending" : "sort-descending";
+			const title = sort_order === "desc" ? __("ascending") : __("descending");
+			const icon_name = sort_order === "asc" ? "sort-ascending" : "sort-descending";
 			$btn.attr("data-value", sort_order);
 			$btn.attr("title", title);
 			$icon.html(frappe.utils.icon(icon_name, "sm"));
@@ -166,8 +161,7 @@ frappe.ui.SortSelector = class SortSelector {
 
 		// set default
 		this.sort_by = this.args.sort_by;
-		this.sort_order = this.args.sort_order =
-			this.args.sort_order.toLowerCase();
+		this.sort_order = this.args.sort_order = this.args.sort_order.toLowerCase();
 	}
 	get_meta_sort_field() {
 		var meta = frappe.get_meta(this.doctype);
@@ -183,16 +177,12 @@ frappe.ui.SortSelector = class SortSelector {
 			var parts = meta.sort_field.split(",")[0].split(" ");
 			return {
 				meta_sort_field: parts[0],
-				meta_sort_order: meta.sort_order
-					? meta.sort_order.toLowerCase()
-					: "",
+				meta_sort_order: meta.sort_order ? meta.sort_order.toLowerCase() : "",
 			};
 		} else {
 			return {
 				meta_sort_field: meta.sort_field || "modified",
-				meta_sort_order: meta.sort_order
-					? meta.sort_order.toLowerCase()
-					: "",
+				meta_sort_order: meta.sort_order ? meta.sort_order.toLowerCase() : "",
 			};
 		}
 	}
@@ -200,21 +190,11 @@ frappe.ui.SortSelector = class SortSelector {
 		if (fieldname === "idx") {
 			return __("Most Used");
 		} else {
-			return (
-				this.labels[fieldname] ||
-				frappe.meta.get_label(this.doctype, fieldname)
-			);
+			return this.labels[fieldname] || frappe.meta.get_label(this.doctype, fieldname);
 		}
 	}
 	get_sql_string() {
 		// build string like `tabTask`.`subject` desc
-		return (
-			"`tab" +
-			this.doctype +
-			"`.`" +
-			this.sort_by +
-			"` " +
-			this.sort_order
-		);
+		return "`tab" + this.doctype + "`.`" + this.sort_by + "` " + this.sort_order;
 	}
 };

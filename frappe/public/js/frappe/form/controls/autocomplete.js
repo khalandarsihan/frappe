@@ -1,8 +1,6 @@
 import Awesomplete from "awesomplete";
 
-frappe.ui.form.ControlAutocomplete = class ControlAutoComplete extends (
-	frappe.ui.form.ControlData
-) {
+frappe.ui.form.ControlAutocomplete = class ControlAutoComplete extends frappe.ui.form.ControlData {
 	static trigger_change_on_input_event = false;
 	make_input() {
 		super.make_input();
@@ -69,15 +67,10 @@ frappe.ui.form.ControlAutocomplete = class ControlAutoComplete extends (
 					d.label = d.value;
 				}
 
-				var _label = me.translate_values
-					? __(d.label, null, d.parent)
-					: d.label;
+				var _label = me.translate_values ? __(d.label, null, d.parent) : d.label;
 				var html = "<strong>" + _label + "</strong>";
 				if (d.description) {
-					html +=
-						'<br><span class="small">' +
-						__(d.description) +
-						"</span>";
+					html += '<br><span class="small">' + __(d.description) + "</span>";
 				}
 
 				return $("<li></li>")
@@ -93,10 +86,7 @@ frappe.ui.form.ControlAutocomplete = class ControlAutoComplete extends (
 	}
 
 	setup_awesomplete() {
-		this.awesomplete = new Awesomplete(
-			this.input,
-			this.get_awesomplete_settings(),
-		);
+		this.awesomplete = new Awesomplete(this.input, this.get_awesomplete_settings());
 
 		$(this.input_area).find(".awesomplete ul").css("min-width", "100%");
 
@@ -215,11 +205,7 @@ frappe.ui.form.ControlAutocomplete = class ControlAutoComplete extends (
 			args.query = get_query;
 		} else {
 			// get_query by function
-			var q = get_query(
-				(this.frm && this.frm.doc) || this.doc,
-				this.doctype,
-				this.docname,
-			);
+			var q = get_query((this.frm && this.frm.doc) || this.doc, this.doctype, this.docname);
 
 			if (typeof q === "string") {
 				// returns a string

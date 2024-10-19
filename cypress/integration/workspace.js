@@ -27,7 +27,7 @@ context("Workspace 2.0", () => {
 		cy.get('.sidebar-item-container[item-name="Test Private Page"]').should(
 			"have.attr",
 			"item-public",
-			"0",
+			"0"
 		);
 
 		cy.get('.standard-actions .btn-primary[data-label="Save"]').click();
@@ -35,7 +35,7 @@ context("Workspace 2.0", () => {
 		cy.get('.sidebar-item-container[item-name="Test Private Page"]').should(
 			"have.attr",
 			"item-public",
-			"0",
+			"0"
 		);
 
 		cy.wait("@new_page");
@@ -58,7 +58,7 @@ context("Workspace 2.0", () => {
 		cy.get('.sidebar-item-container[item-name="Test Child Page"]').should(
 			"have.attr",
 			"item-public",
-			"0",
+			"0"
 		);
 
 		cy.get('.standard-actions .btn-primary[data-label="Save"]').click();
@@ -66,7 +66,7 @@ context("Workspace 2.0", () => {
 		cy.get('.sidebar-item-container[item-name="Test Child Page"]').should(
 			"have.attr",
 			"item-public",
-			"0",
+			"0"
 		);
 
 		cy.wait("@new_page");
@@ -81,9 +81,7 @@ context("Workspace 2.0", () => {
 		cy.get(".codex-editor__redactor .ce-block");
 		cy.get(".btn-edit-workspace").click();
 
-		cy.get('.sidebar-item-container[item-name="Test Private Page"]').as(
-			"sidebar-item",
-		);
+		cy.get('.sidebar-item-container[item-name="Test Private Page"]').as("sidebar-item");
 
 		cy.get("@sidebar-item").find(".standard-sidebar-item").first().click();
 		cy.get("@sidebar-item").find(".dropdown-btn").first().click();
@@ -105,23 +103,15 @@ context("Workspace 2.0", () => {
 			url: "api/method/frappe.desk.doctype.workspace.workspace.sort_pages",
 		}).as("page_sorted");
 
-		cy.get('.sidebar-item-container[item-name="Duplicate Page"]').as(
-			"sidebar-item",
-		);
+		cy.get('.sidebar-item-container[item-name="Duplicate Page"]').as("sidebar-item");
 
 		cy.get("@sidebar-item").find(".standard-sidebar-item").first().click();
-		cy.get("@sidebar-item")
-			.find(".drag-handle")
-			.first()
-			.move({ deltaX: 0, deltaY: 100 });
+		cy.get("@sidebar-item").find(".drag-handle").first().move({ deltaX: 0, deltaY: 100 });
 
 		cy.get('.sidebar-item-container[item-name="Build"]').as("sidebar-item");
 
 		cy.get("@sidebar-item").find(".standard-sidebar-item").first().click();
-		cy.get("@sidebar-item")
-			.find(".drag-handle")
-			.first()
-			.move({ deltaX: 0, deltaY: 100 });
+		cy.get("@sidebar-item").find(".drag-handle").first().move({ deltaX: 0, deltaY: 100 });
 
 		cy.wait("@page_sorted");
 	});
@@ -132,9 +122,7 @@ context("Workspace 2.0", () => {
 			url: "api/method/frappe.desk.doctype.workspace.workspace.update_page",
 		}).as("page_updated");
 
-		cy.get('.sidebar-item-container[item-name="Test Private Page"]').as(
-			"sidebar-item",
-		);
+		cy.get('.sidebar-item-container[item-name="Test Private Page"]').as("sidebar-item");
 
 		cy.get("@sidebar-item").find(".standard-sidebar-item").first().click();
 		cy.get("@sidebar-item").find(".dropdown-btn").first().click();
@@ -149,33 +137,27 @@ context("Workspace 2.0", () => {
 		cy.click_modal_primary_button("Update");
 
 		cy.get(
-			'.standard-sidebar-section:first .sidebar-item-container[item-name="Test Private Page"]',
+			'.standard-sidebar-section:first .sidebar-item-container[item-name="Test Private Page"]'
 		).should("not.exist");
 		cy.get(
-			'.standard-sidebar-section:last .sidebar-item-container[item-name="Test Private Page 1"]',
+			'.standard-sidebar-section:last .sidebar-item-container[item-name="Test Private Page 1"]'
 		).should("exist");
 
 		cy.wait("@page_updated");
 	});
 
 	it("Add New Block", () => {
-		cy.get('.sidebar-item-container[item-name="Duplicate Page"]').as(
-			"sidebar-item",
-		);
+		cy.get('.sidebar-item-container[item-name="Duplicate Page"]').as("sidebar-item");
 
 		cy.get("@sidebar-item").find(".standard-sidebar-item").first().click();
 
 		cy.get(".ce-block").click().type("{enter}");
-		cy.get(".block-list-container .block-list-item")
-			.contains("Heading")
-			.click();
+		cy.get(".block-list-container .block-list-item").contains("Heading").click();
 		cy.get(":focus").type("Header");
 		cy.get(".ce-block:last").find(".ce-header").should("exist");
 
 		cy.get(".ce-block:last").click().type("{enter}");
-		cy.get(".block-list-container .block-list-item")
-			.contains("Text")
-			.click();
+		cy.get(".block-list-container .block-list-item").contains("Text").click();
 		cy.get(":focus").type("Paragraph text");
 		cy.get(".ce-block:last").find(".ce-paragraph").should("exist");
 	});
@@ -223,12 +205,8 @@ context("Workspace 2.0", () => {
 			.find('.dropdown-item[title="Hide Workspace"]')
 			.click({ force: true });
 		cy.wait(300);
-		cy.get(
-			'.standard-actions .btn-secondary[data-label="Discard"]',
-		).click();
-		cy.get('.sidebar-item-container[item-name="Duplicate Page"]').should(
-			"not.be.visible",
-		);
+		cy.get('.standard-actions .btn-secondary[data-label="Discard"]').click();
+		cy.get('.sidebar-item-container[item-name="Duplicate Page"]').should("not.be.visible");
 
 		cy.wait("@hide_page");
 
@@ -246,12 +224,8 @@ context("Workspace 2.0", () => {
 			.click({ force: true });
 		cy.wait(300);
 
-		cy.get(
-			'.standard-actions .btn-secondary[data-label="Discard"]',
-		).click();
-		cy.get('.sidebar-item-container[item-name="Duplicate Page"]').should(
-			"be.visible",
-		);
+		cy.get('.standard-actions .btn-secondary[data-label="Discard"]').click();
+		cy.get('.sidebar-item-container[item-name="Duplicate Page"]').should("be.visible");
 
 		cy.wait("@unhide_page");
 	});
@@ -272,12 +246,8 @@ context("Workspace 2.0", () => {
 			.find('.dropdown-item[title="Delete Workspace"]')
 			.click({ force: true });
 		cy.wait(300);
-		cy.get(".modal-footer > .standard-actions > .btn-modal-primary:visible")
-			.first()
-			.click();
-		cy.get('.sidebar-item-container[item-name="Duplicate Page"]').should(
-			"not.exist",
-		);
+		cy.get(".modal-footer > .standard-actions > .btn-modal-primary:visible").first().click();
+		cy.get('.sidebar-item-container[item-name="Duplicate Page"]').should("not.exist");
 
 		cy.wait("@page_deleted");
 	});

@@ -5,8 +5,7 @@ frappe.ui.form.on("Personal Data Deletion Request", {
 	refresh: function (frm) {
 		if (
 			frappe.user.has_role("System Manager") &&
-			(frm.doc.status == "Pending Approval" ||
-				frm.doc.status == "On Hold")
+			(frm.doc.status == "Pending Approval" || frm.doc.status == "On Hold")
 		) {
 			frm.add_custom_button(__("Delete Data"), function () {
 				return frappe.call({
@@ -20,10 +19,7 @@ frappe.ui.form.on("Personal Data Deletion Request", {
 			});
 		}
 
-		if (
-			frappe.user.has_role("System Manager") &&
-			frm.doc.status == "Pending Approval"
-		) {
+		if (frappe.user.has_role("System Manager") && frm.doc.status == "Pending Approval") {
 			frm.add_custom_button(__("Put on Hold"), function () {
 				return frappe.call({
 					doc: frm.doc,

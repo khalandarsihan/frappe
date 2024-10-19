@@ -6,9 +6,9 @@ frappe.ui.form.on("Module Onboarding", {
 		frappe.boot.developer_mode &&
 			frm.set_intro(
 				__(
-					"Saving this will export this document as well as the steps linked here as json.",
+					"Saving this will export this document as well as the steps linked here as json."
 				),
-				true,
+				true
 			);
 		if (!frappe.boot.developer_mode) {
 			frm.trigger("disable_form");

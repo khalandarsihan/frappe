@@ -6,30 +6,27 @@ context("Dynamic Link", () => {
 			.window()
 			.its("frappe")
 			.then((frappe) => {
-				return frappe.xcall(
-					"frappe.tests.ui_test_helpers.create_doctype",
-					{
-						name: "Test Dynamic Link",
-						fields: [
-							{
-								label: "Document Type",
-								fieldname: "doc_type",
-								fieldtype: "Link",
-								options: "DocType",
-								in_list_view: 1,
-								in_standard_filter: 1,
-							},
-							{
-								label: "Document ID",
-								fieldname: "doc_id",
-								fieldtype: "Dynamic Link",
-								options: "doc_type",
-								in_list_view: 1,
-								in_standard_filter: 1,
-							},
-						],
-					},
-				);
+				return frappe.xcall("frappe.tests.ui_test_helpers.create_doctype", {
+					name: "Test Dynamic Link",
+					fields: [
+						{
+							label: "Document Type",
+							fieldname: "doc_type",
+							fieldtype: "Link",
+							options: "DocType",
+							in_list_view: 1,
+							in_standard_filter: 1,
+						},
+						{
+							label: "Document ID",
+							fieldname: "doc_id",
+							fieldtype: "Dynamic Link",
+							options: "doc_type",
+							in_list_view: 1,
+							in_standard_filter: 1,
+						},
+					],
+				});
 			});
 	});
 
@@ -143,9 +140,7 @@ context("Dynamic Link", () => {
 		cy.get_field("doc_type").clear();
 
 		//Entering System Settings in the Doctype field
-		cy.intercept("/api/method/frappe.desk.search.search_link").as(
-			"search_query",
-		);
+		cy.intercept("/api/method/frappe.desk.search.search_link").as("search_query");
 		cy.fill_field("doc_type", "System Settings", "Link", { delay: 500 });
 		cy.wait("@search_query");
 		cy.get(`[data-fieldname="doc_type"] ul:visible div:first-child`).click({
@@ -158,7 +153,7 @@ context("Dynamic Link", () => {
 		cy.get(".modal-title").should("have.text", "Error");
 		cy.get(".msgprint").should(
 			"have.text",
-			"System Settings is not a valid DocType for Dynamic Link",
+			"System Settings is not a valid DocType for Dynamic Link"
 		);
 	});
 });

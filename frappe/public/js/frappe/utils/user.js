@@ -33,8 +33,8 @@ $.extend(frappe.user, {
 			? __(
 					"You",
 					null,
-					"Name of the current user. For example: You edited this 5 hours ago.",
-				)
+					"Name of the current user. For example: You edited this 5 hours ago."
+			  )
 			: frappe.user_info(uid).fullname;
 	},
 	image: function (uid) {
@@ -46,11 +46,7 @@ $.extend(frappe.user, {
 	has_role: function (rl) {
 		if (typeof rl == "string") rl = [rl];
 		for (var i in rl) {
-			if (
-				(frappe.boot ? frappe.boot.user.roles : ["Guest"]).indexOf(
-					rl[i],
-				) != -1
-			)
+			if ((frappe.boot ? frappe.boot.user.roles : ["Guest"]).indexOf(rl[i]) != -1)
 				return true;
 		}
 	},
@@ -64,17 +60,10 @@ $.extend(frappe.user, {
 
 			var ret = null;
 			if (type === "module") {
-				if (
-					frappe.boot.user.allow_modules.indexOf(m) != -1 ||
-					frappe.modules[m].is_help
-				)
+				if (frappe.boot.user.allow_modules.indexOf(m) != -1 || frappe.modules[m].is_help)
 					ret = m;
 			} else if (type === "page") {
-				if (
-					frappe.boot.allowed_pages.indexOf(frappe.modules[m].link) !=
-					-1
-				)
-					ret = m;
+				if (frappe.boot.allowed_pages.indexOf(frappe.modules[m].link) != -1) ret = m;
 			} else if (type === "list") {
 				if (frappe.model.can_read(frappe.modules[m]._doctype)) ret = m;
 			} else if (type === "view") {
@@ -96,11 +85,7 @@ $.extend(frappe.user, {
 	},
 
 	is_report_manager: function () {
-		return frappe.user.has_role([
-			"Administrator",
-			"System Manager",
-			"Report Manager",
-		]);
+		return frappe.user.has_role(["Administrator", "System Manager", "Report Manager"]);
 	},
 
 	get_formatted_email: function (email) {
@@ -127,9 +112,7 @@ $.extend(frappe.user, {
 	},
 
 	get_emails: () => {
-		return Object.keys(frappe.boot.user_info).map(
-			(key) => frappe.boot.user_info[key].email,
-		);
+		return Object.keys(frappe.boot.user_info).map((key) => frappe.boot.user_info[key].email);
 	},
 
 	/* Normally frappe.user is an object
@@ -152,10 +135,6 @@ $(document).bind("mousemove", function () {
 		$(document).trigger("session_alive");
 	}
 	frappe.session_alive = true;
-	if (frappe.session_alive_timeout)
-		clearTimeout(frappe.session_alive_timeout);
-	frappe.session_alive_timeout = setTimeout(
-		"frappe.session_alive=false;",
-		30000,
-	);
+	if (frappe.session_alive_timeout) clearTimeout(frappe.session_alive_timeout);
+	frappe.session_alive_timeout = setTimeout("frappe.session_alive=false;", 30000);
 });

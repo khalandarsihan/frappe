@@ -3,9 +3,7 @@ frappe.RoleEditor = class {
 		this.frm = frm;
 		this.wrapper = wrapper;
 		this.disable = disable;
-		let user_roles = this.frm.doc.roles
-			? this.frm.doc.roles.map((a) => a.role)
-			: [];
+		let user_roles = this.frm.doc.roles ? this.frm.doc.roles.map((a) => a.role) : [];
 		this.multicheck = frappe.ui.form.make_control({
 			parent: wrapper,
 			df: {
@@ -87,13 +85,8 @@ frappe.RoleEditor = class {
 									.map(
 										(p) =>
 											`<td class="text-muted bold">${
-												perm[p]
-													? frappe.utils.icon(
-															"check",
-															"xs",
-														)
-													: "-"
-											}</td>`,
+												perm[p] ? frappe.utils.icon("check", "xs") : "-"
+											}</td>`
 									)
 									.join("")}
 							</tr>
@@ -114,9 +107,7 @@ frappe.RoleEditor = class {
 			.css("width", "auto")
 			.css("max-width", "1200px");
 
-		this.perm_dialog.$wrapper
-			.find(".modal-body")
-			.css("overflow", "overlay");
+		this.perm_dialog.$wrapper.find(".modal-body").css("overflow", "overlay");
 	}
 	show() {
 		this.reset();
@@ -138,11 +129,7 @@ frappe.RoleEditor = class {
 		});
 		checked_options.map((role) => {
 			if (!roles.find((d) => d.role === role)) {
-				let role_doc = frappe.model.add_child(
-					this.frm.doc,
-					"Has Role",
-					"roles",
-				);
+				let role_doc = frappe.model.add_child(this.frm.doc, "Has Role", "roles");
 				role_doc.role = role;
 			}
 		});
